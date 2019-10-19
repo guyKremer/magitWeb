@@ -15,19 +15,16 @@ export default class Main extends React.Component{
     componentDidMount() {
         this.getUserData();
     }
-    }
 
-    render() {
+    render(){
         return(
-        <div id="main">
-            <Left userName={this.state.userName}>
-            <div>{}</div>
-        </div>
-        )
+            <div id="main">
+                <Left userName={this.state.userName}/>
+            </div>
+         )
     }
 
     async getUserData(){
         let response = await fetch('userData', {method:'POST', body: userName, credentials: 'include'});
-
     }
 }
