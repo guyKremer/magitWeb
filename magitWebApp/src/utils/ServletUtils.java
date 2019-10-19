@@ -1,10 +1,14 @@
 package utils;
 
 
+import com.google.gson.Gson;
 import users.UserManager;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ServletUtils {
 
@@ -26,6 +30,17 @@ public class ServletUtils {
             }
         }
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
+    }
+
+    public static HttpServletResponse SendJsonResponse (HttpServletResponse response,String body) throws IOException {
+        PrintWriter out=response.getWriter();
+        Gson gson = new Gson();
+        String gsonResponse = gson.toJson(body);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(gsonResponse);
+        out.flush();
+        return response;
     }
 
     /*
