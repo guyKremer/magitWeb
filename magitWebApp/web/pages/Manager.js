@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Login from './login/Login';
 import Consts from'./Constants';
-import Main from './main/Main'
+import Main from './UserDashboard/UserDashboard';
 
 
 
