@@ -81,6 +81,12 @@ public class Engine {
         return res;
     }
 
+    public boolean isChanges()throws java.io.IOException{
+       Status status = showStatus();
+       return(status.getDeletedFiles().isEmpty()||status.getAddedFiles().isEmpty()||status.getModifiedFiles().isEmpty());
+
+    }
+
     public void isRepositoryInitialized() {
         if(m_currentRepository == null){
             throw new NullPointerException("No repository was initialized");
