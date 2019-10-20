@@ -83,7 +83,7 @@ public class Engine {
 
     public boolean isChanges()throws java.io.IOException{
        Status status = showStatus();
-       return(status.getDeletedFiles().isEmpty()&&status.getAddedFiles().isEmpty()&&status.getModifiedFiles().isEmpty());
+       return(status.getDeletedFiles().isEmpty()||status.getAddedFiles().isEmpty()||status.getModifiedFiles().isEmpty());
 
     }
 
