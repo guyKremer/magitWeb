@@ -1,0 +1,13 @@
+body {
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
+#newBtn{
+    background-color: #4CAF50;
+    margin-left: 8%;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+}
+

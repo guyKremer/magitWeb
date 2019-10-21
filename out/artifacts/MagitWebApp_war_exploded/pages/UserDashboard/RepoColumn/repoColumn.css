@@ -1,0 +1,13 @@
+#userDash-left{
+    padding: 2%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+}
+
+#userDash-left-first{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
