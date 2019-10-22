@@ -1,0 +1,24 @@
+.singleUser{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.dot{
+    height: 13px;
+    width: 13px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dot-online{
+    background-color: #4CAF50;
+}
+
+.dot-offline{
+    background-color: red;
+}
+
+.singleUserName{
+    margin-left: 5%;
+}

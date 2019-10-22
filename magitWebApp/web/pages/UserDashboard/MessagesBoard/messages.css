@@ -1,12 +1,12 @@
 
 #messagesWrapper{
-    background-color: #d1e4d7;
+    background-color: #dbe7e4;
     display: flex;
     flex-wrap: nowrap;
     flex-direction: column;
     border-left-color: darkgrey;
     border-left-style: solid;
-    width: 100%;
+    flex-basis: 60%;
 }
 
 body {
@@ -21,8 +21,10 @@ body {
     font-family: Helvetica;
     justify-content: space-between;
     padding: 0.6rem;
-    margin: auto;
-    width: max-content;
+    margin-left: 5%;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 90%;
 }
 
 .Toast--success {
