@@ -25,9 +25,6 @@ export default class RepoColumn extends React.Component {
     render() {
         return(
             <Table hover>
-                <th>
-                    Repositories
-                </th>
                 <tbody>
                 <tr>
                     <td>1</td>
