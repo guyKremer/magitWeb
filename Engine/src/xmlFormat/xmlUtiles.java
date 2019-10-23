@@ -10,8 +10,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,7 +30,32 @@ public class xmlUtiles {
     private static Set<String> m_foldersIds;
     private static Set<String> m_blobsIds;
     private static Set<String> m_commitsIds;
+    private static final String rootPath = "c:\\magit-ex3";
 
+    private MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException
+    {
+        InputStream inputStream = new ByteArrayInputStream(i_XMLContent.getBytes());
+        JAXBContext jc = JAXBContext.newInstance(MagitRepository.class);
+        Unmarshaller u = jc.createUnmarshaller();
+
+        return (MagitRepository) u.unmarshal(inputStream);
+    }
+
+
+    public static Repository LoadXmlEx3(String i_XMLContent, String i_UserName) throws Exception {
+
+        m_mr = parseFromXmlFileToXmlMagitRepository(i_XMLContent);
+        loadRepositoryListsObjects();
+        loadSetIds();
+
+        checkXMLvalidation();
+
+        parseRepository(i_UserName);
+
+        return m_repository;
+    }
+
+    /*
     public static Repository LoadXml(String i_path) throws Exception {
 
         String extension = getFileExtension(i_path);
@@ -53,6 +77,7 @@ public class xmlUtiles {
 
         return m_repository;
     }
+     */
 
     public static void ExportToXml(Repository i_repository, String i_path) throws IOException, JAXBException {
         m_msfList = new ArrayList<MagitSingleFolder>();
@@ -79,87 +104,6 @@ public class xmlUtiles {
 
         jaxbMarshaller.marshal(m_mr, file);
     }
-    /*
-    private static void createMagitRepository() throws IOException {
-        MagitBlobs mBlobs = new MagitBlobs();
-        MagitFolders mFolders = new MagitFolders();
-        MagitCommits mCommits = new MagitCommits();
-        MagitBranches mBranches = new MagitBranches();
-
-        m_mr.setName(m_repository.GetName());
-
-        for(Map.Entry<String,Branch> branch : m_repository.GetBranches().entrySet()){
-            branchToMagitBranch(branch.getValue());
-            if(branch.getKey().equals(m_repository.GetHeadBranch().getName())) {
-                mBranches.setHead(branch.getValue().getName());
-            }
-        }
-
-        mBranches.getMagitSingleBranch().addAll(m_msbList);
-        mCommits.getMagitSingleCommit().addAll(m_mscList);
-        mFolders.getMagitSingleFolder().addAll(m_msfList);
-        mBlobs.getMagitBlob().addAll(m_mbList);
-
-        m_mr.setMagitBranches(mBranches);
-        m_mr.setMagitCommits(mCommits);
-        m_mr.setMagitFolders(mFolders);
-        m_mr.setMagitBlobs(mBlobs);
-    }
-
-    private static void branchToMagitBranch(Branch i_branch) throws IOException {
-        MagitSingleBranch msb = new MagitSingleBranch();
-        MagitSingleBranch.PointedCommit pointedCommit = new MagitSingleBranch.PointedCommit();
-        Commit commit;
-
-        pointedCommit.setId(i_branch.getCommitSha1());
-        msb.setName(i_branch.getName());
-        // not necessary in ex01
-
-        //msb.setIsRemote(false);
-        //msb.setTracking(false);
-        //msb.setTrackingAfter(null);
-
-        m_msbList.add(msb);
-
-        commit = new Commit(pointedCommit.getId());
-        commitToMagitSingleCommit(commit);
-        msb.setPointedCommit(pointedCommit);
-    }
-    */
-
-    /*
-    private static void commitToMagitSingleCommit(Commit i_commit) throws IOException {
-        MagitSingleCommit msc = new MagitSingleCommit();
-        PrecedingCommits precedingCommits;
-        PrecedingCommits.PrecedingCommit precedingCommit;
-        RootFolder rootFolder = new RootFolder();
-
-        msc.setId(i_commit.getSha1());
-        msc.setAuthor(i_commit.getCreator());
-        msc.setDateOfCreation(i_commit.getDateOfCreation());
-        msc.setMessage(i_commit.getMessage());
-        rootFolder.setId(i_commit.getRootFolder().getSha1());
-        msc.setRootFolder(rootFolder);
-        folderToMagitSingFolder(i_commit.getRootFolder(), true);
-
-        if(i_commit.getPrevCommitSha1() != null) {
-            precedingCommits = new PrecedingCommits();
-            precedingCommit = new PrecedingCommits.PrecedingCommit();
-
-            precedingCommit.setId(i_commit.getPrevCommitSha1());
-            precedingCommits.getPrecedingCommit().add(precedingCommit);
-            commitToMagitSingleCommit(new Commit(precedingCommit.getId()));
-            msc.setPrecedingCommits(precedingCommits);
-        }
-
-        if(findById(msc.getId(),m_mscList) == null){
-            m_mscList.add(msc);
-        }
-
-    }
-     */
-
-
 
     private static void folderToMagitSingFolder(Folder i_folder, boolean i_isRootFolder) {
         MagitSingleFolder msf = new MagitSingleFolder();
@@ -359,19 +303,25 @@ public class xmlUtiles {
         return "There is 2 or more " + magitObj + " with the same ID";
     }
 
-    private static Repository parseRepository() throws Exception {
+    private static Repository parseRepository(String i_UserName) throws Exception {
 
+        String userFolderLocation = rootPath + File.separator + i_UserName + File.separator;
+
+        /*
         if(Files.exists(Paths.get(m_mr.getLocation()))){
             throw new FileAlreadyExistsException("Folder with the same name already exists");
         }
+         */
 
         doesAllTrackingBranchesTrackAfterRemoteBranchThatIsRemote();
 
+        // location --> rootPath (c:\magit-ex3) + userName + repoName
+
         if(m_mr.magitRemoteReference == null || m_mr.magitRemoteReference.location == null || m_mr.magitRemoteReference.name == null) {
-            m_repository = new Repository(m_mr.getName(), m_mr.getLocation(), false);
+            m_repository = new Repository(m_mr.getName(), userFolderLocation + m_mr.getName(), false);
         }
         else{
-            m_repository = new LocalRepository(m_mr.getName(), m_mr.getLocation(), false,
+            m_repository = new LocalRepository(m_mr.getName(), userFolderLocation + m_mr.getName(), false,
                     m_mr.magitRemoteReference.location,
                     m_mr.magitRemoteReference.name);
             //((LocalRepository) m_repository).setRemoteRepoLocation(m_mr.magitRemoteReference.location);
@@ -554,42 +504,3 @@ public class xmlUtiles {
         return item;
     }
 }
-
-    /*
-    private static MagitSingleFolder findFolderById(String i_id){
-        MagitSingleFolder folder = null;
-
-        for (MagitSingleFolder msf : m_msfList ){
-            if(msf.getId() == i_id) {
-                folder = msf;
-            }
-        }
-        return folder;
-    }
-
-
-    private static MagitBlob findBlobById(String i_id) {
-        MagitBlob blob = null;
-
-        for (MagitBlob mb : m_mbList ){
-            if(mb.getId() == i_id) {
-                blob = mb;
-            }
-        }
-        return blob;
-    }
-
-    private static MagitSingleCommit findCommitById(String i_id){
-        MagitSingleCommit commit = null;
-
-        for (MagitSingleCommit msc : m_mscList ){
-            if(msc.getId() == i_id) {
-                commit = msc;
-            }
-        }
-        return commit;
-    }
-
-    // ======================================================================
-}
-*/
