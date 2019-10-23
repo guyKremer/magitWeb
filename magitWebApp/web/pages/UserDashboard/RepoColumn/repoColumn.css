@@ -1,0 +1,15 @@
+#userDash-left{
+    padding: 2%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    flex-basis: 25%;
+
+}
+
+#userDash-left-first{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
