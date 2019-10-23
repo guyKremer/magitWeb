@@ -2,6 +2,13 @@ import React from 'react';
 import RepoList from './repoList/RepoLIst';
 import NewRepo from './newRepo/NewRepo';
 import './repoColumn.css';
+import {
+    HashRouter as Router,
+    Switch,
+    Route,
+    Link,
+    Redirect
+} from "react-router-dom";
 
 export default class RepoColumn extends React.Component{
     constructor(props){
@@ -10,6 +17,7 @@ export default class RepoColumn extends React.Component{
             newRepoPressed:false
         }
         this.newRepoEventHandler=this.newRepoEventHandler.bind(this);
+        this.render=this.render.bind(this);
     }
 
 
@@ -22,7 +30,6 @@ export default class RepoColumn extends React.Component{
 
     render(){
         if(this.state.newRepoPressed === false){
-            console.log(this.state.newRepoPressed);
             return(
                 <div id="userDash-left">
                     <div id="userDash-left-first">
@@ -37,10 +44,10 @@ export default class RepoColumn extends React.Component{
             return(
                 <div id="userDash-left">
                     <div id="userDash-left-first">
-                        <form action={"repositories?"+this.props.userName} encType="multipart/form-data" method="POST">
-                            <input type="file" name="file1"/>
-                                <input type="Submit" value="Upload File"/>
-                        </form>
+                        <input type="file" onChange={()=>{fetch(  "repositories?userName="+this.props.userName, {method:'POST', body: '',  headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'multipart/form-data'
+                            },credentials: 'include'});}}/>
                     </div>
                     <RepoList/>
                 </div>
