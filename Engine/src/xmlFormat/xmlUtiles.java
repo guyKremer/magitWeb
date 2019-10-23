@@ -32,7 +32,7 @@ public class xmlUtiles {
     private static Set<String> m_commitsIds;
     private static final String rootPath = "c:\\magit-ex3";
 
-    private MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException
+    private static MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException
     {
         InputStream inputStream = new ByteArrayInputStream(i_XMLContent.getBytes());
         JAXBContext jc = JAXBContext.newInstance(MagitRepository.class);
