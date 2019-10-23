@@ -37,7 +37,7 @@ export default class RepoColumn extends React.Component{
             return(
                 <div id="userDash-left">
                     <div id="userDash-left-first">
-                        <form action={"repositories?"+this.props.userName} encType="multipart/form-data" method="POST">
+                        <form action={"repositories?userName="+this.props.userName} encType="multipart/form-data" method="POST">
                             <input type="file" name="file1"/>
                                 <input type="Submit" value="Upload File"/>
                         </form>
