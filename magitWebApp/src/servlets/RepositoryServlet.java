@@ -24,7 +24,7 @@ import static constants.Constants.*;
 @WebServlet(name = "UserDataServlet", urlPatterns = {"/repositories"})
 public class RepositoryServlet extends HttpServlet {
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter=request.getParameter(USERNAME);
         Gson gson = new Gson();
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
