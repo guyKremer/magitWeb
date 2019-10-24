@@ -20,6 +20,14 @@ export default class RepoColumn extends React.Component{
         this.render=this.render.bind(this);
     }
 
+    componentDidMount() {
+        setInterval(async ()=>{
+            let response = await fetch("repositories", {method:'GET',credentials: 'include'});
+            let parsedResponse = await response.json();
+        }, 3000);
+
+    }
+
 
     newRepoEventHandler(){
         this.setState(()=>({
@@ -44,12 +52,14 @@ export default class RepoColumn extends React.Component{
             return(
                 <div id="userDash-left">
                     <div id="userDash-left-first">
+                        <div>Repositories</div>
                         <input type="file" id="input" onChange={
                             ()=>{
-                                let selectedFile = document.getElementById('input');
-                                let  formData = new FormData();
-                                formData.append("file",selectedFile);
-                                fetch("repositories?userName="+this.props.userName, {method:'POST', body: formData,credentials: 'include'});
+                                let input = document.getElementById('input');
+                                let formData = new FormData();
+                                formData.append("input",input.files[0]);
+                                fetch("repositories?userName="+this.props.userName, {method:'POST', body:formData,credentials: 'include'});
+                                this.setState(()=>({newRepoPressed:false}));
                             }}/>
                     </div>
                     <RepoList/>
