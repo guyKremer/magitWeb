@@ -1,8 +1,7 @@
 .users{
     display: flex;
     flex-direction: column;
-    flex-basis: 20%;
     background-color: #dbe7e4;
     padding-top: 2%;
-    flex-basis: 15%;
+    align-items: center;
 }

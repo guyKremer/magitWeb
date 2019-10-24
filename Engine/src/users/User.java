@@ -10,4 +10,8 @@ public class User {
     public void AddMessage(Message i_msg){
         messages.add(i_msg);
     }
+
+    public String getUserName() {
+        return userName;
+    }
 }

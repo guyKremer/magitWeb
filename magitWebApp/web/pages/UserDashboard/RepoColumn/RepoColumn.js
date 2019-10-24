@@ -25,9 +25,7 @@ export default class RepoColumn extends React.Component{
             let response = await fetch("repositories", {method:'GET',credentials: 'include'});
             let parsedResponse = await response.json();
         }, 3000);
-
     }
-
 
     newRepoEventHandler(){
         this.setState(()=>({

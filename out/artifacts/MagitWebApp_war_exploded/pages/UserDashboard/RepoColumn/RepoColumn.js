@@ -24,11 +24,8 @@ export default class RepoColumn extends React.Component{
         setInterval(async ()=>{
             let response = await fetch("repositories", {method:'GET',credentials: 'include'});
             let parsedResponse = await response.json();
-            console.log(parsedResponse);
         }, 3000);
-
     }
-
 
     newRepoEventHandler(){
         this.setState(()=>({

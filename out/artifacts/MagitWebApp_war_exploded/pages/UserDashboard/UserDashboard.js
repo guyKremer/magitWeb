@@ -14,16 +14,20 @@ export default class UserDashboard extends React.Component{
         super(props);
         this.state ={
             userName:this.props.userName,
-            messeages:null,
+            onlineUsers:[],
+            messeages:null
         };
-        this.getUserData=this.getUserData.bind(this);
+        this.getUsersNames=this.getUsersNames.bind(this);
     }
 
-    /*
+
     componentDidMount() {
-        this.getUserData();
+        this.getUsersNames();
+        setInterval(async ()=>{
+            this.getUsersNames()
+        }, 5000);
     }
-     */
+
 
     render(){
         return(
@@ -43,13 +47,17 @@ export default class UserDashboard extends React.Component{
                 <div id="main">
                     <RepoColumn userName={this.state.userName}/>
                     <MessagesBoard/>
-                    <Users onlineUsers={["guy","naor"]} offlineUsers={["keren"]}/>
+                    <Users onlineUsers={this.state.onlineUsers}/>
                 </div>
             </React.Fragment>
          )
     }
 
-    async getUserData(){
-        let response = await fetch('userData', {method:'POST', body: userName, credentials: 'include'});
+    async getUsersNames(){
+        let response = await fetch('users', {method:'GET', credentials: 'include'});
+        let jsonResponse = await response.json();
+        this.setState(()=>({
+            onlineUsers:jsonResponse
+        }));
     }
 }

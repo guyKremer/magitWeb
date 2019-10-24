@@ -7,6 +7,7 @@
     border-left-color: darkgrey;
     border-left-style: solid;
     flex-basis: 60%;
+    align-items: center;
 }
 
 body {

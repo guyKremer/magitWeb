@@ -32,13 +32,13 @@ public class ServletUtils {
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 
-    public static HttpServletResponse SendJsonResponse (HttpServletResponse response,String body) throws IOException {
+    public static HttpServletResponse SendJsonResponse (HttpServletResponse response,Object body) throws IOException {
         PrintWriter out=response.getWriter();
         Gson gson = new Gson();
-        String gsonResponse = gson.toJson(body);
+        String jsonRes = gson.toJson(body);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print(gsonResponse);
+        out.print(jsonRes);
         out.flush();
         return response;
     }

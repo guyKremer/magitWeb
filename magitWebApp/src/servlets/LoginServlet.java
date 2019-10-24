@@ -23,7 +23,6 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         BufferedReader reader = request.getReader();
         Gson gson = new Gson();
-
         String userNameFromParameter = gson.fromJson(reader, String.class);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
 
