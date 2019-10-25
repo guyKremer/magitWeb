@@ -1,11 +1,14 @@
 package users;
 
+import Engine.MagitObjects.Repository;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private String userName;
     List<Message> messages = new ArrayList<Message>();
+    List<Repository> repositories;
     private boolean online;
 
     public User(String i_userName){
@@ -42,4 +45,14 @@ public class User {
         }
         return newMsg;
     }
+
+    public void setRepositories(List<Repository> i_repos){
+        repositories = i_repos;
+    }
+
+    public void addRepository(Repository repo){
+        repositories.add(repo);
+    }
+
+
 }

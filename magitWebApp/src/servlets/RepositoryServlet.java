@@ -1,6 +1,9 @@
 package servlets;
 
+import Engine.MagitObjects.Commit;
 import Engine.MagitObjects.FolderItems.Blob;
+import Engine.MagitObjects.LocalRepository;
+import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import constants.Constants;
@@ -21,7 +24,10 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 import static constants.Constants.*;
@@ -52,9 +58,74 @@ public class RepositoryServlet extends HttpServlet {
 
     }
 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userNameFromParameter= SessionUtils.getUsername(request);
+        List<Repository> repositoryList = new ArrayList<>();
+        Repository repo;
+        List<RepositoryDetails> repositoryDetailsList = new ArrayList<>();
+        File[] directories =
+                new File("c:\\magit-ex3" +File.separator + userNameFromParameter ).listFiles(File::isDirectory);
+
+        for(File file : directories) {
+            List<String> lines = Files.readAllLines(Paths.get(file.getAbsolutePath()).resolve(".magit").resolve("RepoName"));
+            if (lines.size() == 1) {
+                repo = new Repository(lines.get(0), file.getAbsolutePath(), true);
+            } else {
+                repo = new LocalRepository(lines.get(0), file.getAbsolutePath(), true, lines.get(1), lines.get(2));
+            }
+            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+
+            repositoryDetailsList.add(
+                    new RepositoryDetails(
+                            repo.GetName(),
+                            repo.GetHeadBranch().getName(),
+                            repo.GetBranches().size(),
+                            commit.getDateOfCreation(),
+                            commit.getMessage()
+                    ));
+
+            repositoryList.add(repo);
+        }
+
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        userManager.addRepositories(userNameFromParameter ,repositoryList);
+
+    }
 
     private String readFromInputStream(InputStream inputStream) {
         return new Scanner(inputStream).useDelimiter("\\Z").next();
+    }
+
+    public class RepositoryDetails{
+        public String repoName;
+        public String activeBranch;
+        public int amountOfBranches;
+        public String lastCommitDate;
+        public String lastCommitMsg;
+
+        public RepositoryDetails(String i_repoName,
+                                 String i_activeBranch,
+                                 int i_amountOfBranches,
+                                 String i_lastCommitDate,
+                                 String i_lastCommitMsg){
+            repoName = i_repoName;
+            activeBranch = i_activeBranch;
+            amountOfBranches = i_amountOfBranches;
+            lastCommitDate = i_lastCommitDate;
+            lastCommitMsg = i_lastCommitMsg;
+        }
+
+        public JsonObject toJson(){
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("repositoryName",repoName);
+            jsonObject.addProperty("activeBranch",activeBranch);
+            jsonObject.addProperty("amountOfBranches",amountOfBranches);
+            jsonObject.addProperty("lastCommitDate",lastCommitDate);
+            jsonObject.addProperty("lastCommitMsg",lastCommitMsg);
+
+            return jsonObject;
+        }
+
     }
 
 }

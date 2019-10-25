@@ -1,5 +1,7 @@
 package users;
 
+import Engine.MagitObjects.Repository;
+
 import java.util.*;
 
 public class UserManager {
@@ -29,5 +31,9 @@ public class UserManager {
 
     public synchronized List<Message> getAllMessages(String userName){
         return usersMap.get(userName).getAllNewMsg();
+    }
+
+    public synchronized  void addRepositories(String i_userName, List<Repository> i_repos){
+        usersMap.get(i_userName).setRepositories(i_repos);
     }
 }
