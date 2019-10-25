@@ -50,7 +50,8 @@ public class PRMessage extends Message {
         jsonObject.addProperty("type","PRMsg");
         jsonObject.addProperty("date",Date.toString());
         jsonObject.addProperty("repositoryName",repositoryName);
-        jsonObject.addProperty("userName",userName);
+        jsonObject.addProperty("targetUserName",targetUserName);
+        jsonObject.addProperty("basisUserName",basisUserName);
         jsonObject.addProperty("targetBranch",targetBranch);
         jsonObject.addProperty("basisBranch",basisBranch);
         jsonObject.addProperty("PRMsg",PRMsg);

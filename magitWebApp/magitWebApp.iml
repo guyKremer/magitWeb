@@ -23,5 +23,14 @@
     <orderEntry type="module" module-name="Engine" />
     <orderEntry type="library" name="gson-2.8.6" level="project" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../Engine/lib/AncestorFinder.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

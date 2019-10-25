@@ -36,4 +36,8 @@ public class UserManager {
     public synchronized  void addRepositories(String i_userName, List<Repository> i_repos){
         usersMap.get(i_userName).setRepositories(i_repos);
     }
+
+    public synchronized List<Repository> getRepositories(String i_userName){
+        return usersMap.get(i_userName).getRepositories();
+    }
 }
