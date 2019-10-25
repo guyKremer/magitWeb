@@ -46,7 +46,7 @@ export default class UserDashboard extends React.Component{
                     </Dropdown>
                 </Navbar>
                 <div id="main">
-                    <RepoColumn repositories={this.state.repositories} userName={this.state.userName}/>
+                    <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
                     <MessagesBoard/>
                     <Users onlineUsers={this.state.onlineUsers}/>
                 </div>

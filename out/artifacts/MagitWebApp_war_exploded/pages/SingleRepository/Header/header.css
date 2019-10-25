@@ -1,0 +1,9 @@
+#hide{
+    visibility:hidden;
+}
+
+#header{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
