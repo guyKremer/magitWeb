@@ -1,6 +1,7 @@
 package servlets;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;

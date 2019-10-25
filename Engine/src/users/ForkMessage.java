@@ -1,5 +1,7 @@
 package users;
 
+import com.google.gson.JsonObject;
+
 public class ForkMessage extends Message{
     private String repositoryName;
     private String userName;
@@ -15,5 +17,15 @@ public class ForkMessage extends Message{
     public ForkMessage(String i_repoName, String i_userName){
         SetRepositoryName(i_repoName);
         SetUserName(i_userName);
+    }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type","forkMsg");
+        jsonObject.addProperty("repositoryName",repositoryName);
+        jsonObject.addProperty("userName",userName);
+
+        return jsonObject;
     }
 }

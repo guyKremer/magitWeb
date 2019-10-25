@@ -1,6 +1,11 @@
 package users;
 
-public class PRMessage {
+import com.google.gson.JsonObject;
+
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+
+public class PRMessage extends Message {
     enum Status {
         WAITING,
         CONFIRMED,
@@ -29,5 +34,19 @@ public class PRMessage {
         }else{
             status = Status.DENIED;
         }
+    }
+
+    @Override
+    public JsonObject toJson(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("type","PRMsg");
+        jsonObject.addProperty("date",Date.toString());
+        jsonObject.addProperty("repositoryName",repositoryName);
+        jsonObject.addProperty("userName",userName);
+        jsonObject.addProperty("targetBranch",targetBranch);
+        jsonObject.addProperty("basisBranch",basisBranch);
+        jsonObject.addProperty("PRMsg",PRMsg);
+
+        return jsonObject;
     }
 }
