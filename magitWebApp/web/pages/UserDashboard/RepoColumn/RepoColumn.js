@@ -17,16 +17,16 @@ export default class RepoColumn extends React.Component{
             newRepoPressed:false
         }
         this.newRepoEventHandler=this.newRepoEventHandler.bind(this);
-        this.render=this.render.bind(this);
     }
 
+    /*
     componentDidMount() {
         setInterval(async ()=>{
             let response = await fetch("repositories", {method:'GET',credentials: 'include'});
             let parsedResponse = await response.json();
         }, 3000);
     }
-
+*/
     newRepoEventHandler(){
         this.setState(()=>({
             newRepoPressed:true
@@ -60,7 +60,7 @@ export default class RepoColumn extends React.Component{
                                 this.setState(()=>({newRepoPressed:false}));
                             }}/>
                     </div>
-                    <RepoList/>
+                    <RepoList repositories={this.props.repositories}/>
                 </div>
             );
         }
