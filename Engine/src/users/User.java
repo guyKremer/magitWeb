@@ -54,5 +54,9 @@ public class User {
         repositories.add(repo);
     }
 
+    public List<Repository> getRepositories(){
+        return repositories;
+    }
+
 
 }

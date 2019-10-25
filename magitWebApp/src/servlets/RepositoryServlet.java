@@ -5,6 +5,7 @@ import Engine.MagitObjects.FolderItems.Blob;
 import Engine.MagitObjects.LocalRepository;
 import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
@@ -56,15 +57,38 @@ public class RepositoryServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        getAllRepos(userNameFromParameter);
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        JsonArray repositoryDetailsList = new JsonArray();
+
+        for(Repository repo : userManager.getRepositories(userNameFromParameter)){
+            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+
+            repositoryDetailsList.add(
+                    new RepositoryDetails(
+                            repo.GetName(),
+                            repo.GetHeadBranch().getName(),
+                            repo.GetBranches().size(),
+                            commit.getDateOfCreation(),
+                            commit.getMessage()
+                    ).toJson());
+        }
+
+        ServletUtils.SendJsonResponse(response, repositoryDetailsList);
+    }
+
+    private void getAllRepos(String i_userName) throws IOException {
+        //String userNameFromParameter= SessionUtils.getUsername(request);
         List<Repository> repositoryList = new ArrayList<>();
         Repository repo;
         List<RepositoryDetails> repositoryDetailsList = new ArrayList<>();
         File[] directories =
-                new File("c:\\magit-ex3" +File.separator + userNameFromParameter ).listFiles(File::isDirectory);
+                new File("c:\\magit-ex3" +File.separator + i_userName ).listFiles(File::isDirectory);
 
         for(File file : directories) {
             List<String> lines = Files.readAllLines(Paths.get(file.getAbsolutePath()).resolve(".magit").resolve("RepoName"));
@@ -88,7 +112,7 @@ public class RepositoryServlet extends HttpServlet {
         }
 
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        userManager.addRepositories(userNameFromParameter ,repositoryList);
+        userManager.addRepositories(i_userName ,repositoryList);
 
     }
 
