@@ -10,8 +10,7 @@ function RepoColumn(props){
             <td>{repo.activeBranch}</td>
             <td>{repo.amountOfBranches}</td>
             <td>{repo.lastCommitDate}</td>
-            <td>{repo.lastCommitDate}</td>
-            <td>{repo.lastCommitMsg}</td>
+\            <td>{repo.lastCommitMsg}</td>
         </tr>
         );
     });

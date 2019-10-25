@@ -15,8 +15,8 @@ export default class UserDashboard extends React.Component{
         this.state ={
             userName:this.props.userName,
             onlineUsers:[],
-            messeages:null,
-            repositories:null
+            messeages:[],
+            repositories:[]
         };
         this.getUserData=this.getUserData.bind(this);
     }

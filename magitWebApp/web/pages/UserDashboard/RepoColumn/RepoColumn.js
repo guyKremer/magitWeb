@@ -42,7 +42,7 @@ export default class RepoColumn extends React.Component{
                         <div>Repositories</div>
                         <NewRepo onClick={this.newRepoEventHandler}/>
                     </div>
-                    <RepoList/>
+                    <RepoList repositories={this.props.repositories}/>
                 </div>
             );
         }
