@@ -20,10 +20,14 @@ public class UserManager {
         return usersMap.keySet();
     }
 
-    public boolean isUserExists(String username) {
-        if(usersMap.get(username) == null){
+    public boolean isUserExists(String userName) {
+        if(usersMap.get(userName) == null){
             return false;
         }
         return true;
+    }
+
+    public synchronized List<Message> getAllMessages(String userName){
+        return usersMap.get(userName).getAllNewMsg();
     }
 }

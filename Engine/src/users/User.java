@@ -27,5 +27,19 @@ public class User {
 
     public void Logout() {
         online = false;
+        for(Message msg : messages){
+            msg.opened = true;
+        }
+    }
+
+    public List<Message> getAllNewMsg(){
+        List<Message> newMsg = new ArrayList<>();
+
+        for(Message msg : messages){
+            if(!msg.opened){
+                newMsg.add(msg);
+            }
+        }
+        return newMsg;
     }
 }
