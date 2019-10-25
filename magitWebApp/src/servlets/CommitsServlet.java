@@ -29,6 +29,7 @@ public class CommitsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
         String repoName=request.getParameter(REPOSITORY);
+        String branchName=request.getParameter(BRANCH);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         Repository currRepo = null;
         JsonArray jsonArray;
@@ -43,14 +44,14 @@ public class CommitsServlet extends HttpServlet {
             }
         }
 
-        jsonArray = getAllBranchCommits(currRepo);
+        jsonArray = getAllBranchCommits(currRepo, branchName);
 
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
 
-    public JsonArray getAllBranchCommits(Repository i_repo) throws IOException {
+    public JsonArray getAllBranchCommits(Repository i_repo, String i_branch) throws IOException {
         JsonArray jsonArray = new JsonArray();
-        Commit firstCommit = new Commit(i_repo.GetHeadBranch().getCommitSha1());
+        Commit firstCommit = new Commit(i_repo.GetBranches().get(i_branch).getCommitSha1());
         Commit secondCommit = null;
         String pointedBranches = "";
 
