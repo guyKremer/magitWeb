@@ -2,6 +2,8 @@ package utils;
 
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import users.UserManager;
 
 import javax.servlet.ServletContext;
@@ -9,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class ServletUtils {
 
@@ -32,13 +36,23 @@ public class ServletUtils {
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 
-    public static HttpServletResponse SendJsonResponse (HttpServletResponse response,Object body) throws IOException {
+    /*
+    public static HttpServletResponse SendJsonArrayResponse (HttpServletResponse response, List<JsonObject> objList) throws IOException {
         PrintWriter out=response.getWriter();
-        Gson gson = new Gson();
-        String jsonRes = gson.toJson(body);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print(jsonRes);
+        out.print(objList);
+        out.flush();
+        return response;
+    }
+
+     */
+
+        public static HttpServletResponse SendJsonResponse (HttpServletResponse response, JsonElement jsonObj) throws IOException {
+        PrintWriter out=response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(jsonObj);
         out.flush();
         return response;
     }
