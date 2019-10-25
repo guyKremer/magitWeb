@@ -1,6 +1,8 @@
 package servlets;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;
@@ -26,11 +28,9 @@ public class UsersServlet extends HttpServlet{
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         String usernameFromParameter = request.getParameter(USERNAME);
-
-
+        JsonArray userNamesArray = new JsonArray();
         if (usernameFromParameter == null || usernameFromParameter.isEmpty()){
             Set<String> users =  userManager.getUsers();
-            List<String> userNamesArray = new ArrayList<>();
 
             for(String user : users){
                 userNamesArray.add(user);

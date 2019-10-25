@@ -2,6 +2,7 @@ package servlets;
 
 import Engine.MagitObjects.FolderItems.Blob;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;
@@ -51,17 +52,6 @@ public class RepositoryServlet extends HttpServlet {
 
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String userNameFromParameter= SessionUtils.getUsername(request);
-        Path userFolder = Paths.get("C:"+ File.separator+"magit-ex3"+ File.separator+userNameFromParameter);
-
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(userFolder)) {
-            for (Path entry : stream) {
-                
-            }
-        }
-        ServletUtils.SendJsonResponse(response,userNameFromParameter);
-    }
 
     private String readFromInputStream(InputStream inputStream) {
         return new Scanner(inputStream).useDelimiter("\\Z").next();

@@ -31,6 +31,7 @@ export default class SignUp extends React.Component {
 
         if(response.ok){
             let name = await response.json();
+            name = name.userName;
             this.props.handleLogin(name);
         }
         else{
