@@ -15,10 +15,11 @@ export default class SingleRepository extends React.Component{
             },
             regularBranchesNames:[]
         }
+        this.getBranches=this.getBranches.bind(this);
     }
 
     componentDidMount() {
-
+        this.getBranches();
     }
 
     render() {
@@ -32,11 +33,10 @@ export default class SingleRepository extends React.Component{
     }
 
    async getBranches(){
-        let branchesResponse = await fetch('branches?repository='+props.repoName, {method:'GET', credentials: 'include'});
+        let branchesResponse = await fetch('branches?repository='+this.props.repoName, {method:'GET', credentials: 'include'});
         branchesResponse= await branchesResponse.json();
         this.setState(()=>({
             headBranch : {name:branchesResponse.pop()},
-            regularBranchesNames: branchesResponse
-        }));
+            regularBranchesNames: branchesResponse}));
     }
 }
