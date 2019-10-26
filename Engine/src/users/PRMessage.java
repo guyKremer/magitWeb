@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 
 public class PRMessage extends Message {
-    enum Status {
+    public enum Status {
         WAITING,
         CONFIRMED,
         DENIED
