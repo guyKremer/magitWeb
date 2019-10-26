@@ -8,20 +8,20 @@ import java.util.Map;
 
 public class Status {
     private String m_repositoryPath;
-    private String m_repositoryName;
-    private String m_userName;
-    private List<String> m_modifiedFiles;
-    private List<String> m_addedFiles;
-    private List<String> m_deletedFiles;
-    private List<String> m_unchangedFiles;
-    private Map<String,String> m_unchangedFilesMap;
-    private Map<String,String> m_changedFilesMap;
+        private String m_repositoryName;
+        private String m_userName;
+        private List<String> m_modifiedFiles;
+        private List<String> m_addedFiles;
+        private List<String> m_deletedFiles;
+        private List<String> m_unchangedFiles;
+        private Map<String,String> m_unchangedFilesMap;
+        private Map<String,String> m_changedFilesMap;
 
     public Status(String i_repoPath,String i_repoName,String i_userName,List<String> i_modifiedFiles,
-                  List<String> i_addedFiles, List<String> i_deletedFiles, List<String> i_unchangedFiles)
-    {
-        m_repositoryPath = i_repoPath;
-        m_repositoryName = i_repoName;
+            List<String> i_addedFiles, List<String> i_deletedFiles, List<String> i_unchangedFiles)
+        {
+            m_repositoryPath = i_repoPath;
+            m_repositoryName = i_repoName;
         m_userName = i_userName;
 
         setModifiedFiles(i_modifiedFiles);
