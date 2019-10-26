@@ -8,6 +8,8 @@ import com.sun.deploy.panel.IProperty;
 import org.apache.commons.io.FileUtils;
 import Engine.Status;
 import puk.team.course.magit.ancestor.finder.AncestorFinder;
+import users.Message;
+import users.PRMessage;
 
 
 import java.io.*;
@@ -28,6 +30,19 @@ public class Repository {
     private Folder m_WC;
     private Set<Integer> m_conflictsSet;
     private Map<String,Commit> m_commitsMap = new HashMap<String, Commit>();
+    private List<PRRequest> prRequests = new ArrayList<>();
+
+    public List<PRRequest> getPrRequests() {
+        return prRequests;
+    }
+
+    public void setPrRequests(List<PRRequest> prRequests) {
+        this.prRequests = prRequests;
+    }
+
+    public void addPRRequest(PRRequest i_request){
+        prRequests.add(i_request);
+    }
 
     public void SetCommitsMap(Map<String, Commit> m_commitsMap) {
         this.m_commitsMap = m_commitsMap;
