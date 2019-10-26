@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './Header/Header';
+import Center from './Center/Center';
 import './singleRepository.css';
 
 export default class SingleRepository extends React.Component{
@@ -13,13 +14,20 @@ export default class SingleRepository extends React.Component{
                 name:"test",
                 commits:[]
             },
-            regularBranchesNames:[]
+            regularBranchesNames:[],
+            commitsSha1:["12443366","346234626","234234234"],
+            files:[]
         }
         this.getBranches=this.getBranches.bind(this);
+        this.getCommitsSha1=this.getCommitsSha1.bind(this);
     }
 
     componentDidMount() {
         this.getBranches();
+        this.getCommitsSha1();
+        setInterval(async ()=>{
+            this.getBranches()
+        }, 5000);
     }
 
     render() {
@@ -28,6 +36,7 @@ export default class SingleRepository extends React.Component{
                 <Header
                     headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
+                <Center commitsSha1={this.state.commitsSha1}/>
             </div>
         );
     }
@@ -38,5 +47,12 @@ export default class SingleRepository extends React.Component{
         this.setState(()=>({
             headBranch : {name:branchesResponse.pop()},
             regularBranchesNames: branchesResponse}));
+    }
+
+    async getCommitsSha1(){
+        let commitsResponse = await fetch('commits?repository='+this.props.repoName+'&branch='+this.state.headBranch.name, {method:'GET', credentials: 'include'});
+        commitsResponse= await commitsResponse.json();
+        this.setState(()=>({
+            commitsSha1: commitsResponse}));
     }
 }
