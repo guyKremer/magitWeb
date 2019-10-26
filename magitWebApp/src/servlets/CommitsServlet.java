@@ -59,7 +59,7 @@ public class CommitsServlet extends HttpServlet {
 
             for (Map.Entry<String, Branch> entry : i_repo.GetBranches().entrySet()) {
                 if(entry.getValue().getCommitSha1().equals(firstCommit.getSha1())){
-                    pointedBranches += entry.getValue() + " ";
+                    pointedBranches += entry.getKey() + " ";
                 }
             }
 
@@ -72,10 +72,11 @@ public class CommitsServlet extends HttpServlet {
 
             pointedBranches = "";
 
-            if(!firstCommit.getSecondPrecedingSha1().isEmpty()) {
-                firstCommit = new Commit(firstCommit.getSecondPrecedingSha1());
-            }else{
-                firstCommit = null;
+            if(!firstCommit.getFirstPrecedingSha1().isEmpty()) {
+                firstCommit = new Commit(firstCommit.getFirstPrecedingSha1());
+            }
+            else{
+                break;
             }
         }
 
