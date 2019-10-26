@@ -1,9 +1,15 @@
-#hide{
+.hide{
     visibility:hidden;
 }
 
-#header{
+.header{
     display: flex;
     flex-direction: row;
     width: 100%;
+}
+
+button.header{
+    justify-content: flex-end;
+    justify-content: flex-end;
+    margin-left: 3%;
 }

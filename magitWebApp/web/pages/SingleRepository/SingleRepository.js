@@ -10,34 +10,34 @@ export default class SingleRepository extends React.Component{
             type:"LR",
             remoteRepo:null,
             headBranch:{
-                name:""
+                name:"test",
                 commits:[]
             },
-            headBranch
             regularBranchesNames:[]
         }
+        this.getBranches=this.getBranches.bind(this);
     }
 
     componentDidMount() {
-
+        this.getBranches();
     }
 
     render() {
         return(
             <div className={"singleRepository"}>
                 <Header
-                    isLR={this.state.type === "LR" ? true:false}
+                    headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
             </div>
         );
     }
 
-    getBranches(){
+   async getBranches(){
         let branchesResponse = await fetch('branches?repository='+props.repoName, {method:'GET', credentials: 'include'});
         branchesResponse= await branchesResponse.json();
         this.setState(()=>({
-            headBranch : {name:branchesResponse.pop()};
-            regularBranchesNames: branchesResponse;
+            headBranch : {name:branchesResponse.pop()},
+            regularBranchesNames: branchesResponse
         }));
     }
 }

@@ -9,7 +9,7 @@ function Header(props){
 
     return(
             <div className={"header"}>
-                <Branches headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
+                <Branches headBranchName={props.headBranchName} headBranch={props.headBranch} regularBranchesNames={props.regularBranchesNames}/>
                 <Button id={"pr"}  className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>New Pull Request</Button>
                 <Button id={"pull"} className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Pull</Button>
                 <Button id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pullOnClick} size={"sm"}>Push</Button>
