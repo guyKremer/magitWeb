@@ -31,6 +31,7 @@ public class CommitsServlet extends HttpServlet {
         String repoName=request.getParameter(REPOSITORY);
         String branchName=request.getParameter(BRANCH);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        Commit commit;
         Repository currRepo = null;
         JsonArray jsonArray;
 
@@ -45,7 +46,8 @@ public class CommitsServlet extends HttpServlet {
         }
 
         jsonArray = getAllBranchCommits(currRepo, branchName);
-
+        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
 

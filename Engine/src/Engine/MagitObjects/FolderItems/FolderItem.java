@@ -9,7 +9,6 @@ import Engine.MagitObjects.Repository;
 import Engine.Status;
 
 public abstract class FolderItem implements Comparable<FolderItem>{
-
     protected String m_sha1=null;
     protected String m_name;
     protected Path m_path;
