@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header/Header';
 import Center from './Center/Center';
+import Commits from './Center/Commits/Commits';
 import MessageBoard from '../UserDashboard/MessagesBoard/MessagesBoard';
 
 import './singleRepository.css';
@@ -18,7 +19,20 @@ export default class SingleRepository extends React.Component{
             },
             regularBranchesNames:[],
             commits:[],
-            files:[]
+            fileTree:{
+                type:"folder",
+                folderContent:
+                [
+                    {
+                     type:"folder",
+                     name:"folderTest"
+                    },
+                    {
+                        type:"file",
+                        name:"fileTest"
+                    },
+                ]
+            }
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
@@ -28,10 +42,8 @@ export default class SingleRepository extends React.Component{
         this.getBranches();
         this.getCommitsSha1();
         setInterval(async ()=>{
-            this.getBranches()
-        }, 2000);
-        setInterval(async ()=>{
-            this.getCommitsSha1()
+            this.getBranches();
+            this.getCommitsSha1();
         }, 2000);
     }
 
@@ -42,7 +54,8 @@ export default class SingleRepository extends React.Component{
                 <Header
                     headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
-                <Center commits={this.state.commits}/>
+                <Center/>
+                <Commits commits={this.state.commits}/>
             </div>
         );
     }

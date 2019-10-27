@@ -1,6 +1,13 @@
 .commits{
     display: flex;
     flex-direction: column;
-    background-color: #ecf8f5 ;
-    align-items: flex-end;
+    align-items: flex-start;
+}
+.singleCommit{
+    display: flex;
+    flex-direction: row;
+}
+
+.singleCommit p{
+    margin-left: 2%;
 }

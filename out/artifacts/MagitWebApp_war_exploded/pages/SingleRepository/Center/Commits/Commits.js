@@ -5,11 +5,8 @@ import './commits.css';
 function Commits(props){
 
     let commmits = props.commits.map((commit)=>{
-        let pointedBranches = commit.pointedBranches.map((branchName)=>{
-            return(<p>{branchName}</p>);
-        })
         return (
-            <div className={singleCommit}>
+            <div className="singleCommit">
                 <Button variant={"link"}>{commit.sha1}</Button>
                 <p>{commit.message}</p>
                 <p>{commit.date}</p>
