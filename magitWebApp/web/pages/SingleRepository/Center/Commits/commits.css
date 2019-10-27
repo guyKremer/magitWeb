@@ -1,4 +1,6 @@
 .commits{
     display: flex;
     flex-direction: column;
+    background-color: #ecf8f5 ;
+    align-items: flex-end;
 }

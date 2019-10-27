@@ -1,6 +1,7 @@
 .fileSystem{
     flex-basis: 80%;
 }
+
 .file {
     background:#eee;
     background:-moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
