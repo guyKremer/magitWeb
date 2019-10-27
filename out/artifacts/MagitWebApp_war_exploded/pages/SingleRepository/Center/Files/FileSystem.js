@@ -1,5 +1,7 @@
 import React from 'react';
 import './FileSystem.css';
+import Button from 'react-bootstrap/Button';
+
 function FileSystem(props){
 
         return(
@@ -10,6 +12,7 @@ function FileSystem(props){
                 <span>
                     <div className = "folder"/>
                 </span>
+
             </div>
         );
 }

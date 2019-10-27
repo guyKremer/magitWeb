@@ -1,15 +1,15 @@
 import React from 'react';
-import FileSystem from './Files/FileSystem';
 import Commits from './Commits/Commits';
+import MessageBoard from '../../UserDashboard/MessagesBoard/MessagesBoard';
+
 import './center.css';
 
 function Center(props){
 
     return(
-        <div className={"center"}>
-            <FileSystem/>
-            <Commits commitsSha1={props.commitsSha1}/>
-        </div>
+            <div className={"center"}>
+                    <MessageBoard />
+            </div>
         );
 }
 

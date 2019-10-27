@@ -7,7 +7,7 @@ import './users.css';
 function Users(props) {
 
     const onlineUsers = props.onlineUsers.map((userName) => {
-        return (<Button variant={"link"}>{userName}</Button>);
+        return (<Button onClick={props.onClick(userName)} variant={"link"}>{userName}</Button>);
     });
         return (
             <div className={"users"}>

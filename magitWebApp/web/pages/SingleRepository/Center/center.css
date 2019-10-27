@@ -5,5 +5,9 @@
     justify-content: space-around;
     background-color: #ecf8f5 ;
     border: solid #d2dedb;
-    width: 100%;
+}
+
+.filesAndCommits{
+    display: flex;
+    flex-direction: column;
 }
