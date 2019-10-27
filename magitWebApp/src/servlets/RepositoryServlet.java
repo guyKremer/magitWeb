@@ -63,10 +63,11 @@ public class RepositoryServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
+        String userName = request.getParameter(USERNAME);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         JsonArray repositoryDetailsList = new JsonArray();
 
-        for(Repository repo : userManager.getRepositories(userNameFromParameter)){
+        for(Repository repo : userManager.getRepositories(userName)){
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
 
             repositoryDetailsList.add(
