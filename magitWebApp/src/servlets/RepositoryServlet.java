@@ -65,13 +65,21 @@ public class RepositoryServlet extends HttpServlet {
         String userNameFromParameter= SessionUtils.getUsername(request);
         String userName = request.getParameter(USERNAME);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String type;
         JsonArray repositoryDetailsList = new JsonArray();
 
         for(Repository repo : userManager.getRepositories(userName)){
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
 
+            if(repo.getClass().equals(LocalRepository.class)){
+                type = "RR";
+            }else{
+                type = "LR";
+            }
+
             repositoryDetailsList.add(
                     new RepositoryDetails(
+                            type,
                             repo.GetName(),
                             repo.GetHeadBranch().getName(),
                             repo.GetBranches().size(),
@@ -87,6 +95,7 @@ public class RepositoryServlet extends HttpServlet {
         //String userNameFromParameter= SessionUtils.getUsername(request);
         List<Repository> repositoryList = new ArrayList<>();
         Repository repo;
+        String type;
         List<RepositoryDetails> repositoryDetailsList = new ArrayList<>();
         File[] directories =
                 new File("c:\\magit-ex3" +File.separator + i_userName ).listFiles(File::isDirectory);
@@ -99,9 +108,15 @@ public class RepositoryServlet extends HttpServlet {
                 repo = new LocalRepository(lines.get(0), file.getAbsolutePath(), true, lines.get(1), lines.get(2));
             }
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+            if(repo.getClass().equals(LocalRepository.class)){
+                type = "RR";
+            }else{
+                type = "LR";
+            }
 
             repositoryDetailsList.add(
                     new RepositoryDetails(
+                            type,
                             repo.GetName(),
                             repo.GetHeadBranch().getName(),
                             repo.GetBranches().size(),
@@ -121,17 +136,20 @@ public class RepositoryServlet extends HttpServlet {
     }
 
     public class RepositoryDetails{
+        public String type;
         public String repoName;
         public String activeBranch;
         public int amountOfBranches;
         public String lastCommitDate;
         public String lastCommitMsg;
 
-        public RepositoryDetails(String i_repoName,
+        public RepositoryDetails(String i_type,
+                                 String i_repoName,
                                  String i_activeBranch,
                                  int i_amountOfBranches,
                                  String i_lastCommitDate,
                                  String i_lastCommitMsg){
+            type = i_type;
             repoName = i_repoName;
             activeBranch = i_activeBranch;
             amountOfBranches = i_amountOfBranches;
@@ -149,7 +167,6 @@ public class RepositoryServlet extends HttpServlet {
 
             return jsonObject;
         }
-
     }
 
 }
