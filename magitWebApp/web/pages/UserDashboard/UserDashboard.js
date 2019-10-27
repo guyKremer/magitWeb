@@ -16,21 +16,24 @@ export default class UserDashboard extends React.Component{
         this.state ={
             userPressed:false,
             pressedUserRepos:[],
+            pressedUserName:"",
             userName:this.props.userName,
             onlineUsers:[],
             messeages:[],
             repositories:[]
         };
+
         this.getUserData=this.getUserData.bind(this);
         this.userOnClickHandler=this.userOnClickHandler.bind(this);
-    }
 
+    }
 
     componentDidMount() {
         this.getUserData();
         setInterval(async ()=>{
             this.getUserData()
         }, 5000);
+
     }
 
 
@@ -45,23 +48,22 @@ export default class UserDashboard extends React.Component{
             );
         }
         else{
-
-           return(<UserRepositories  userRepos={this.state.pressedUserRepos} />);
+           return(<UserRepositories userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />);
         }
-
     }
 
     async userOnClickHandler(userName){
-        let repoResponse = await fetch('userRepos?userName='+userName, {method:'GET', credentials: 'include'});
+        let repoResponse = await fetch('repositories?userName='+userName, {method:'GET', credentials: 'include'});
         repoResponse=await repoResponse.json();
         this.setState(()=>({
             userPressed:true,
-            pressedUserRepos:repoResponse
+            pressedUserRepos:repoResponse,
+            pressedUserName:userName
         }));
     }
 
     async getUserData(){
-        let repoResponse = await fetch('repositories', {method:'GET', credentials: 'include'});
+        let repoResponse = await fetch('repositories?userName='+this.state.userName, {method:'GET', credentials: 'include'});
         let usersResponse = await fetch('users', {method:'GET', credentials: 'include'});
         usersResponse = await usersResponse.json();
         repoResponse = await repoResponse.json();

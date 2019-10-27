@@ -1,0 +1,4 @@
+.userRepos{
+    display: flex;
+    flex-direction: row;
+}
