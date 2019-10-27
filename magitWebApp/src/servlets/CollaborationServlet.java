@@ -46,7 +46,7 @@ public class CollaborationServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Engine engine = new Engine();
         String userNameFromParameter = SessionUtils.getUsername(request);
-        String remoteUser = request.getParameter(USERNAME);
+        String remoteUser = request.getParameter(REMOTEUSER);
         String remoteRepo = request.getParameter(REMOTEREPO);
         String localRepo = request.getParameter(LOCALREPO);
 
