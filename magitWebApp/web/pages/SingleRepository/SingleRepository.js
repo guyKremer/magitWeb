@@ -10,7 +10,7 @@ export default class SingleRepository extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            name:"",
+            name:props.repoName,
             type:"LR",
             remoteRepo:null,
             headBranch:"test",
@@ -54,7 +54,7 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                   pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
+                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center/>
                 <Commits commits={this.state.commits}/>
@@ -64,7 +64,9 @@ export default class SingleRepository extends React.Component{
 
 
     async chekoutHandler(newHeadBranch){
-        await fetch('branches?repository='+this.props.repoName, {method:'POST',body:newHeadBranch, credentials: 'include'});
+        let chars = newHeadBranch.replace('\\','_');
+
+        await fetch('branches?repository='+this.props.repoName, {method:'POST',body:chars, credentials: 'include'});
         let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
             return branchName!==newHeadBranch;
         });

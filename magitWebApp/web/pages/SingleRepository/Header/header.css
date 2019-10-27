@@ -2,12 +2,17 @@
     visibility:hidden;
 }
 
-.header{
+.row{
     display: flex;
     flex-direction: row;
-    width: 100%;
 }
 
-.header .btn {
+.header{
+    display: flex;
+    flex-direction: column;
+}
+
+.row .btn {
     margin-left: 0.5%;
 }
+
