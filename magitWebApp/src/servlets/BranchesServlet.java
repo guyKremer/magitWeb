@@ -64,7 +64,9 @@ public class BranchesServlet extends HttpServlet {
         BufferedReader reader = request.getReader();
         Gson gson = new Gson();
         String branchName = gson.fromJson(reader, String.class);
-        System.out.println(branchName);
+        branchName = branchName.replace("^^"," ");
+        branchName = branchName.replace('^', '\\');
+        //System.out.println(branchName);
         //String branchName = request.getParameter(BRANCH);
         Repository currRepo = null;
         Commit commit;
