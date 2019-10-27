@@ -1,6 +1,8 @@
 package servlets;
 
+import Engine.Engine;
 import Engine.MagitObjects.Branch;
+import Engine.MagitObjects.Commit;
 import Engine.MagitObjects.Repository;
 import com.google.gson.JsonArray;
 import com.sun.org.apache.regexp.internal.RE;
@@ -51,4 +53,29 @@ public class BranchesServlet extends HttpServlet {
 
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
+
+    //checkout
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Engine engine = new Engine();
+        String userNameFromParameter= SessionUtils.getUsername(request);
+        String repoName=request.getParameter(REPOSITORY);
+        String branchName = request.getParameter(BRANCH);
+        Repository currRepo = null;
+        Commit commit;
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+
+        //find repo
+        for(Repository repo : userManager.getRepositories(userNameFromParameter)){
+            if(repo.GetName().equals(repoName)){
+                currRepo = repo;
+                break;
+            }
+        }
+
+        engine.setCurrentRepository(currRepo);
+        engine.checkOut(branchName);
+        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+    }
+
 }

@@ -29,5 +29,7 @@ public class userReposServlet extends HttpServlet {
             jsonArray.add(repo.GetName());
         }
 
+        ServletUtils.SendJsonResponse(response, jsonArray);
+
     }
 }
