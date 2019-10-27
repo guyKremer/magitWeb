@@ -3,7 +3,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 function Branches(props){
     let regularBranchesNames=props.regularBranchesNames.map((branchName)=>{
-        return(<Dropdown.Item>{branchName}</Dropdown.Item>);
+        return(<Dropdown.Item onClick={()=>{props.checkOut(branchName)}}>{branchName}</Dropdown.Item>);
     });
 
 
