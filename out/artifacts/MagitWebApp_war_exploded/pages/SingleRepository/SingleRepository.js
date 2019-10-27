@@ -64,7 +64,8 @@ export default class SingleRepository extends React.Component{
 
 
     async chekoutHandler(newHeadBranch){
-        let chars = newHeadBranch.replace('\\','_');
+        newHeadBranch = newHeadBranch.replace('\\','^');
+        newHeadBranch = newHeadBranch.replace(" ",'^^');
 
         await fetch('branches?repository='+this.props.repoName, {method:'POST',body:chars, credentials: 'include'});
         let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
