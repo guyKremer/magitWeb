@@ -76,7 +76,7 @@ export default class SingleRepository extends React.Component{
         let branchesResponse = await fetch('branches?repository='+this.props.repoName, {method:'GET', credentials: 'include'});
         branchesResponse= await branchesResponse.json();
         this.setState(()=>({
-            headBranch : {name:branchesResponse.pop()},
+            headBranch : {name:branchesResponse.shift()},
             regularBranchesNames: branchesResponse}));
     }
 

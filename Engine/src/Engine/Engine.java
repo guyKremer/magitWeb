@@ -333,7 +333,6 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
