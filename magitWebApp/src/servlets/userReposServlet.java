@@ -1,5 +1,7 @@
 package servlets;
 
+import Engine.MagitObjects.Commit;
+import Engine.MagitObjects.LocalRepository;
 import Engine.MagitObjects.Repository;
 import com.google.gson.JsonArray;
 import com.sun.corba.se.impl.orbutil.RepositoryIdStrings;
@@ -12,7 +14,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 
 import static constants.Constants.*;
 
@@ -25,11 +31,12 @@ public class userReposServlet extends HttpServlet {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         JsonArray jsonArray = new JsonArray();
 
+
+        /*
         for(Repository repo : userManager.getRepositories(userNameFromParameter)){
             jsonArray.add(repo.GetName());
         }
-
+        */
         ServletUtils.SendJsonResponse(response, jsonArray);
-
     }
 }
