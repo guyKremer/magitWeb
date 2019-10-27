@@ -1,7 +1,9 @@
 package servlets;
 
 import Engine.Engine;
+import Engine.MagitObjects.LocalRepository;
 import Engine.MagitObjects.Repository;
+import users.ForkMessage;
 import users.User;
 import users.UserManager;
 import utils.ServletUtils;
@@ -44,7 +46,7 @@ public class CollaborationServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Engine engine = new Engine();
         String userNameFromParameter = SessionUtils.getUsername(request);
-        String remoteUser = request.getParameter(USERNAME);
+        String remoteUser = request.getParameter(REMOTEUSER);
         String remoteRepo = request.getParameter(REMOTEREPO);
         String localRepo = request.getParameter(LOCALREPO);
 
@@ -54,8 +56,9 @@ public class CollaborationServlet extends HttpServlet {
 
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         userManager.usersMap.get(userNameFromParameter).
-                getRepositories().add(new Repository(localRepo,LR.getAbsolutePath(),true));
+                getRepositories().add(new LocalRepository(localRepo,LR.getAbsolutePath(),true, RR.getAbsolutePath(),remoteRepo));
 
+        userManager.usersMap.get(remoteUser).AddMessage(new ForkMessage(remoteRepo,userNameFromParameter));
         //check response
     }
 
