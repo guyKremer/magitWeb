@@ -26,10 +26,7 @@ public class FolderItemServlet  extends HttpServlet {
         Folder rootFolder = userManager.usersMap.get(userNameFromParameter).getRootFolder();
         JsonObject jsonObject;
         JsonArray jsonArray = new JsonArray();
-        FolderItemDetails folderItemDetails;
         FolderItem res;
-        String content = null;
-
 
         if(folderItemName.equals(rootFolder.GetName())){ // if root requested
             for(FolderItem folderItem : rootFolder.GetItems()) {
@@ -46,9 +43,9 @@ public class FolderItemServlet  extends HttpServlet {
             }else{
                 jsonObject = (new FolderItemDetails(res.GetName(),res.GetType(),null, ((Blob)res).GetContent())).toJson();
             }
-
-            ServletUtils.SendJsonResponse(response, jsonObject);
         }
+
+        ServletUtils.SendJsonResponse(response, jsonObject);
     }
 
     public FolderItem getItem(Folder rootFolder, String itemName){
@@ -83,8 +80,11 @@ public class FolderItemServlet  extends HttpServlet {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("name",name);
             jsonObject.addProperty("type",type);
-            jsonObject.add("folderContent", folderContent);
-            jsonObject.addProperty("content",content);
+            if(folderContent != null) {
+                jsonObject.add("content", folderContent);
+            }else {
+                jsonObject.addProperty("content", content);
+            }
 
             return jsonObject;
         }
