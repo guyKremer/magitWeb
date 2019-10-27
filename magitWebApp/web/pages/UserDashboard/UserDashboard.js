@@ -46,7 +46,7 @@ export default class UserDashboard extends React.Component{
             );
         }
         else{
-           return(<UserRepositories userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />);
+           return(<UserRepositories forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />);
         }
     }
 

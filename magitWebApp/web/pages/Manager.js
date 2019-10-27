@@ -22,7 +22,7 @@ export default class BaseContainer extends React.Component{
         this.state={
             location:props.location,
             userName:"",
-            chosenRepoName:""
+            chosenRepoName:"",
         }
         this.loginHandler = this.loginHandler.bind(this);
         this.repoChoosingHandler = this.repoChoosingHandler.bind(this);
@@ -41,10 +41,9 @@ export default class BaseContainer extends React.Component{
             return(
                 <React.Fragment>
                     <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand onClick={this.homeHandler}>MagitHub</Navbar.Brand>
+                        <Navbar.Brand>MagitHub</Navbar.Brand>
                         <Nav className="mr-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-
+                            <Nav.Link onClick={this.homeHandler}>Home</Nav.Link>
                         </Nav>
                         <Dropdown as={ButtonToolbar}>
                             <DropdownButton variant= "secondary"title={this.state.userName} size="sm">
@@ -52,7 +51,7 @@ export default class BaseContainer extends React.Component{
                             </DropdownButton>
                         </Dropdown>
                     </Navbar>
-                    <Main repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
+                    <Main userPressed={this.state.userPressed} repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
                 </React.Fragment>
             );
         }
@@ -62,8 +61,7 @@ export default class BaseContainer extends React.Component{
                     <Navbar bg="dark" variant="dark">
                         <Navbar.Brand href="#home">MagitHub</Navbar.Brand>
                         <Nav className="mr-auto">
-                            <Nav.Link href="#home">Home</Nav.Link>
-
+                            <Nav.Link onClick={this.homeHandler}>Home</Nav.Link>
                         </Nav>
                         <Dropdown as={ButtonToolbar}>
                             <DropdownButton variant= "secondary"title={this.state.userName} size="sm">

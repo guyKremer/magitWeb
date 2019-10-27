@@ -5,6 +5,7 @@ import './userRepositories.css';
 function UserRepositories(props){
 
     const onclick = (RRRepoName, LRnewRepoName) => {
+        props.forkOnClick();
         let check = 'collaboration?remoteUser='+props.userName+'&remoteRepo='+RRRepoName+'&localRepo='+LRnewRepoName;
         let repoResponse =  fetch(check, {method:'POST',body:'', credentials: 'include'});
     }
