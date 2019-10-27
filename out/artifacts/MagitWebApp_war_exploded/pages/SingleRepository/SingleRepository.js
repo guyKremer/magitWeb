@@ -36,6 +36,9 @@ export default class SingleRepository extends React.Component{
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
+        this.pullOnClickHandler=this.pullOnClickHandler.bind(this);
+        this.pushOnClickHandler=this.pushOnClickHandler.bind(this);
+
     }
 
     componentDidMount() {
@@ -52,13 +55,22 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                    headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
+                   pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center/>
                 <Commits commits={this.state.commits}/>
             </div>
         );
     }
+
+    pushOnClickHandler(){
+        fetch('collaboration?repository='+this.props.repoName+'&operation=push', {method:'GET', credentials: 'include'});
+    }
+   async pullOnClickHandler(){
+        await fetch('collaboration?repository='+this.props.repoName+'&operation=pull', {method:'GET', credentials: 'include'});
+       this.getBranches();
+       this.getCommitsSha1();
+   }
 
    async getBranches(){
         let branchesResponse = await fetch('branches?repository='+this.props.repoName, {method:'GET', credentials: 'include'});
@@ -74,4 +86,6 @@ export default class SingleRepository extends React.Component{
         this.setState(()=>({
             commits: commitsResponse}));
     }
+
+
 }

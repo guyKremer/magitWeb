@@ -33,10 +33,8 @@ export default class UserDashboard extends React.Component{
         setInterval(async ()=>{
             this.getUserData()
         }, 5000);
-
     }
-
-
+    
     render(){
         if(this.state.userPressed === false){
             return(

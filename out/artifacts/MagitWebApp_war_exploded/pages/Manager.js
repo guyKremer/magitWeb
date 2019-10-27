@@ -26,6 +26,7 @@ export default class BaseContainer extends React.Component{
         }
         this.loginHandler = this.loginHandler.bind(this);
         this.repoChoosingHandler = this.repoChoosingHandler.bind(this);
+        this.homeHandler=this.homeHandler.bind(this);
     }
 
     render() {
@@ -40,7 +41,7 @@ export default class BaseContainer extends React.Component{
             return(
                 <React.Fragment>
                     <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand href="#home">MagitHub</Navbar.Brand>
+                        <Navbar.Brand onClick={this.homeHandler}>MagitHub</Navbar.Brand>
                         <Nav className="mr-auto">
                             <Nav.Link href="#home">Home</Nav.Link>
 
@@ -76,6 +77,11 @@ export default class BaseContainer extends React.Component{
         }
     }
 
+    homeHandler(){
+        this.setState(()=> ({
+            location: Consts.MAIN,
+        }));
+    }
     loginHandler(userName){
         this.setState(()=> ({
             location: Consts.MAIN,
