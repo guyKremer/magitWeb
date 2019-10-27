@@ -333,7 +333,6 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
@@ -598,8 +597,12 @@ public class Engine {
         }
 
     }
-    /// NOT FINISHED
+
+    /// NEED CHECK
     private void pushNewBranch() throws IOException {
+        String headBranchName = m_currentRepository.GetHeadBranch().getName();
+        String headCommit = m_currentRepository.GetHeadBranch().getCommitSha1();
+
         Map<String,Commit> localCommits = m_currentRepository.GetCommitsMap();
         Map<String,Commit> remoteCommits;
 
@@ -613,7 +616,27 @@ public class Engine {
         Path RRpath = RR.GetRepositoryPath();
         Path RRMagit = Repository.m_pathToMagitDirectory;
 
+        RTBranch rtBranch = new RTBranch(
+                Repository.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName)
+                ,headCommit);
+
         remoteCommits = RR.GetCommitsMap();
+
+        Commit branchCommit1;
+        Commit branchCommit2 = null;
+
+        initNewPaths(RRpath, m_currentRepository);
+        //branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1());
+
+        Repository.m_repositoryPath = RRpath;
+        Repository.m_pathToMagitDirectory = RRMagit;
+
+        for(Map.Entry<String,Commit> commit: localCommits.entrySet()){
+            if(remoteCommits.get(commit.getKey()) == null){
+                Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(commit.getKey())
+                        ,commit.getValue().toString());
+            }
+        }
 
 
     }

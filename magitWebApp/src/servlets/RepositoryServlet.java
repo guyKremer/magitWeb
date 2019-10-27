@@ -1,27 +1,40 @@
 package servlets;
 
+import Engine.MagitObjects.Commit;
+import Engine.MagitObjects.FolderItems.Blob;
+import Engine.MagitObjects.LocalRepository;
+import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;
+import utils.SessionUtils;
 import xmlFormat.xmlUtiles;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 import static constants.Constants.*;
 
 @WebServlet(name = "UserDataServlet", urlPatterns = {"/repositories"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 public class RepositoryServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,11 +57,116 @@ public class RepositoryServlet extends HttpServlet {
             e.printStackTrace();
         }
 
+        getAllRepos(userNameFromParameter);
+
     }
 
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userNameFromParameter= SessionUtils.getUsername(request);
+        String userName = request.getParameter(USERNAME);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String type;
+        JsonArray repositoryDetailsList = new JsonArray();
+
+        for(Repository repo : userManager.getRepositories(userName)){
+            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+
+            if(repo.getClass().equals(LocalRepository.class)){
+                type = "RR";
+            }else{
+                type = "LR";
+            }
+
+            repositoryDetailsList.add(
+                    new RepositoryDetails(
+                            type,
+                            repo.GetName(),
+                            repo.GetHeadBranch().getName(),
+                            repo.GetBranches().size(),
+                            commit.getDateOfCreation(),
+                            commit.getMessage()
+                    ).toJson());
+        }
+
+        ServletUtils.SendJsonResponse(response, repositoryDetailsList);
+    }
+
+    private void getAllRepos(String i_userName) throws IOException {
+        //String userNameFromParameter= SessionUtils.getUsername(request);
+        List<Repository> repositoryList = new ArrayList<>();
+        Repository repo;
+        String type;
+        List<RepositoryDetails> repositoryDetailsList = new ArrayList<>();
+        File[] directories =
+                new File("c:\\magit-ex3" +File.separator + i_userName ).listFiles(File::isDirectory);
+
+        for(File file : directories) {
+            List<String> lines = Files.readAllLines(Paths.get(file.getAbsolutePath()).resolve(".magit").resolve("RepoName"));
+            if (lines.size() == 1) {
+                repo = new Repository(lines.get(0), file.getAbsolutePath(), true);
+            } else {
+                repo = new LocalRepository(lines.get(0), file.getAbsolutePath(), true, lines.get(1), lines.get(2));
+            }
+            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+            if(repo.getClass().equals(LocalRepository.class)){
+                type = "RR";
+            }else{
+                type = "LR";
+            }
+
+            repositoryDetailsList.add(
+                    new RepositoryDetails(
+                            type,
+                            repo.GetName(),
+                            repo.GetHeadBranch().getName(),
+                            repo.GetBranches().size(),
+                            commit.getDateOfCreation(),
+                            commit.getMessage()
+                    ));
+
+            repositoryList.add(repo);
+        }
+
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        userManager.addRepositories(i_userName ,repositoryList);
+    }
 
     private String readFromInputStream(InputStream inputStream) {
         return new Scanner(inputStream).useDelimiter("\\Z").next();
+    }
+
+    public class RepositoryDetails{
+        public String type;
+        public String repoName;
+        public String activeBranch;
+        public int amountOfBranches;
+        public String lastCommitDate;
+        public String lastCommitMsg;
+
+        public RepositoryDetails(String i_type,
+                                 String i_repoName,
+                                 String i_activeBranch,
+                                 int i_amountOfBranches,
+                                 String i_lastCommitDate,
+                                 String i_lastCommitMsg){
+            type = i_type;
+            repoName = i_repoName;
+            activeBranch = i_activeBranch;
+            amountOfBranches = i_amountOfBranches;
+            lastCommitDate = i_lastCommitDate;
+            lastCommitMsg = i_lastCommitMsg;
+        }
+
+        public JsonObject toJson(){
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("repositoryName",repoName);
+            jsonObject.addProperty("activeBranch",activeBranch);
+            jsonObject.addProperty("amountOfBranches",amountOfBranches);
+            jsonObject.addProperty("lastCommitDate",lastCommitDate);
+            jsonObject.addProperty("lastCommitMsg",lastCommitMsg);
+
+            return jsonObject;
+        }
     }
 
 }

@@ -1,0 +1,9 @@
+.singleRepository{
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+    min-height: 100vh;
+
+}

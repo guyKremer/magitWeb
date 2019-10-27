@@ -1,0 +1,13 @@
+.hide{
+    visibility:hidden;
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+.header .btn {
+    margin-left: 0.5%;
+}

@@ -1,0 +1,13 @@
+.center{
+    display: flex;
+    flex-direction: row;
+    margin-top: 2%;
+    justify-content: space-around;
+    background-color: #ecf8f5 ;
+    border: solid #d2dedb;
+}
+
+.filesAndCommits{
+    display: flex;
+    flex-direction: column;
+}

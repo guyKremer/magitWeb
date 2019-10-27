@@ -1,7 +1,10 @@
 package utils;
 
 
+import Engine.MagitObjects.FolderItems.Folder;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import users.UserManager;
 
 import javax.servlet.ServletContext;
@@ -9,18 +12,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class ServletUtils {
 
     private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
-    private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
+    private static final String ROOT_FOLDER = "rootFolder";
+    //private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 
     /*
     Note how the synchronization is done only on the question and\or creation of the relevant managers and once they exists -
     the actual fetch of them is remained un-synchronized for performance POV
      */
     private static final Object userManagerLock = new Object();
-    private static final Object chatManagerLock = new Object();
+    //private static final Object chatManagerLock = new Object();
 
     public static UserManager getUserManager(ServletContext servletContext) {
 
@@ -32,13 +38,23 @@ public class ServletUtils {
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 
-    public static HttpServletResponse SendJsonResponse (HttpServletResponse response,String body) throws IOException {
+    /*
+    public static HttpServletResponse SendJsonArrayResponse (HttpServletResponse response, List<JsonObject> objList) throws IOException {
         PrintWriter out=response.getWriter();
-        Gson gson = new Gson();
-        String gsonResponse = gson.toJson(body);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        out.print(gsonResponse);
+        out.print(objList);
+        out.flush();
+        return response;
+    }
+
+     */
+
+        public static HttpServletResponse SendJsonResponse (HttpServletResponse response, JsonElement jsonObj) throws IOException {
+        PrintWriter out=response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        out.print(jsonObj);
         out.flush();
         return response;
     }

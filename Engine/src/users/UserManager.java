@@ -1,27 +1,43 @@
 package users;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import Engine.MagitObjects.Repository;
+
+import java.util.*;
 
 public class UserManager {
-    public final Set<String> usersSet;
+    public final Map<String,User> usersMap;
 
-    public UserManager() { usersSet = new HashSet<>(); }
+    public UserManager() { usersMap = new HashMap<>(); }
 
     public synchronized void addUser(String username) {
-        usersSet.add(username);
+        User user = new User(username);
+        usersMap.put(username,user);
     }
 
-    public synchronized void removeUser(String username) {
-        usersSet.remove(username);
+    public synchronized void logoutUser(String username) {
+        usersMap.get(username).Logout();
     }
 
     public synchronized Set<String> getUsers() {
-        return Collections.unmodifiableSet(usersSet);
+        return usersMap.keySet();
     }
 
-    public boolean isUserExists(String username) {
-        return usersSet.contains(username);
+    public boolean isUserExists(String userName) {
+        if(usersMap.get(userName) == null){
+            return false;
+        }
+        return true;
+    }
+
+    public synchronized List<Message> getAllMessages(String userName){
+        return usersMap.get(userName).getAllNewMsg();
+    }
+
+    public synchronized  void addRepositories(String i_userName, List<Repository> i_repos){
+        usersMap.get(i_userName).setRepositories(i_repos);
+    }
+
+    public synchronized List<Repository> getRepositories(String i_userName){
+        return usersMap.get(i_userName).getRepositories();
     }
 }

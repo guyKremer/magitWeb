@@ -1,6 +1,8 @@
 package servlets;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;
@@ -23,10 +25,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         BufferedReader reader = request.getReader();
         Gson gson = new Gson();
-
         String userNameFromParameter = gson.fromJson(reader, String.class);
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(Constants.USERNAME,userNameFromParameter) ;
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-
         synchronized (this){
             if(userManager.isUserExists(userNameFromParameter)){
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
@@ -34,7 +36,7 @@ public class LoginServlet extends HttpServlet {
             else{
                 userManager.addUser(userNameFromParameter);
                 request.getSession(true).setAttribute(Constants.USERNAME, userNameFromParameter);
-                ServletUtils.SendJsonResponse(response,userNameFromParameter);
+                ServletUtils.SendJsonResponse(response,jsonObject);
             }
         }
     }

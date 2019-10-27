@@ -6,8 +6,6 @@ function SingleUser(props) {
 
     return(
         <div className={"singleUser"}>
-            <div className={"dot dot-"+ props.status}/>
-            <Button variant={"link"}>{props.userName}</Button>
         </div>
 
     );
