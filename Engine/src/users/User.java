@@ -1,14 +1,24 @@
 package users;
 
+import Engine.MagitObjects.FolderItems.Folder;
 import Engine.MagitObjects.Repository;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
     private String userName;
+
+    public Folder getRootFolder() {
+        return rootFolder;
+    }
+
+    public void setRootFolder(Folder rootFolder) {
+        this.rootFolder = rootFolder;
+    }
+
     List<Message> messages = new ArrayList<Message>();
     List<Repository> repositories;
+    Folder rootFolder;
     private boolean online;
 
     public User(String i_userName){

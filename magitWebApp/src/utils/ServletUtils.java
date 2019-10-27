@@ -1,6 +1,7 @@
 package utils;
 
 
+import Engine.MagitObjects.FolderItems.Folder;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ServletUtils {
 
     private static final String USER_MANAGER_ATTRIBUTE_NAME = "userManager";
+    private static final String ROOT_FOLDER = "rootFolder";
     //private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 
     /*
