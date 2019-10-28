@@ -160,7 +160,7 @@ public class Engine {
 
     public Status showStatusAgainstOtherCommits(Commit commit, String prevCommitSha1)throws IOException {
         isRepositoryInitialized();
-        Commit originalCommit = m_currentRepository.GetCurrentCommit();
+        Commit originalCommit = m_currentRepository.GeCurrentCommit();
         Folder originalWc = m_currentRepository.loadWC();
         Status status=new Status(m_currentRepository.m_repositoryPath.toString(),m_currentRepository.GetName(),m_user,null,null,null,null);
 
@@ -240,6 +240,7 @@ public class Engine {
 
         return destFile;
     }
+
 
     public List<String> showCurrentCommitFiles()throws NullPointerException{
         isRepositoryInitialized();
@@ -332,7 +333,6 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-        //m_currentRepository.flushBranches();
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
@@ -394,7 +394,7 @@ public class Engine {
 
     public void Pull() throws IOException {
 
-        //if(!isChanges()) {
+        if(!isChanges()) {
 
             Path currRepoPath = Repository.m_repositoryPath;
             Path currMagitPath = Repository.m_pathToMagitDirectory;
@@ -446,7 +446,6 @@ public class Engine {
                 }
             }
 
-
             if (m_currentRepository.GetHeadBranch() instanceof RTBranch) {
 
                 // update RB in LR
@@ -475,25 +474,23 @@ public class Engine {
 
                 initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
             }
+        }else{
+            throw new FileNotFoundException("Working copy dirty, please commit before pull");
+        }
 
-
-        //}else{
-        //    throw new FileNotFoundException("Working copy dirty, please commit before pull");
-        //}
-        m_currentRepository.flushBranches();
     }
 
     public void Push() throws IOException {
 
-  //      String RBcommit = (m_currentRepository.GetBranch(((LocalRepository)m_currentRepository).getRemoteRepoName()
-     //                   + File.separator + m_currentRepository.GetHeadBranch())).getCommitSha1();
+        String RBcommit = m_currentRepository.GetBranch(
+                ((LocalRepository)m_currentRepository).getRemoteRepoName()
+                        + File.separator + m_currentRepository.GetHeadBranch()).getCommitSha1();
+        String LBcommit = m_currentRepository.GetHeadBranch().getCommitSha1();
 
-       // String LBcommit = m_currentRepository.GetHeadBranch().getCommitSha1();
+        if(RBcommit.equals(LBcommit)){
+            throw new FileNotFoundException("Need Pull before Push");
 
-       // if(RBcommit.equals(LBcommit)){
-     //       throw new FileNotFoundException("Need Pull before Push");
-
-        //}else {
+        }else {
             // is a new branch
             if (m_currentRepository.GetBranch(
                     ((LocalRepository) m_currentRepository).getRemoteRepoName()
@@ -597,7 +594,7 @@ public class Engine {
                 //initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
                 //}
             }
-       // }
+        }
 
     }
 

@@ -71,7 +71,7 @@ public class RepositoryServlet extends HttpServlet {
         String RRuser = null;
 
         for(Repository repo : userManager.getRepositories(userName)){
-
+            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
 
             if(repo.getClass().equals(LocalRepository.class)){
                 type = "LR";
@@ -90,8 +90,8 @@ public class RepositoryServlet extends HttpServlet {
                             repo.GetName(),
                             repo.GetHeadBranch().getName(),
                             repo.GetBranches().size(),
-                            repo.GetCurrentCommit().getDateOfCreation(),
-                            repo.GetCurrentCommit().getMessage(),
+                            commit.getDateOfCreation(),
+                            commit.getMessage(),
                             RRname,
                             RRuser
                     ).toJson());
