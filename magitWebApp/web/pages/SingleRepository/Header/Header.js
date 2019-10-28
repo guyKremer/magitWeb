@@ -16,10 +16,13 @@ function Header(props){
                         <div className={"row2"}>
                             <b>{props.repoName}</b>
                             <div className={"right"}>
-                                <b> RR: </b>
+                                <b>RR:</b>
                                 <b>{props.RRuser + '/' + props.RRname}</b>
                             </div>
-                        </div>:""
+                        </div>:
+                        <div className={"row2"}>
+                            <b>{props.repoName}</b>
+                        </div>
                     }
                 </div>
                 <div className={"row2"}>
