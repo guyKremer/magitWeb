@@ -10,13 +10,10 @@ export default class SingleRepository extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            name:"",
+            name:props.repoName,
             type:"LR",
             remoteRepo:null,
-            headBranch:{
-                name:"test",
-                commits:[]
-            },
+            headBranch:"test",
             regularBranchesNames:[],
             commits:[],
             fileTree:{
@@ -38,6 +35,8 @@ export default class SingleRepository extends React.Component{
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
         this.pullOnClickHandler=this.pullOnClickHandler.bind(this);
         this.pushOnClickHandler=this.pushOnClickHandler.bind(this);
+        this.chekoutHandler=this.chekoutHandler.bind(this);
+
 
     }
 
@@ -55,12 +54,26 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                   pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} headBranch={this.state.headBranch}  regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
+                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center/>
                 <Commits commits={this.state.commits}/>
             </div>
         );
+    }
+
+
+    async chekoutHandler(newHeadBranch){
+        newHeadBranch = newHeadBranch.replace('\\','^');
+        newHeadBranch = newHeadBranch.replace(" ",'^^');
+
+        await fetch('branches?repository='+this.props.repoName, {method:'POST',body:newHeadBranch, credentials: 'include'});
+        let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
+            return branchName!==newHeadBranch;
+        });
+        this.setState(()=>({
+            headBranch : newHeadBranch,
+            regularBranchesNames: regularBranchesName}));
     }
 
     pushOnClickHandler(){
