@@ -51,6 +51,35 @@ public class CommitsServlet extends HttpServlet {
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        String userNameFromParameter= SessionUtils.getUsername(request);
+        String repoName=request.getParameter(REPOSITORY);
+        String sha1=request.getParameter(SHA1);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        Commit commit;
+        Repository currRepo = null;
+
+        List<Repository> userRepos = userManager.getRepositories(userNameFromParameter);
+
+        //find repo
+        for(Repository repo : userRepos){
+            if(repo.GetName().equals(repoName)){
+                currRepo = repo;
+                break;
+            }
+        }
+
+        if(sha1.equals("0")){
+            commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+            userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+        }
+        else{
+            commit = new Commit(sha1);
+            userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+        }
+    }
+
     public JsonArray getAllBranchCommits(Repository i_repo, String i_branch) throws IOException {
         JsonArray jsonArray = new JsonArray();
         Commit firstCommit = new Commit(i_repo.GetBranches().get(i_branch).getCommitSha1());
