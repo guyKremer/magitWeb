@@ -67,6 +67,8 @@ public class RepositoryServlet extends HttpServlet {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         String type;
         JsonArray repositoryDetailsList = new JsonArray();
+        String RRname = null;
+        String RRuser = null;
 
         for(Repository repo : userManager.getRepositories(userName)){
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
@@ -77,6 +79,11 @@ public class RepositoryServlet extends HttpServlet {
                 type = "LR";
             }
 
+            if(type.equals("LR")){
+                RRname = repo.GetName();
+                RRuser = (repo.GetRepositoryPath().getParent()).getFileName().toString();
+            }
+
             repositoryDetailsList.add(
                     new RepositoryDetails(
                             type,
@@ -84,7 +91,9 @@ public class RepositoryServlet extends HttpServlet {
                             repo.GetHeadBranch().getName(),
                             repo.GetBranches().size(),
                             commit.getDateOfCreation(),
-                            commit.getMessage()
+                            commit.getMessage(),
+                            RRname,
+                            RRuser
                     ).toJson());
         }
 
@@ -97,6 +106,8 @@ public class RepositoryServlet extends HttpServlet {
         Repository repo;
         String type;
         List<RepositoryDetails> repositoryDetailsList = new ArrayList<>();
+        String RRname = null;
+        String RRuser = null;
         File[] directories =
                 new File("c:\\magit-ex3" +File.separator + i_userName ).listFiles(File::isDirectory);
 
@@ -113,7 +124,10 @@ public class RepositoryServlet extends HttpServlet {
             }else{
                 type = "LR";
             }
-
+            if(type.equals("LR")){
+                RRname = repo.GetName();
+                RRuser = (repo.GetRepositoryPath().getParent()).getFileName().toString();
+            }
             repositoryDetailsList.add(
                     new RepositoryDetails(
                             type,
@@ -121,7 +135,9 @@ public class RepositoryServlet extends HttpServlet {
                             repo.GetHeadBranch().getName(),
                             repo.GetBranches().size(),
                             commit.getDateOfCreation(),
-                            commit.getMessage()
+                            commit.getMessage(),
+                            RRname,
+                            RRuser
                     ));
 
             repositoryList.add(repo);
@@ -142,19 +158,25 @@ public class RepositoryServlet extends HttpServlet {
         public int amountOfBranches;
         public String lastCommitDate;
         public String lastCommitMsg;
+        public String RRname = null;
+        public String RRuser =null;
 
         public RepositoryDetails(String i_type,
                                  String i_repoName,
                                  String i_activeBranch,
                                  int i_amountOfBranches,
                                  String i_lastCommitDate,
-                                 String i_lastCommitMsg){
+                                 String i_lastCommitMsg,
+                                 String i_RRname,
+                                 String i_RRuser){
             type = i_type;
             repoName = i_repoName;
             activeBranch = i_activeBranch;
             amountOfBranches = i_amountOfBranches;
             lastCommitDate = i_lastCommitDate;
             lastCommitMsg = i_lastCommitMsg;
+            RRname = i_RRname;
+            RRuser = i_RRuser;
         }
 
         public JsonObject toJson(){
@@ -164,6 +186,8 @@ public class RepositoryServlet extends HttpServlet {
             jsonObject.addProperty("amountOfBranches",amountOfBranches);
             jsonObject.addProperty("lastCommitDate",lastCommitDate);
             jsonObject.addProperty("lastCommitMsg",lastCommitMsg);
+            jsonObject.addProperty("RRname", RRname);
+            jsonObject.addProperty("RRuser", RRuser);
 
             return jsonObject;
         }
