@@ -84,7 +84,8 @@ export default class SingleRepository extends React.Component{
         }
         else{
              fileHierarchy = this.state.fileHierarchy.map((file)=>{
-                if(i<index){
+                if(i<=index){
+                    console.log(file);
                     i++
                     return file;
                 }
