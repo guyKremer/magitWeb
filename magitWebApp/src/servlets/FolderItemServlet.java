@@ -58,8 +58,7 @@ public class FolderItemServlet  extends HttpServlet {
                 break;
             }
             else if(item.GetType().equals("folder")) {
-                res = getItem(rootFolder, itemName);
-                break;
+                res = getItem((Folder)item, itemName);
             }
         }
         return res;
