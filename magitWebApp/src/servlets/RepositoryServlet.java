@@ -80,7 +80,7 @@ public class RepositoryServlet extends HttpServlet {
             }
 
             if(type.equals("LR")){
-                RRname = repo.GetName();
+                RRname = ((LocalRepository)repo).getRemoteRepoName();
                 RRuser = (repo.GetRepositoryPath().getParent()).getFileName().toString();
             }
 
@@ -125,7 +125,7 @@ public class RepositoryServlet extends HttpServlet {
                 type = "RR";
             }
             if(type.equals("LR")){
-                RRname = repo.GetName();
+                RRname = ((LocalRepository)repo).getRemoteRepoName();
                 RRuser = (repo.GetRepositoryPath().getParent()).getFileName().toString();
             }
             repositoryDetailsList.add(
