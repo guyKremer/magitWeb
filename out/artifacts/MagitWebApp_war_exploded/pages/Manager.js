@@ -8,6 +8,7 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import SingleRepository from './SingleRepository/SingleRepository';
+import Bar from '../pages/Bar';
 
 import {
     HashRouter as Router,
@@ -23,6 +24,7 @@ export default class BaseContainer extends React.Component{
             location:props.location,
             userName:"",
             chosenRepoName:"",
+            userPressed:false
         }
         this.loginHandler = this.loginHandler.bind(this);
         this.repoChoosingHandler = this.repoChoosingHandler.bind(this);
@@ -39,36 +41,13 @@ export default class BaseContainer extends React.Component{
 
         else if(this.state.location === Consts.MAIN) {
             return(
-                <React.Fragment>
-                    <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand>MagitHub</Navbar.Brand>
-                        <Nav className="mr-auto">
-                            <Nav.Link onClick={this.homeHandler}>Home</Nav.Link>
-                        </Nav>
-                        <Dropdown as={ButtonToolbar}>
-                            <DropdownButton variant= "secondary"title={this.state.userName} size="sm">
-                                <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
-                            </DropdownButton>
-                        </Dropdown>
-                    </Navbar>
                     <Main userPressed={this.state.userPressed} repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
-                </React.Fragment>
             );
         }
         else{
             return (
                 <React.Fragment>
-                    <Navbar bg="dark" variant="dark">
-                        <Navbar.Brand href="#home">MagitHub</Navbar.Brand>
-                        <Nav className="mr-auto">
-                            <Nav.Link onClick={this.homeHandler}>Home</Nav.Link>
-                        </Nav>
-                        <Dropdown as={ButtonToolbar}>
-                            <DropdownButton variant= "secondary"title={this.state.userName} size="sm">
-                                <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
-                            </DropdownButton>
-                        </Dropdown>
-                    </Navbar>
+                    <Bar  homeHandler={this.homeHandler} userName={this.state.userName}/>
                     <SingleRepository repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )

@@ -7,6 +7,7 @@ import ButtonToolbar from 'react-bootstrap/ButtonToolbar';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import Dropdown from 'react-bootstrap/Dropdown';
 import UserRepositories from './UserRepositories/UserRepositories';
+import Bar from '../Bar';
 import './main.css'
 
 export default class UserDashboard extends React.Component{
@@ -17,7 +18,7 @@ export default class UserDashboard extends React.Component{
             userPressed:false,
             pressedUserRepos:[],
             pressedUserName:"",
-            userName:this.props.userName,
+            userName:props.userName,
             onlineUsers:[],
             messeages:[],
             repositories:[]
@@ -31,23 +32,31 @@ export default class UserDashboard extends React.Component{
     componentDidMount() {
         this.getUserData();
         setInterval(async ()=>{
-            this.getUserData()
-        }, 5000);
+            this.getUserData();
+        }, 1000);
     }
-    
+
     render(){
         if(this.state.userPressed === false){
             return(
-                <div id="main">
-                    <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
-                    <MessagesBoard/>
-                    <Users onClick={this.userOnClickHandler} onlineUsers={this.state.onlineUsers}/>
-                </div>
+                <React.Fragment>
+                    <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
+                    <div id="main">
+                        <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
+                        <MessagesBoard/>
+                        <Users onClick={this.userOnClickHandler} onlineUsers={this.state.onlineUsers}/>
+                     </div>
+                </React.Fragment>
             );
         }
         else{
-           return(<UserRepositories forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />);
-        }
+            return(
+            <React.Fragment>
+             <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
+             <UserRepositories forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />
+            </React.Fragment>
+            );
+                }
     }
 
     async userOnClickHandler(userName){
