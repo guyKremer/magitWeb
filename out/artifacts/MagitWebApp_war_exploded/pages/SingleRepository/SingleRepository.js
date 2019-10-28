@@ -76,6 +76,12 @@ export default class SingleRepository extends React.Component{
             regularBranchesNames: regularBranchesName}));
     }
 
+    newBranchOnClickHandler(){
+        fetch('branches?repository='+this.props.repoName+'&branch=push', {method:'PUT', credentials: 'include'});
+
+    }
+
+
     pushOnClickHandler(){
         fetch('collaboration?repository='+this.props.repoName+'&operation=push', {method:'GET', credentials: 'include'});
     }

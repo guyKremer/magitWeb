@@ -16,3 +16,7 @@
     margin-left: 0.5%;
 }
 
+#pull,#post,#pr{
+    align-items: flex-end;
+}
+
