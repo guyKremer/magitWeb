@@ -74,9 +74,9 @@ public class RepositoryServlet extends HttpServlet {
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
 
             if(repo.getClass().equals(LocalRepository.class)){
-                type = "RR";
-            }else{
                 type = "LR";
+            }else{
+                type = "RR";
             }
 
             if(type.equals("LR")){
@@ -120,9 +120,9 @@ public class RepositoryServlet extends HttpServlet {
             }
             Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
             if(repo.getClass().equals(LocalRepository.class)){
-                type = "RR";
-            }else{
                 type = "LR";
+            }else{
+                type = "RR";
             }
             if(type.equals("LR")){
                 RRname = repo.GetName();
@@ -186,6 +186,7 @@ public class RepositoryServlet extends HttpServlet {
             jsonObject.addProperty("amountOfBranches",amountOfBranches);
             jsonObject.addProperty("lastCommitDate",lastCommitDate);
             jsonObject.addProperty("lastCommitMsg",lastCommitMsg);
+            jsonObject.addProperty("type",type);
             jsonObject.addProperty("RRname", RRname);
             jsonObject.addProperty("RRuser", RRuser);
 
