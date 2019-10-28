@@ -24,6 +24,9 @@ export default class BaseContainer extends React.Component{
             location:props.location,
             userName:"",
             chosenRepoName:"",
+            choserRepoType:"",
+            RRname:"",
+            RRowner:"",
             userPressed:false
         }
         this.loginHandler = this.loginHandler.bind(this);
@@ -66,10 +69,13 @@ export default class BaseContainer extends React.Component{
         }));
     }
 
-    repoChoosingHandler(repoName){
+    repoChoosingHandler(repoName,repoType,RRname,RRowner){
         this.setState(()=> ({
             location: Consts.SINGLE_REPO,
-            chosenRepoName:repoName
+            chosenRepoName:repoName,
+            RRname:RRname,
+            choserRepoType:repoType,
+            RRowner:RRowner
         }));
     }
 }

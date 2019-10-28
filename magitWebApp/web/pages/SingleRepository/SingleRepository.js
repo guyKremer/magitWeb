@@ -11,7 +11,7 @@ export default class SingleRepository extends React.Component{
         super(props);
         this.state={
             name:props.repoName,
-            type:"LR",
+            type:props.type,
             remoteRepo:null,
             headBranch:"test",
             regularBranchesNames:[],
