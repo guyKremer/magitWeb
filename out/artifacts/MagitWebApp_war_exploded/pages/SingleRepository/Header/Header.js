@@ -27,7 +27,7 @@ function Header(props){
                     <NewBranchButton repoName={props.repoName}/>
                     <Button variant={"success"} id={"pr"}  className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Create Pull Request</Button>
                     <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Pull</Button>
-                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pullOnClick} size={"sm"}>Push</Button>
+                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pushOnClick} size={"sm"}>Push</Button>
                 </div>
             </div>
     )
