@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 
 import static constants.Constants.*;
 
@@ -31,9 +30,7 @@ public class CollaborationServlet extends HttpServlet {
         String repoName = request.getParameter(REPOSITORY);
         String operation = request.getParameter(OPERATION);
         Repository repo = getUserRepo(userNameFromParameter,repoName);
-        engine.setCurrentRepository((LocalRepository)repo);
-        Repository.m_repositoryPath = Paths.get(rootPath + File.separator + userNameFromParameter + File.separator + repoName);
-        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+        engine.setCurrentRepository(repo);
 
         if(operation.equals("push")){
             engine.Push();
