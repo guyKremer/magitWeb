@@ -71,7 +71,7 @@ public class RepositoryServlet extends HttpServlet {
         String RRuser = null;
 
         for(Repository repo : userManager.getRepositories(userName)){
-            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+            Commit commit = repo.GetCurrentCommit();
 
             if(repo.getClass().equals(LocalRepository.class)){
                 type = "LR";
@@ -118,7 +118,7 @@ public class RepositoryServlet extends HttpServlet {
             } else {
                 repo = new LocalRepository(lines.get(0), file.getAbsolutePath(), true, lines.get(1), lines.get(2));
             }
-            Commit commit = new Commit(repo.GetHeadBranch().getCommitSha1());
+            Commit commit = repo.GetCurrentCommit();
             if(repo.getClass().equals(LocalRepository.class)){
                 type = "LR";
             }else{

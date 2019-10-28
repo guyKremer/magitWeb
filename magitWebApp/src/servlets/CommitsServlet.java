@@ -46,8 +46,8 @@ public class CommitsServlet extends HttpServlet {
         }
 
         jsonArray = getAllBranchCommits(currRepo, branchName);
-        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
-        userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+        //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        //userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
 
@@ -71,7 +71,8 @@ public class CommitsServlet extends HttpServlet {
         }
 
         if(sha1.equals("0")){
-            commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+            //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+            commit = currRepo.GetCurrentCommit();
             userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
         }
         else{
