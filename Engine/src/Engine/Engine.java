@@ -241,7 +241,6 @@ public class Engine {
         return destFile;
     }
 
-
     public List<String> showCurrentCommitFiles()throws NullPointerException{
         isRepositoryInitialized();
         return m_currentRepository.showCurrentCommitFiles();
@@ -333,6 +332,7 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
+        //m_currentRepository.flushBranches();
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
@@ -446,7 +446,6 @@ public class Engine {
                 }
             }
 
-            new Commit(m_currentRepository.GetHeadBranch().getCommitSha1()).flush();
 
             if (m_currentRepository.GetHeadBranch() instanceof RTBranch) {
 
@@ -481,7 +480,7 @@ public class Engine {
         //}else{
         //    throw new FileNotFoundException("Working copy dirty, please commit before pull");
         //}
-
+        m_currentRepository.flushBranches();
     }
 
     public void Push() throws IOException {
