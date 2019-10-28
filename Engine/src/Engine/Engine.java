@@ -160,7 +160,7 @@ public class Engine {
 
     public Status showStatusAgainstOtherCommits(Commit commit, String prevCommitSha1)throws IOException {
         isRepositoryInitialized();
-        Commit originalCommit = m_currentRepository.GeCurrentCommit();
+        Commit originalCommit = m_currentRepository.GetCurrentCommit();
         Folder originalWc = m_currentRepository.loadWC();
         Status status=new Status(m_currentRepository.m_repositoryPath.toString(),m_currentRepository.GetName(),m_user,null,null,null,null);
 
