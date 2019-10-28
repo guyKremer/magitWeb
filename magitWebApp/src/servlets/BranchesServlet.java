@@ -6,6 +6,7 @@ import Engine.MagitObjects.Commit;
 import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sun.org.apache.regexp.internal.RE;
 import users.UserManager;
 import utils.ServletUtils;
@@ -79,11 +80,42 @@ public class BranchesServlet extends HttpServlet {
                 break;
             }
         }
-
         engine.setCurrentRepository(currRepo);
         engine.checkOut(branchName);
         commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
         userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+    }
+
+
+    //new branch
+    public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Engine engine = new Engine();
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String userNameFromParameter = SessionUtils.getUsername(request);
+        String repoName = request.getParameter(REPOSITORY);
+        String sha1 = request.getParameter(SHA1);
+        String newBranch = request.getParameter(BRANCH);
+        Repository currRepo = null;
+        Branch branch;
+
+        //find repo
+        for (Repository repo : userManager.getRepositories(userNameFromParameter)) {
+            if (repo.GetName().equals(repoName)) {
+                currRepo = repo;
+                break;
+            }
+        }
+
+        engine.setCurrentRepository(currRepo);
+
+        if (sha1.isEmpty()) {
+            engine.AddBranch(newBranch,true);
+        } else {
+            branch = new Branch(currRepo.GetPathToMagitDirectory().resolve("branches").resolve(newBranch),sha1);
+            currRepo.InsertBranch(branch);
+            currRepo.checkOut(newBranch);
+        }
+
     }
 
 }

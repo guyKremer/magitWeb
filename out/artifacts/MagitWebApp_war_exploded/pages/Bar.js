@@ -10,7 +10,7 @@ return(
     <Navbar bg="dark" variant="dark">
         <Navbar.Brand>MagitHub</Navbar.Brand>
         <Nav className="mr-auto">
-            <Nav.Link onClick={props.homeHandler}>MagitHub</Nav.Link>
+            <Nav.Link onClick={props.homeHandler}>Home</Nav.Link>
         </Nav>
         <Dropdown as={ButtonToolbar}>
             <DropdownButton variant= "secondary"title={props.userName} size="sm">

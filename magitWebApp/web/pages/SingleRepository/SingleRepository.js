@@ -11,7 +11,7 @@ export default class SingleRepository extends React.Component{
         super(props);
         this.state={
             name:props.repoName,
-            type:"LR",
+            type:props.type,
             remoteRepo:null,
             headBranch:"test",
             regularBranchesNames:[],
@@ -54,7 +54,7 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
+                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center/>
                 <Commits commits={this.state.commits}/>
@@ -75,6 +75,12 @@ export default class SingleRepository extends React.Component{
             headBranch : newHeadBranch,
             regularBranchesNames: regularBranchesName}));
     }
+
+    newBranchOnClickHandler(){
+        fetch('branches?repository='+this.props.repoName+'&branch=push', {method:'PUT', credentials: 'include'});
+
+    }
+
 
     pushOnClickHandler(){
         fetch('collaboration?repository='+this.props.repoName+'&operation=push', {method:'GET', credentials: 'include'});
