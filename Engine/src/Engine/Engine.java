@@ -394,7 +394,7 @@ public class Engine {
 
     public void Pull() throws IOException {
 
-        if(!isChanges()) {
+        //if(!isChanges()) {
 
             Path currRepoPath = Repository.m_repositoryPath;
             Path currMagitPath = Repository.m_pathToMagitDirectory;
@@ -474,9 +474,9 @@ public class Engine {
 
                 initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
             }
-        }else{
-            throw new FileNotFoundException("Working copy dirty, please commit before pull");
-        }
+        //}else{
+        //    throw new FileNotFoundException("Working copy dirty, please commit before pull");
+        //}
 
     }
 
