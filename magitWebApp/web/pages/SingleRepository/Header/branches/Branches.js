@@ -10,7 +10,7 @@ function Branches(props){
     return(
         <Dropdown>
             <Dropdown.Toggle variant="secondary" id="dropdown-basic" size={"sm"}>
-                {props.headBranch.name}
+                {props.headBranchName}
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 {regularBranchesNames}

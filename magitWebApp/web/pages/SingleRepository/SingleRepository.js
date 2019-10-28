@@ -33,19 +33,18 @@ export default class SingleRepository extends React.Component{
     }
 
     async componentDidMount() {
-        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
-        let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
-        folder = await folder.json();
-        this.setState(()=>({
-            fileTree: folder,
-        }));
-
         this.getBranches();
         this.getCommitsSha1();
         setInterval(async ()=>{
             this.getBranches();
             this.getCommitsSha1();
         }, 2000);
+        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+        let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
+        folder = await folder.json();
+        this.setState(()=>({
+            fileTree: folder,
+        }));
     }
 
 
@@ -53,7 +52,7 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                 <Commits commits={this.state.commits}/>
@@ -105,6 +104,8 @@ export default class SingleRepository extends React.Component{
         let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
             return branchName!==newHeadBranch;
         });
+        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+
         this.setState(()=>({
             headBranch : newHeadBranch,
             regularBranchesNames: regularBranchesName}));
@@ -121,9 +122,10 @@ export default class SingleRepository extends React.Component{
 
    async getBranches(){
         let branchesResponse = await fetch('branches?repository='+this.props.repoName, {method:'GET', credentials: 'include'});
-        branchesResponse= await branchesResponse.json();
+        branchesResponse= await branchesResponse.json()
+        let newHeadBranch=branchesResponse.shift();
         this.setState(()=>({
-            headBranch : branchesResponse.shift(),
+            headBranch: newHeadBranch,
             regularBranchesNames: branchesResponse}));
     }
 
