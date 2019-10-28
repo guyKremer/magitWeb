@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import constants.Constants;
 import users.UserManager;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -39,5 +40,10 @@ public class LoginServlet extends HttpServlet {
                 ServletUtils.SendJsonResponse(response,jsonObject);
             }
         }
+    }
+
+    //logout
+    public void doDelete(HttpServletRequest request, HttpServletResponse response){
+        SessionUtils.clearSession(request);
     }
 }

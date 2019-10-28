@@ -96,7 +96,7 @@ public class Repository {
         return m_headBranch;
     }
 
-    public Commit GeCurrentCommit() {
+    public Commit GetCurrentCommit() {
         return m_currentCommit;
     }
 
