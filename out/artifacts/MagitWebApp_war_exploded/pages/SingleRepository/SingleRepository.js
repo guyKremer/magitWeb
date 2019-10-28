@@ -33,11 +33,13 @@ export default class SingleRepository extends React.Component{
     }
 
     async componentDidMount() {
+        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
         let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
         folder = await folder.json();
         this.setState(()=>({
             fileTree: folder,
         }));
+
         this.getBranches();
         this.getCommitsSha1();
         setInterval(async ()=>{
