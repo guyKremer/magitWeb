@@ -54,7 +54,7 @@ export default class SingleRepository extends React.Component{
         return(
             <div className={"singleRepository"}>
                 <Header
-                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} isLR={this.state.type === "LR" ? true:false}
+                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                 />
                 <Center/>
                 <Commits commits={this.state.commits}/>

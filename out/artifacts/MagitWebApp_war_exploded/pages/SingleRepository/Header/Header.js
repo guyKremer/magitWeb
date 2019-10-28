@@ -12,14 +12,16 @@ function Header(props){
             <div className={"header"}>
                 <div className={"row1"}>
                     <Button variant={"success"}>Back</Button>
-                    <div className={"row2"}>
-                        <b>{props.repoName}</b>
-                        <div className={"right"}>
-                            <b> RR: </b>
-                            <b>{props.RRuser+'/'+props.RRname}</b>
-                        </div>
+                    { props.type==="LR" ?
+                        <div className={"row2"}>
+                            <b>{props.repoName}</b>
+                            <div className={"right"}>
+                                <b> RR: </b>
+                                <b>{props.RRuser + '/' + props.RRname}</b>
+                            </div>
 
-                    </div>
+                        </div>:""
+                    }
                 </div>
                 <div className={"row2"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} headBranch={props.headBranch} regularBranchesNames={props.regularBranchesNames}/>

@@ -51,7 +51,7 @@ export default class BaseContainer extends React.Component{
             return (
                 <React.Fragment>
                     <Bar  homeHandler={this.homeHandler} userName={this.state.userName}/>
-                    <SingleRepository repoName={this.state.chosenRepoName}/>
+                    <SingleRepository type={this.state.choserRepoType} RRname={this.state.RRname} RRowner={this.state.RRowner} repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )
         }
