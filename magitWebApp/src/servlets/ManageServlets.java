@@ -15,6 +15,7 @@ public class ManageServlets implements ServletContextListener {
         try {
             FileUtils.deleteDirectory(new File("c:\\magit-ex3"));
         } catch (IOException e) {
+            
             e.printStackTrace();
         }
     }
