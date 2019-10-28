@@ -446,6 +446,8 @@ public class Engine {
                 }
             }
 
+            new Commit(m_currentRepository.GetHeadBranch().getCommitSha1()).flush();
+
             if (m_currentRepository.GetHeadBranch() instanceof RTBranch) {
 
                 // update RB in LR
@@ -474,6 +476,8 @@ public class Engine {
 
                 initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
             }
+
+
         //}else{
         //    throw new FileNotFoundException("Working copy dirty, please commit before pull");
         //}
