@@ -52,6 +52,7 @@ public class CommitsServlet extends HttpServlet {
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
         String userNameFromParameter= SessionUtils.getUsername(request);
         String repoName=request.getParameter(REPOSITORY);
         String sha1=request.getParameter(SHA1);
