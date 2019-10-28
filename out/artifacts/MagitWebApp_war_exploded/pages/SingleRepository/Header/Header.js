@@ -12,14 +12,13 @@ function Header(props){
             <div className={"header"}>
                 <div className={"row1"}>
                     <Button variant={"success"}>Back</Button>
-                    { props.type==="LR" ?
+                    { props.isLR===true ?
                         <div className={"row2"}>
                             <b>{props.repoName}</b>
                             <div className={"right"}>
                                 <b> RR: </b>
                                 <b>{props.RRuser + '/' + props.RRname}</b>
                             </div>
-
                         </div>:""
                     }
                 </div>

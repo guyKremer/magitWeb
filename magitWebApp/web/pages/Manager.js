@@ -26,7 +26,7 @@ export default class BaseContainer extends React.Component{
             chosenRepoName:"",
             choserRepoType:"",
             RRname:"",
-            RRowner:"",
+            RRuser:"",
             userPressed:false
         }
         this.loginHandler = this.loginHandler.bind(this);
@@ -51,7 +51,7 @@ export default class BaseContainer extends React.Component{
             return (
                 <React.Fragment>
                     <Bar  homeHandler={this.homeHandler} userName={this.state.userName}/>
-                    <SingleRepository type={this.state.choserRepoType} RRname={this.state.RRname} RRowner={this.state.RRowner} repoName={this.state.chosenRepoName}/>
+                    <SingleRepository type={this.state.choserRepoType} RRname={this.state.RRname} RRuser={this.state.RRuser} repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )
         }
@@ -69,13 +69,13 @@ export default class BaseContainer extends React.Component{
         }));
     }
 
-    repoChoosingHandler(repoName,repoType,RRname,RRowner){
+    repoChoosingHandler(repoName,repoType,RRname,RRuser){
         this.setState(()=> ({
             location: Consts.SINGLE_REPO,
             chosenRepoName:repoName,
             RRname:RRname,
             choserRepoType:repoType,
-            RRowner:RRowner
+            RRuser:RRuser
         }));
     }
 }
