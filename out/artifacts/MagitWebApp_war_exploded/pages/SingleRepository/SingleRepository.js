@@ -13,7 +13,7 @@ export default class SingleRepository extends React.Component{
             name:props.repoName,
             type:props.type,
             remoteRepo:null,
-            headBranch:"test",
+            headBranch:"",
             regularBranchesNames:[],
             commits:[],
             fileTree:{
@@ -77,12 +77,13 @@ export default class SingleRepository extends React.Component{
     async barButtonOnClickHandler(folderName,index){
         let folder = await fetch('folderItem?folderItem='+folderName, {method:'GET', credentials: 'include'});
         folder = await folder.json();
+        let fileHierarchy;
         let i=0;
         if(index === 0){
             fileHierarchy=[this.state.name];
         }
         else{
-            let fileHierarchy = this.state.fileHierarchy.map((file)=>{
+             fileHierarchy = this.state.fileHierarchy.map((file)=>{
                 if(i<index){
                     i++
                     return file;
@@ -121,12 +122,12 @@ export default class SingleRepository extends React.Component{
         let branchesResponse = await fetch('branches?repository='+this.props.repoName, {method:'GET', credentials: 'include'});
         branchesResponse= await branchesResponse.json();
         this.setState(()=>({
-            headBranch : {name:branchesResponse.shift()},
+            headBranch : branchesResponse.shift(),
             regularBranchesNames: branchesResponse}));
     }
 
     async getCommitsSha1(){
-        let commitsResponse = await fetch('commits?repository='+this.props.repoName+'&branch='+this.state.headBranch.name, {method:'GET', credentials: 'include'});
+        let commitsResponse = await fetch('commits?repository='+this.props.repoName+'&branch='+this.state.headBranch, {method:'GET', credentials: 'include'});
         commitsResponse= await commitsResponse.json();
         this.setState(()=>({
             commits: commitsResponse}));
