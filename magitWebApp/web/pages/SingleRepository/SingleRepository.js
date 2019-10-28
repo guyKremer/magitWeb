@@ -17,30 +17,27 @@ export default class SingleRepository extends React.Component{
             regularBranchesNames:[],
             commits:[],
             fileTree:{
-                type:"folder",
-                folderContent:
-                [
-                    {
-                     type:"folder",
-                     name:"folderTest"
-                    },
-                    {
-                        type:"file",
-                        name:"fileTest"
-                    },
-                ]
-            }
+                type:"",
+                name:"",
+                content:[]
+            },
+            fileHierarchy:[props.repoName]
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
         this.pullOnClickHandler=this.pullOnClickHandler.bind(this);
         this.pushOnClickHandler=this.pushOnClickHandler.bind(this);
         this.chekoutHandler=this.chekoutHandler.bind(this);
-
-
+        this.barButtonOnClickHandler=this.barButtonOnClickHandler.bind(this);
+        this.itemOnClickHandler= this.itemOnClickHandler.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
+        folder = await folder.json();
+        this.setState(()=>({
+            fileTree: folder,
+        }));
         this.getBranches();
         this.getCommitsSha1();
         setInterval(async ()=>{
@@ -56,12 +53,45 @@ export default class SingleRepository extends React.Component{
                 <Header
                    repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranch={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                 />
-                <Center/>
+                <Center itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                 <Commits commits={this.state.commits}/>
             </div>
         );
     }
 
+    async itemOnClickHandler(name,type){
+        if(type==="folder"){
+            let folder = await fetch('folderItem?folderItem='+name, {method:'GET', credentials: 'include'});
+            folder = await folder.json();
+            let fileHierarchy = this.state.fileHierarchy;
+            fileHierarchy.push(name);
+            this.setState(()=>({
+                fileTree: folder,
+                fileHierarchy:fileHierarchy
+            }));
+        }
+    }
+
+    async barButtonOnClickHandler(folderName,index){
+        let folder = await fetch('folderItem?folderItem='+folderName, {method:'GET', credentials: 'include'});
+        folder = await folder.json();
+        let i=0;
+        if(index === 0){
+            fileHierarchy=[this.state.name];
+        }
+        else{
+            let fileHierarchy = this.state.fileHierarchy.map((file)=>{
+                if(i<index){
+                    i++
+                    return file;
+                }
+            });
+        }
+        this.setState(()=>({
+            fileTree: folder,
+            fileHierarchy:fileHierarchy
+        }));
+    }
 
     async chekoutHandler(newHeadBranch){
         newHeadBranch = newHeadBranch.replace('\\','^');
@@ -75,12 +105,6 @@ export default class SingleRepository extends React.Component{
             headBranch : newHeadBranch,
             regularBranchesNames: regularBranchesName}));
     }
-
-    newBranchOnClickHandler(){
-        fetch('branches?repository='+this.props.repoName+'&branch=push', {method:'PUT', credentials: 'include'});
-
-    }
-
 
     pushOnClickHandler(){
         fetch('collaboration?repository='+this.props.repoName+'&operation=push', {method:'GET', credentials: 'include'});

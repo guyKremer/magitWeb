@@ -6,8 +6,15 @@
     flex-direction: column;
     border-left-color: darkgrey;
     border-left-style: solid;
-    flex-basis: 60%;
     align-items: center;
+}
+
+#main #messagesWrapper {
+    flex-basis: 60%;
+}
+
+.center #messagesWrapper {
+    flex-basis: 80%;
 }
 
 body {
