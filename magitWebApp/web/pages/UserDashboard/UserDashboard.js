@@ -44,7 +44,7 @@ export default class UserDashboard extends React.Component{
                     <div id="main">
                         <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
                         <MessagesBoard/>
-                        <Users onClick={this.userOnClickHandler} onlineUsers={this.state.onlineUsers}/>
+                        <Users selfName={this.state.userName} onClick={this.userOnClickHandler} onlineUsers={this.state.onlineUsers}/>
                      </div>
                 </React.Fragment>
             );

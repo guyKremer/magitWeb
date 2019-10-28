@@ -7,7 +7,12 @@ import './users.css';
 function Users(props) {
 
     const onlineUsers = props.onlineUsers.map((userName) => {
-        return (<Button onClick={()=>{props.onClick(userName);}} variant={"link"}>{userName}</Button>);
+        if(userName!==props.selfName){
+            return (<Button onClick={()=>{props.onClick(userName);}} variant={"link"}>{userName}</Button>);
+        }
+        else{
+            return (<p>{userName}</p>);
+        }
     });
         return (
             <div className={"users"}>

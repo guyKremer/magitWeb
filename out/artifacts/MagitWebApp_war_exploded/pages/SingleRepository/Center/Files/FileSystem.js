@@ -26,12 +26,14 @@ function FileSystem(props) {
         if(index === 0){
             delimiter="";
         }
-        return(<Button variant={"link"} size={"sm"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
+        return(<Button variant={"link"} size={"lg"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
     });
 
         return(
             <div className={"fileSystem"}>
-                {bar}
+                <div className={"barSection"}>
+                    {bar}
+                </div>
                 <div className={"itemsSection"}>
                     {items}
                 </div>

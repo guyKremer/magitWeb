@@ -1,7 +1,7 @@
 .fileSystem{
     display: flex;
     flex-direction: column;
-    flex-basis: 20%;
+    flex-basis: 40%;
 }
 
 
@@ -14,6 +14,20 @@
 }
 .itemsSection{
     margin-left: 2%;
+    margin-top: 2%;
+}
+.barSection{
+    display: flex;
+    flex-direction: row;
+}
+.barSection .btn-link{
+    text-decoration: underline !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+}
+
+.itemRow .btn-link{
+    margin-top: 1%;
 }
 
 
