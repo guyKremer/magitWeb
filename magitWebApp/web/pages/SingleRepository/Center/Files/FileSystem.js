@@ -29,16 +29,38 @@ function FileSystem(props) {
         return(<Button variant={"link"} size={"lg"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
     });
 
+    if(props.fileEditor===false){
         return(
             <div className={"fileSystem"}>
                 <div className={"barSection"}>
                     {bar}
+                    <button className={"newFileBtn"}>Create New File</button>
                 </div>
                 <div className={"itemsSection"}>
                     {items}
                 </div>
             </div>
         );
+    }
+    else{
+        return (
+            <div className="form-group">
+                <label htmlFor="exampleFormControlTextarea1">
+                    Edit File
+                </label>
+                <textarea
+                    className="form-control"
+                    id="exampleFormControlTextarea1"
+                    rows="5"
+                >
+                    {props.chosenFileContent}
+                </textarea>
+                <button>Save</button>
+                <button>Cancel</button>
+            </div>
+        );
+    }
+
 
 }
 export default FileSystem

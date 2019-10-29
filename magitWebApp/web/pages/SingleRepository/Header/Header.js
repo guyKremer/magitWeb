@@ -10,22 +10,18 @@ function Header(props){
 
     return(
             <div className={"header"}>
-                <div className={"row1"}>
-                    <Button variant={"success"}>Back</Button>
+                <div className={"row"}>
+                    <Button variant={"success"} size={"sm"}>Back</Button>
+                        <b>{"Repository: "+props.repoName}</b>
                     { props.isLR===true ?
-                        <div className={"row2"}>
-                            <b>{props.repoName}</b>
-                            <div className={"right"}>
-                                <b>RR:</b>
-                                <b>{props.RRuser + '/' + props.RRname}</b>
-                            </div>
-                        </div>:
-                        <div className={"row2"}>
-                            <b>{props.repoName}</b>
-                        </div>
+                       <React.Fragment>
+                           <div className={"RRrepoName"}>
+                               <b>{"Remote Repository: "+props.RRuser + '/' + props.RRname}</b>
+                           </div>
+                       </React.Fragment>:""
                     }
                 </div>
-                <div className={"row2"}>
+                <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
                     <NewBranchButton repoName={props.repoName}/>
                     <Button variant={"success"} id={"pr"}  className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Create Pull Request</Button>

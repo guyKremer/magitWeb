@@ -8,7 +8,7 @@ export default function Folder(props){
     return(
        <div className={"itemRow"}>
             <div className = "folder"/>
-            <Button onClick={()=>{props.itemOnClick(props.name,"folder")}} variant={"link"} size={"sm"}>{props.name}</Button>
+            <Button onClick={()=>{props.itemOnClick(props.name,"","folder")}} variant={"link"} size={"sm"}>{props.name}</Button>
        </div>
     );
 }

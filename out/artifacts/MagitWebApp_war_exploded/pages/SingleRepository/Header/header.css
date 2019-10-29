@@ -2,17 +2,20 @@
     visibility:hidden;
 }
 
-.row2{
+.row{
     display: flex;
     flex-direction: row;
     margin-top: 2%;
 }
-.row2 .right{
-    justify-content: flex-end;
+.RRrepoName{
+margin-left: 10%;
 }
-.row1{
-    display: flex;
-    flex-direction: column;
+
+.repoName{
+    margin-left: 30%;
+}
+.row + b{
+    margin-left: 1%;
 }
 
 .header{
@@ -20,7 +23,7 @@
     flex-direction: column;
 }
 
-.row2 .btn {
-    margin-left: 0.5%;
+.row .btn {
+    margin-left: 1%;
 }
 

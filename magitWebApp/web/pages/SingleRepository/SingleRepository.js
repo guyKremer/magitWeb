@@ -21,7 +21,9 @@ export default class SingleRepository extends React.Component{
                 name:"",
                 content:[]
             },
-            fileHierarchy:[props.repoName]
+            fileHierarchy:[props.repoName],
+            fileEditor:false,
+            chosenFileContent:""
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
@@ -49,18 +51,19 @@ export default class SingleRepository extends React.Component{
 
 
     render() {
-        return(
-            <div className={"singleRepository"}>
-                <Header
-                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
-                />
-                <Center itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
-                <Commits commits={this.state.commits}/>
-            </div>
-        );
+            return(
+                <div className={"singleRepository"}>
+                    <Header
+                        repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                    />
+                    <Center chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
+                    <Commits commits={this.state.commits}/>
+                </div>
+            );
+
     }
 
-    async itemOnClickHandler(name,type){
+    async itemOnClickHandler(name,content,type){
         if(type==="folder"){
             let folder = await fetch('folderItem?folderItem='+name, {method:'GET', credentials: 'include'});
             folder = await folder.json();
@@ -70,6 +73,12 @@ export default class SingleRepository extends React.Component{
                 fileTree: folder,
                 fileHierarchy:fileHierarchy
             }));
+        }
+        else{
+            this.setState(()=>({
+                chosenFileContent:content,
+                fileEditor:true
+            }))
         }
     }
 
