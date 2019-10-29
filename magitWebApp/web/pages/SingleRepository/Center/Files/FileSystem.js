@@ -3,7 +3,7 @@ import './FileSystem.css';
 import File from './File/File';
 import Folder from './Folder/Folder';
 import Button from 'react-bootstrap/Button';
-import Navigation from './Navigation/Navigation';
+import EditFile from './EditFile/EditFile';
 
 
 function FileSystem(props) {
@@ -34,7 +34,7 @@ function FileSystem(props) {
             <div className={"fileSystem"}>
                 <div className={"barSection"}>
                     {bar}
-                    <button className={"newFileBtn"}>Create New File</button>
+                    <button onClick={props.createNewFileOnClick} className={"newFileBtn"}>Create New File</button>
                 </div>
                 <div className={"itemsSection"}>
                     {items}
@@ -43,22 +43,9 @@ function FileSystem(props) {
         );
     }
     else{
-        return (
-            <div className="form-group">
-                <label htmlFor="exampleFormControlTextarea1">
-                    Edit File
-                </label>
-                <textarea
-                    className="form-control"
-                    id="exampleFormControlTextarea1"
-                    rows="5"
-                >
-                    {props.chosenFileContent}
-                </textarea>
-                <button>Save</button>
-                <button>Cancel</button>
-            </div>
-        );
+            return (
+                    <EditFile saveOnClick={props.saveOnClick} cancelOnClickHandler={props.editFileCancelOnClickHandler} createNewFile={props.createNewFile} chosenFileContent={props.chosenFileContent}/>
+            );
     }
 
 
