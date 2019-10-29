@@ -26,8 +26,7 @@ export default class BaseContainer extends React.Component{
             chosenRepoName:"",
             choserRepoType:"",
             RRname:"",
-            RRuser:"",
-            userPressed:false
+            RRuser:""
         }
         this.loginHandler = this.loginHandler.bind(this);
         this.repoChoosingHandler = this.repoChoosingHandler.bind(this);
@@ -44,14 +43,14 @@ export default class BaseContainer extends React.Component{
 
         else if(this.state.location === Consts.MAIN) {
             return(
-                    <Main userPressed={this.state.userPressed} repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
+                    <Main repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
             );
         }
         else{
             return (
                 <React.Fragment>
                     <Bar  homeHandler={this.homeHandler} userName={this.state.userName}/>
-                    <SingleRepository type={this.state.choserRepoType} RRname={this.state.RRname} RRuser={this.state.RRuser} repoName={this.state.chosenRepoName}/>
+                    <SingleRepository backOnClick={this.homeHandler} type={this.state.choserRepoType} RRname={this.state.RRname} RRuser={this.state.RRuser} repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )
         }

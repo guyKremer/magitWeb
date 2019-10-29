@@ -24,6 +24,7 @@ export default class SingleRepository extends React.Component{
             fileHierarchy:[props.repoName],
             fileEditor:false,
             chosenFileContent:"",
+            chosenFileName:"",
             createNewFile:false
         }
         this.getBranches=this.getBranches.bind(this);
@@ -58,7 +59,7 @@ export default class SingleRepository extends React.Component{
             return(
                 <div className={"singleRepository"}>
                     <Header
-                        repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                       backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                     />
                     <Center saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                     <Commits commits={this.state.commits}/>
@@ -75,13 +76,19 @@ export default class SingleRepository extends React.Component{
     }
 
     saveOnClickHandler(fileName,fileContent){
-        console.log(fileName+': '+fileContent);
+        if(fileName!=="---"){
+            console.log(fileName+': '+fileContent);
+        }
+        else{
+            console.log(this.state.chosenFileName+': '+fileContent);
+        }
     }
 
     editFileCancelOnClickHandler(){
         this.setState(()=>({
             createNewFile:false,
-            fileEditor: false
+            fileEditor: false,
+            chosenFileName:""
         }));
     }
 
@@ -99,8 +106,9 @@ export default class SingleRepository extends React.Component{
         else{
             this.setState(()=>({
                 chosenFileContent:content,
+                chosenFileName:name,
                 fileEditor:true
-            }))
+            }));
         }
     }
 

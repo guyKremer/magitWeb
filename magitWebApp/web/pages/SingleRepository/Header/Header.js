@@ -11,7 +11,7 @@ function Header(props){
     return(
             <div className={"header"}>
                 <div className={"row"}>
-                    <Button variant={"success"} size={"sm"}>Back</Button>
+                    <Button onClick={props.backOnClick} variant={"success"} size={"sm"}>Back</Button>
                         <b>{"Repository: "+props.repoName}</b>
                     { props.isLR===true ?
                        <React.Fragment>

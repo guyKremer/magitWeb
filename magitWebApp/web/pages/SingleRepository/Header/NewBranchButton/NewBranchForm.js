@@ -41,7 +41,14 @@ export default class NewBranchForm extends React.Component{
         if(this.state.sha1){
              sha1 = document.getElementById("sha1Input").value;
         }
-        fetch('branches?repository='+this.props.repoName+ '&branch='+branchName+'&sha1='+sha1, {method:'PUT',body:'', credentials: 'include'});
+
+        if(branchName===""){
+            window.alert("Branch name is mendatory");
+        }
+        else{
+            fetch('branches?repository='+this.props.repoName+ '&branch='+branchName+'&sha1='+sha1, {method:'PUT',body:'', credentials: 'include'});
+            this.props.closeForm();
+        }
     }
 
 }

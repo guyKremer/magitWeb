@@ -11,11 +11,14 @@ export default function EditFile(props) {
                 </label>
                 <textarea
                     className="form-control"
-                    id="exampleFormControlTextarea1"
+                    id="fileContenttextArea"
                     rows="5"
                     defaultValue={props.chosenFileContent}
                 />
-                <button>Save</button>
+                <button onClick={()=>{
+                    let fileContent=document.getElementById("fileContenttextArea").value
+                    props.saveOnClick("---",fileContent);}}
+                >Save</button>
                 <button onClick={props.cancelOnClickHandler}>Cancel</button>
             </div>
         );
