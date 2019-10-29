@@ -16,7 +16,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,9 @@ public class CommitsServlet extends HttpServlet {
             }
         }
 
+        Repository.m_repositoryPath = Paths.get(CollaborationServlet.rootPath + File.separator + currRepo.GetName());
+        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+
         jsonArray = getAllBranchCommits(currRepo, branchName);
         //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
         //userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
@@ -70,7 +75,8 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
-
+        Repository.m_repositoryPath = Paths.get(CollaborationServlet.rootPath + File.separator + currRepo.GetName());
+        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
         if(sha1.equals("0")){
             //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
             commit = currRepo.GetCurrentCommit();

@@ -8,8 +8,8 @@
           <element id="module-output" name="magitWebApp" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="gson-2.8.6" />
           <element id="artifact" artifact-name="Engine:jar" />
+          <element id="library" level="project" name="gson-2.8.6" />
         </element>
       </element>
     </root>
