@@ -82,7 +82,8 @@ public class BranchesServlet extends HttpServlet {
         }
         engine.setCurrentRepository(currRepo);
         engine.checkOut(branchName);
-        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        commit = currRepo.GetCurrentCommit();
         userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
     }
 

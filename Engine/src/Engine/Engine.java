@@ -295,6 +295,7 @@ public class Engine {
         RBranch rb;
         RTBranch rtBranch;
         switchRepository(RR);
+        Repository repoRR = m_currentRepository;
         Map<String,Branch> branches = m_currentRepository.GetBranches();
         Map<String,Commit> commitsMap = m_currentRepository.GetCommitsMap();
         LocalRepository LR = new LocalRepository(repoName,
@@ -333,7 +334,8 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-        ////////////
+
+        //initNewPaths(i_RR.toPath(), repoRR);
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
