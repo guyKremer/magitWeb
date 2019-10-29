@@ -8,7 +8,12 @@ export default function File(props){
     return (
         <div className={"itemRow"}>
             <div className="file"/>
-            <Button onClick={()=>{props.itemOnClick(props.name,"file")}} variant={"link"} size={"sm"}>{props.name}</Button>
+            <Button onClick={async ()=>{
+                let file = await fetch('folderItem?folderItem='+props.name, {method:'GET', credentials: 'include'});
+                file = await file.json();
+                props.itemOnClick(props.name,file.content,"file")
+            }}
+                    variant={"link"} size={"sm"}>{props.name}</Button>
         </div>
     );
 }

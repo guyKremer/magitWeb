@@ -21,7 +21,10 @@ export default class SingleRepository extends React.Component{
                 name:"",
                 content:[]
             },
-            fileHierarchy:[props.repoName]
+            fileHierarchy:[props.repoName],
+            fileEditor:false,
+            chosenFileContent:"",
+            createNewFile:false
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
@@ -30,6 +33,9 @@ export default class SingleRepository extends React.Component{
         this.chekoutHandler=this.chekoutHandler.bind(this);
         this.barButtonOnClickHandler=this.barButtonOnClickHandler.bind(this);
         this.itemOnClickHandler= this.itemOnClickHandler.bind(this);
+        this.createNewFileOnClickHandler=this.createNewFileOnClickHandler.bind(this);
+        this.editFileCancelOnClickHandler=this.editFileCancelOnClickHandler.bind(this);
+        this.saveOnClickHandler=this.saveOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -49,18 +55,37 @@ export default class SingleRepository extends React.Component{
 
 
     render() {
-        return(
-            <div className={"singleRepository"}>
-                <Header
-                   repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
-                />
-                <Center itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
-                <Commits commits={this.state.commits}/>
-            </div>
-        );
+            return(
+                <div className={"singleRepository"}>
+                    <Header
+                        repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                    />
+                    <Center saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
+                    <Commits commits={this.state.commits}/>
+                </div>
+            );
+
     }
 
-    async itemOnClickHandler(name,type){
+    createNewFileOnClickHandler(){
+        this.setState(()=>({
+            createNewFile:true,
+            fileEditor: true
+        }));
+    }
+
+    saveOnClickHandler(fileName,fileContent){
+        console.log(fileName+': '+fileContent);
+    }
+
+    editFileCancelOnClickHandler(){
+        this.setState(()=>({
+            createNewFile:false,
+            fileEditor: false
+        }));
+    }
+
+    async itemOnClickHandler(name,content,type){
         if(type==="folder"){
             let folder = await fetch('folderItem?folderItem='+name, {method:'GET', credentials: 'include'});
             folder = await folder.json();
@@ -70,6 +95,12 @@ export default class SingleRepository extends React.Component{
                 fileTree: folder,
                 fileHierarchy:fileHierarchy
             }));
+        }
+        else{
+            this.setState(()=>({
+                chosenFileContent:content,
+                fileEditor:true
+            }))
         }
     }
 

@@ -3,7 +3,7 @@ import './FileSystem.css';
 import File from './File/File';
 import Folder from './Folder/Folder';
 import Button from 'react-bootstrap/Button';
-import Navigation from './Navigation/Navigation';
+import EditFile from './EditFile/EditFile';
 
 
 function FileSystem(props) {
@@ -29,16 +29,25 @@ function FileSystem(props) {
         return(<Button variant={"link"} size={"lg"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
     });
 
+    if(props.fileEditor===false){
         return(
             <div className={"fileSystem"}>
                 <div className={"barSection"}>
                     {bar}
+                    <button onClick={props.createNewFileOnClick} className={"newFileBtn"}>Create New File</button>
                 </div>
                 <div className={"itemsSection"}>
                     {items}
                 </div>
             </div>
         );
+    }
+    else{
+            return (
+                    <EditFile saveOnClick={props.saveOnClick} cancelOnClickHandler={props.editFileCancelOnClickHandler} createNewFile={props.createNewFile} chosenFileContent={props.chosenFileContent}/>
+            );
+    }
+
 
 }
 export default FileSystem

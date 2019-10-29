@@ -30,4 +30,16 @@
     margin-top: 1%;
 }
 
+.form-control{
+    width: 400px !important;
+}
+
+.newFileBtn {
+    width: max-content;
+    height: max-content;
+    font-size: small;
+    align-self: flex-end;
+    margin-left: auto;
+}
+
 
