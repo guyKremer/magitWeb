@@ -29,7 +29,8 @@ public class CommitsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
         String repoName=request.getParameter(REPOSITORY);
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());        String branchName=request.getParameter(BRANCH);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String branchName=request.getParameter(BRANCH);
 
         Commit commit;
         Repository currRepo = null;

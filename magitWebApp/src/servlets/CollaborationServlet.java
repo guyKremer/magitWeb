@@ -49,14 +49,26 @@ public class CollaborationServlet extends HttpServlet {
         String remoteUser = request.getParameter(REMOTEUSER);
         String remoteRepo = request.getParameter(REMOTEREPO);
         String localRepo = request.getParameter(LOCALREPO);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        Repository rr = null;
+        LocalRepository lr = null;
 
         File RR = new File(rootPath + File.separator + remoteUser + File.separator + remoteRepo);
         File LR = new File (rootPath + File.separator + userNameFromParameter + File.separator + localRepo);
-        engine.Clone(RR,LR,localRepo);
 
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+
+        //find repo
+        for(Repository repo : userManager.getRepositories(remoteUser)){
+            if(repo.GetName().equals(remoteRepo)){
+                rr = repo;
+                break;
+            }
+        }
+
+        lr = engine.Clone(rr, RR.getAbsolutePath(),LR,localRepo);
+
         userManager.usersMap.get(userNameFromParameter).
-                getRepositories().add(new LocalRepository(localRepo,LR.getAbsolutePath(),true, RR.getAbsolutePath(),remoteRepo));
+                getRepositories().add(lr);
 
         userManager.usersMap.get(remoteUser).AddMessage(new ForkMessage(remoteRepo,userNameFromParameter));
         //check response

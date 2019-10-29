@@ -290,18 +290,19 @@ public class Engine {
         }
     }
 
-    public void Clone(File i_RR, File i_LR, String repoName) throws IOException {
-        String RR = i_RR.getAbsolutePath();
+    public LocalRepository Clone(Repository RR,String RRpath ,File i_LR, String repoName) throws IOException {
+        //String RR = i_RR.getAbsolutePath();
         RBranch rb;
         RTBranch rtBranch;
-        switchRepository(RR);
-        Repository repoRR = m_currentRepository;
+        //switchRepository(RR);
+        m_currentRepository = RR;
+        Repository repoRR = RR;
         Map<String,Branch> branches = m_currentRepository.GetBranches();
         Map<String,Commit> commitsMap = m_currentRepository.GetCommitsMap();
         LocalRepository LR = new LocalRepository(repoName,
                 i_LR.getAbsolutePath(),
                 false,
-                RR,
+                RRpath,
                 m_currentRepository.GetName());
 
         LR.SetCommitsMap(commitsMap);
@@ -335,7 +336,7 @@ public class Engine {
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
 
-        //initNewPaths(i_RR.toPath(), repoRR);
+        return LR;
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
