@@ -28,12 +28,12 @@ public class WCServlet extends HttpServlet {
     // SAVE
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
-        String repoName=request.getParameter(REPOSITORY);
+        //String repoName=request.getParameter(REPOSITORY);
         BufferedReader reader = request.getReader();
         Gson gson = new Gson();
         FileToAdd fileToAdd = gson.fromJson(reader, FileToAdd.class);
 
-        fileToAdd.FlashFile(userNameFromParameter, repoName);
+        fileToAdd.FlashFile(userNameFromParameter);
     }
 
     // COMMIT
@@ -71,8 +71,8 @@ public class WCServlet extends HttpServlet {
             this.content = content;
         }
 
-        public void FlashFile(String i_userName, String i_repoName) throws IOException {
-            File file = buildPath(i_userName, i_repoName).toFile();
+        public void FlashFile(String i_userName) throws IOException {
+            File file = buildPath(i_userName).toFile();
             file.createNewFile();
 
             FileWriter writer = new FileWriter(file, false);
@@ -81,9 +81,9 @@ public class WCServlet extends HttpServlet {
         }
 
 
-        private Path buildPath(String i_userName, String i_repoName){
+        private Path buildPath(String i_userName){
             String res =
-                    CollaborationServlet.rootPath + File.separator + i_userName + File.separator + i_repoName;
+                    CollaborationServlet.rootPath + File.separator + i_userName + File.separator;
             for(String str : tree){
                 res += str + File.separator;
             }
