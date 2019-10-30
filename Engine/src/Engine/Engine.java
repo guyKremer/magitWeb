@@ -483,15 +483,15 @@ public class Engine {
 
     public void Push() throws IOException {
 
-        String RBcommit = m_currentRepository.GetBranch(
-                ((LocalRepository)m_currentRepository).getRemoteRepoName()
-                        + File.separator + m_currentRepository.GetHeadBranch()).getCommitSha1();
-        String LBcommit = m_currentRepository.GetHeadBranch().getCommitSha1();
+       // String RBcommit = m_currentRepository.GetBranch(
+        //        ((LocalRepository)m_currentRepository).getRemoteRepoName()
+         //               + File.separator + m_currentRepository.GetHeadBranch().getName()).getCommitSha1();
+       // String LBcommit = m_currentRepository.GetHeadBranch().getCommitSha1();
 
-        if(RBcommit.equals(LBcommit)){
-            throw new FileNotFoundException("Need Pull before Push");
+      //  if(RBcommit.equals(LBcommit)){
+       //     throw new FileNotFoundException("Need Pull before Push");
 
-        }else {
+     //   }else {
             // is a new branch
             if (m_currentRepository.GetBranch(
                     ((LocalRepository) m_currentRepository).getRemoteRepoName()
@@ -595,7 +595,7 @@ public class Engine {
                 //initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
                 //}
             }
-        }
+      //  }
 
     }
 
