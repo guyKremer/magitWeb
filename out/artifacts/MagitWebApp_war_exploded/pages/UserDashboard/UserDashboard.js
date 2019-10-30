@@ -43,7 +43,7 @@ export default class UserDashboard extends React.Component{
                     <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
                     <div id="main">
                         <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
-                        <MessagesBoard/>
+                        <MessagesBoard messages={this.state.messages}/>
                         <Users selfName={this.state.userName} onClick={this.userOnClickHandler} onlineUsers={this.state.onlineUsers}/>
                      </div>
                 </React.Fragment>
@@ -70,13 +70,16 @@ export default class UserDashboard extends React.Component{
     }
 
     async getUserData(){
+        let messagesRespone = await fetch('messages', {method:'GET', credentials: 'include'});
         let repoResponse = await fetch('repositories?userName='+this.state.userName, {method:'GET', credentials: 'include'});
         let usersResponse = await fetch('users', {method:'GET', credentials: 'include'});
         usersResponse = await usersResponse.json();
         repoResponse = await repoResponse.json();
+        messagesRespone=await messagesRespone.json();
         this.setState(()=>({
             onlineUsers:usersResponse,
-            repositories:repoResponse
+            repositories:repoResponse,
+            messeages: messagesRespone
         }));
     }
 }

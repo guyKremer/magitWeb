@@ -1,34 +1,38 @@
 import React from 'react';
 import './messages.css';
 
-export default class MessagesBoard extends React.Component{
-    constructor(props){
-        super(props);
-        this.state={
+export default function MessagesBoard (props){
 
-        }
-    }
-
-    render(){
-        return(
-            <div id="messagesWrapper">
+        let messages=props.messages.map((message)=>{
+            if(message.type==="forkMsg"){
+                return(
+                    <div className="Toast Toast--success">
+                        <main className="Toast__message">
+                            <header className="Toast__message-category">
+                                {message.userName+' has forked '+ props.repositoryName}
+                            </header>
+                        </main>
+                    </div>
+                );
+            }
+            else if (message.type==="PRMsg"){
                 <div className="Toast Toast--success">
                     <main className="Toast__message">
-                        <header className="Toast__message-category">Check</header>
-                        <p className="Toast__message-text">check check check check</p>
-                    </main>
-                </div>
-                <div className="Toast Toast--success">
-                    <main className="Toast__message">
-                        <header className="Toast__message-category">Check
+                        <header className="Toast__message-category">
+                            {message.targetUserName+' has added a PR to '+ props.repositoryName}
                         </header>
-                        <p className="Toast__message-text">check check check check
+                        <p className="Toast__message-text">
+                            {"Message: "+props.PRMsg+ "Target branch: "+props.targetBranch+"Base branch: "+props.basisBranch}
                         </p>
                     </main>
                 </div>
+            }
+        })
+
+        return(
+
+            <div id="messagesWrapper">
+                {messages}
             </div>
         );
-    }
-
-
 }
