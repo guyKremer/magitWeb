@@ -20,7 +20,7 @@ export default class UserDashboard extends React.Component{
             pressedUserName:"",
             userName:props.userName,
             onlineUsers:[],
-            messeages:[],
+            messages:[],
             repositories:[]
         };
 
@@ -79,7 +79,7 @@ export default class UserDashboard extends React.Component{
         this.setState(()=>({
             onlineUsers:usersResponse,
             repositories:repoResponse,
-            messeages: messagesRespone
+            messages: messagesRespone
         }));
     }
 }

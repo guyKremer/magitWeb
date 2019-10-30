@@ -9,8 +9,11 @@ export default function MessagesBoard (props){
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
-                                {message.userName+' has forked '+ props.repositoryName}
+                                {'You\'ve been forked!'}
                             </header>
+                            <p className="Toast__message-text">
+                                {message.userName+' has forked '+ message.repositoryName}
+                            </p>
                         </main>
                     </div>
                 );

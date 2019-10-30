@@ -22,7 +22,7 @@ import static constants.Constants.*;
 
 @WebServlet(name = "CollaborationServlet", urlPatterns = {"/collaboration"})
 public class CollaborationServlet extends HttpServlet {
-    private static final String rootPath = "c:\\magit-ex3";
+    public static final String rootPath = "c:\\magit-ex3";
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Engine engine = new Engine();
