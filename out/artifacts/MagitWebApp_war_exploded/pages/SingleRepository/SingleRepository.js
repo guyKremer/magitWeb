@@ -14,6 +14,7 @@ export default class SingleRepository extends React.Component{
             type:props.type,
             remoteRepo:null,
             headBranch:"",
+            headBranchCommit:"",
             regularBranchesNames:[],
             commits:[],
             fileTree:{
