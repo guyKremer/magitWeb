@@ -30,6 +30,7 @@ public class FolderItemServlet  extends HttpServlet {
         JsonArray jsonArray = new JsonArray();
         FolderItem res;
 
+
         if(folderItemName.equals(rootFolder.GetName())){ // if root requested
             for(FolderItem folderItem : rootFolder.GetItems()) {
                 jsonArray.add(new FolderItemDetails(folderItem.GetName(), folderItem.GetType(), null, null).toJson());
@@ -52,6 +53,7 @@ public class FolderItemServlet  extends HttpServlet {
 
     public FolderItem getItem(Folder rootFolder, String itemName){
         FolderItem res = null;
+
         for(FolderItem item : rootFolder.GetItems()){
             if(item.GetName().equals(itemName)){
                 res = item;
@@ -59,6 +61,9 @@ public class FolderItemServlet  extends HttpServlet {
             }
             else if(item.GetType().equals("folder")) {
                 res = getItem((Folder)item, itemName);
+                if(res != null){
+                    break;
+                }
             }
         }
         return res;
