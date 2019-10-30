@@ -82,8 +82,7 @@ public class CommitsServlet extends HttpServlet {
 
         if(sha1.equals("0")){
             //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
-            commit = currRepo.GetCurrentCommit();
-            userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+            userManager.usersMap.get(userNameFromParameter).setRootFolder(currRepo.loadWC());
         }
         else{
             commit = new Commit(sha1);
