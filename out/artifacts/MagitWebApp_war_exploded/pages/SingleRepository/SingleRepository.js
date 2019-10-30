@@ -25,7 +25,8 @@ export default class SingleRepository extends React.Component{
             fileEditor:false,
             chosenFileContent:"",
             chosenFileName:"",
-            createNewFile:false
+            createNewFile:false,
+            messages:[]
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
@@ -37,20 +38,31 @@ export default class SingleRepository extends React.Component{
         this.createNewFileOnClickHandler=this.createNewFileOnClickHandler.bind(this);
         this.editFileCancelOnClickHandler=this.editFileCancelOnClickHandler.bind(this);
         this.saveOnClickHandler=this.saveOnClickHandler.bind(this);
+        this.getMessages=this.getMessages.bind(this);
     }
 
     async componentDidMount() {
+        this.getMessages();
         this.getBranches();
         this.getCommitsSha1();
         setInterval(async ()=>{
             this.getBranches();
             this.getCommitsSha1();
+            this.getMessages();
         }, 2000);
         await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
         let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
         folder = await folder.json();
         this.setState(()=>({
             fileTree: folder,
+        }));
+    }
+
+   async getMessages(){
+        let messagesRespone = await fetch('messages', {method:'GET', credentials: 'include'});
+        messagesRespone = await messagesRespone.json();
+        this.setState(()=>({
+            messages: messagesRespone
         }));
     }
 
@@ -61,7 +73,7 @@ export default class SingleRepository extends React.Component{
                     <Header
                        backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                     />
-                    <Center saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
+                    <Center messages={this.state.messages} saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                     <Commits commits={this.state.commits}/>
                 </div>
             );

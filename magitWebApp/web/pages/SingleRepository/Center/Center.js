@@ -10,7 +10,7 @@ function Center(props){
     return(
             <div className={"center"}>
                     <FileSystem  saveOnClick={props.saveOnClickHandler} editFileCancelOnClickHandler={props.editFileCancelOnClickHandler} createNewFileOnClick={props.createNewFileOnClick} createNewFile={props.createNewFile}  chosenFileContent={props.chosenFileContent} fileEditor={props.fileEditor} itemOnClick={props.itemOnClick} barButtonOnClick={props.barButtonOnClick} mainFolder={props.fileTree.name} items={props.fileTree.content} fileHierarchy={props.fileHierarchy} />
-                    <MessageBoard />
+                    <MessageBoard messages={props.messages} />
             </div>
         );
 }
