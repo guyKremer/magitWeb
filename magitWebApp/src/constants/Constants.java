@@ -11,6 +11,7 @@ public class Constants {
     public static final String REMOTEUSER = "remoteUser";
     public static final String SHA1 = "sha1";
     public static final String ISRTB ="isRTB";
+    public static final String COMMITMSG = "commitMsg";
     public static final String ONLYNAMES= "onlyNames";
 
 
