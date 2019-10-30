@@ -111,10 +111,15 @@ export default class SingleRepository extends React.Component{
             await fetch('WC', {method:'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify(reqBody), credentials: 'include'});
         }
         await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
-        let lastFolder = this.state.fileHierarchy(this.state.fileHierarchy.length-1)
+        let lastFolder = this.state.fileHierarchy[this.state.fileHierarchy.length-1];
+        console.log(lastFolder);
         let folder = await fetch('folderItem?folderItem='+lastFolder, {method:'GET', credentials: 'include'});
+        folder= await folder.json();
         this.setState(()=>({
             fileTree: folder,
+            fileEditor: false,
+            createNewFile:false,
+            chosenFileName:""
         }));
 
     }
