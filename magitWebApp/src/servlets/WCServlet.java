@@ -21,7 +21,7 @@ import static constants.Constants.REPOSITORY;
 @WebServlet(name = "WCServlet", urlPatterns = {"/WC"})
 public class WCServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        
     }
 
 

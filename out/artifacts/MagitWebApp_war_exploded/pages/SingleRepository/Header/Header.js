@@ -24,6 +24,7 @@ function Header(props){
                 <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
                     <NewBranchButton repoName={props.repoName}/>
+                    <Button variant={"success"} id={"commit"} onClick={props.commitOnClick} size={"sm"}>Commit</Button>
                     <Button variant={"success"} id={"pr"}  className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Create Pull Request</Button>
                     <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Pull</Button>
                     <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pushOnClick} size={"sm"}>Push</Button>
