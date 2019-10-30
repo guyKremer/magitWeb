@@ -222,7 +222,9 @@ export default class SingleRepository extends React.Component{
         let commitsResponse = await fetch('commits?repository='+this.props.repoName+'&branch='+this.state.headBranch, {method:'GET', credentials: 'include'});
         commitsResponse= await commitsResponse.json();
         this.setState(()=>({
-            commits: commitsResponse}));
+            commits: commitsResponse,
+            headBranchCommit:commitsResponse.length!==0 ? commitsResponse[0]:""
+        }));
     }
 
 
