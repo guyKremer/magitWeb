@@ -34,7 +34,10 @@ function FileSystem(props) {
             <div className={"fileSystem"}>
                 <div className={"barSection"}>
                     {bar}
+                    {props.canEdit===true ?
                     <button onClick={props.createNewFileOnClick} className={"newFileBtn"}>Create New File</button>
+                    :""
+                    }
                 </div>
                 <div className={"itemsSection"}>
                     {items}
@@ -44,7 +47,7 @@ function FileSystem(props) {
     }
     else{
             return (
-                    <EditFile saveOnClick={props.saveOnClick} cancelOnClickHandler={props.editFileCancelOnClickHandler} createNewFile={props.createNewFile} chosenFileContent={props.chosenFileContent}/>
+                    <EditFile canEdit={props.canEdit} saveOnClick={props.saveOnClick} cancelOnClickHandler={props.editFileCancelOnClickHandler} createNewFile={props.createNewFile} chosenFileContent={props.chosenFileContent}/>
             );
     }
 
