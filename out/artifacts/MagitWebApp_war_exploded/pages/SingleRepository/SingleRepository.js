@@ -39,6 +39,7 @@ export default class SingleRepository extends React.Component{
         this.editFileCancelOnClickHandler=this.editFileCancelOnClickHandler.bind(this);
         this.saveOnClickHandler=this.saveOnClickHandler.bind(this);
         this.getMessages=this.getMessages.bind(this);
+        this.commitOnClickHandler=this.commitOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -71,7 +72,7 @@ export default class SingleRepository extends React.Component{
             return(
                 <div className={"singleRepository"}>
                     <Header
-                       backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                        commitOnClick={this.commitOnClickHandler} backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                     />
                     <Center messages={this.state.messages} saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                     <Commits commits={this.state.commits}/>
@@ -81,8 +82,12 @@ export default class SingleRepository extends React.Component{
     }
 
     async commitOnClickHandler(msg){
-        let msgObj = {message:msg};
-        await fetch('WC', {method:'PUT',headers:{'Content-Type': 'application/json'},body:JSON.stringify(msgObj), credentials: 'include'});
+        if(msg===""){
+            window.alert("You have to enter a message to the commit");
+        }
+        else{
+            let commitResponse=await fetch('WC?commitMsg='+msg+'&repository='+this.state.name, {method:'PUT',body:'', credentials: 'include'});
+        }
     }
 
     createNewFileOnClickHandler(){
