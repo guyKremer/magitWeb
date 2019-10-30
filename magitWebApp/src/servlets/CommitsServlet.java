@@ -47,7 +47,6 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
-
         Repository.m_repositoryPath = Paths.get(CollaborationServlet.rootPath + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
