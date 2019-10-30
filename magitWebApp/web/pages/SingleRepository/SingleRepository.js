@@ -15,6 +15,7 @@ export default class SingleRepository extends React.Component{
             remoteRepo:null,
             headBranch:"",
             headBranchCommit:"",
+            isHeadBranchCommit:true,
             regularBranchesNames:[],
             commits:[],
             fileTree:{
@@ -40,7 +41,8 @@ export default class SingleRepository extends React.Component{
         this.editFileCancelOnClickHandler=this.editFileCancelOnClickHandler.bind(this);
         this.saveOnClickHandler=this.saveOnClickHandler.bind(this);
         this.getMessages=this.getMessages.bind(this);
-        this.commitOnClickHandler=this.commitOnClickHandler.bind(this);
+        this.commitButtonOnClickHandler=this.commitButtonOnClickHandler.bind(this);
+        this.commitSha1OnClickHandler=this.commitSha1OnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -73,16 +75,31 @@ export default class SingleRepository extends React.Component{
             return(
                 <div className={"singleRepository"}>
                     <Header
-                        commitOnClick={this.commitOnClickHandler} backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                        commitOnClick={this.commitButtonOnClickHandler} backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                     />
-                    <Center messages={this.state.messages} saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
-                    <Commits commits={this.state.commits}/>
+                    <Center  isHeadBranchCommit={this.state.isHeadBranchCommit} messages={this.state.messages} saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
+                    <Commits commitSha1OnClick={this.commitSha1OnClickHandler} commits={this.state.commits}/>
                 </div>
             );
 
     }
 
-    async commitOnClickHandler(msg){
+    async commitSha1OnClickHandler(sha1){
+        await fetch('commits?repository='+this.state.name+'&sha1='+sha1, {method:'POST', credentials: 'include'});
+        let lastFolder = this.state.fileHierarchy[this.state.fileHierarchy.length-1];
+        let folder = await fetch('folderItem?folderItem='+this.state.name, {method:'GET', credentials: 'include'});
+        folder= await folder.json();
+        this.setState(()=>({
+            fileTree: folder,
+            fileHierarchy:[this.state.name],
+            fileEditor: false,
+            createNewFile:false,
+            chosenFileName:"",
+            isHeadBranchCommit:this.state.headBranchCommit===sha1 ? true:false
+        }));
+    }
+
+    async commitButtonOnClickHandler(msg){
         if(msg===""){
             window.alert("You have to enter a message to the commit");
         }
@@ -118,7 +135,6 @@ export default class SingleRepository extends React.Component{
         }
         await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
         let lastFolder = this.state.fileHierarchy[this.state.fileHierarchy.length-1];
-        console.log(lastFolder);
         let folder = await fetch('folderItem?folderItem='+lastFolder, {method:'GET', credentials: 'include'});
         folder= await folder.json();
         this.setState(()=>({
@@ -127,7 +143,6 @@ export default class SingleRepository extends React.Component{
             createNewFile:false,
             chosenFileName:""
         }));
-
     }
 
     editFileCancelOnClickHandler(){
@@ -167,14 +182,13 @@ export default class SingleRepository extends React.Component{
             fileHierarchy=[this.state.name];
         }
         else{
-             fileHierarchy = this.state.fileHierarchy.map((file)=>{
-                if(i<=index){
-                    console.log(file);
-                    i++
-                    return file;
-                }
+             fileHierarchy = this.state.fileHierarchy.filter((file)=>{
+                 let res = i<=index;
+                 i++;
+                 return res;
             });
         }
+        console.log(fileHierarchy);
         this.setState(()=>({
             fileTree: folder,
             fileHierarchy:fileHierarchy
@@ -223,9 +237,7 @@ export default class SingleRepository extends React.Component{
         commitsResponse= await commitsResponse.json();
         this.setState(()=>({
             commits: commitsResponse,
-            headBranchCommit:commitsResponse.length!==0 ? commitsResponse[0]:""
+            headBranchCommit:commitsResponse.length!==0 ? commitsResponse[0].sha1:""
         }));
     }
-
-
 }

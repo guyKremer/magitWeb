@@ -15,10 +15,13 @@ export default function EditFile(props) {
                     rows="5"
                     defaultValue={props.chosenFileContent}
                 />
-                <button onClick={()=>{
-                    let fileContent=document.getElementById("fileContenttextArea").value
-                    props.saveOnClick("---",fileContent);}}
-                >Save</button>
+                {
+                    props.canEdit===true ?
+                        <button onClick={()=>{
+                        let fileContent=document.getElementById("fileContenttextArea").value
+                        props.saveOnClick("---",fileContent);}}
+                    >Save</button>:""
+                }
                 <button onClick={props.cancelOnClickHandler}>Cancel</button>
             </div>
         );

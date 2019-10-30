@@ -7,7 +7,7 @@ function Commits(props){
     let commmits = props.commits.map((commit)=>{
         return (
             <div className="singleCommit">
-                <Button variant={"link"}>{commit.sha1}</Button>
+                <Button onClick={()=>{props.commitSha1OnClick(commit.sha1)}} variant={"link"}>{commit.sha1}</Button>
                 <p>{commit.message}</p>
                 <p>{commit.date}</p>
                 <p>{commit.creator}</p>
