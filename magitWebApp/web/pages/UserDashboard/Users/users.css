@@ -1,7 +1,6 @@
 .users{
     display: flex;
     flex-direction: column;
-    background-color: #dbe7e4;
-    padding-top: 2%;
     align-items: center;
+    flex-basis: 15%;
 }

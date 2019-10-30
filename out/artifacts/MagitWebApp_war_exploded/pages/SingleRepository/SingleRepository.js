@@ -80,6 +80,11 @@ export default class SingleRepository extends React.Component{
 
     }
 
+    async commitOnClickHandler(msg){
+        let msgObj = {message:msg};
+        await fetch('WC', {method:'PUT',headers:{'Content-Type': 'application/json'},body:JSON.stringify(msgObj), credentials: 'include'});
+    }
+
     createNewFileOnClickHandler(){
         this.setState(()=>({
             createNewFile:true,
@@ -87,13 +92,31 @@ export default class SingleRepository extends React.Component{
         }));
     }
 
-    saveOnClickHandler(fileName,fileContent){
+    async saveOnClickHandler(fileName,fileContent){
+        let reqBody;
         if(fileName!=="---"){
-            console.log(fileName+': '+fileContent);
+             reqBody = {
+                tree:this.state.fileHierarchy,
+                fileName:fileName,
+                content: fileContent
+            }
+            await fetch('WC', {method:'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify(reqBody), credentials: 'include'});
         }
         else{
-            console.log(this.state.chosenFileName+': '+fileContent);
+            reqBody = {
+                tree:this.state.fileHierarchy,
+                fileName:this.state.chosenFileName,
+                content: fileContent
+            }
+            await fetch('WC', {method:'POST',headers:{'Content-Type': 'application/json'},body:JSON.stringify(reqBody), credentials: 'include'});
         }
+        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+        let lastFolder = this.state.fileHierarchy(this.state.fileHierarchy.length-1)
+        let folder = await fetch('folderItem?folderItem='+lastFolder, {method:'GET', credentials: 'include'});
+        this.setState(()=>({
+            fileTree: folder,
+        }));
+
     }
 
     editFileCancelOnClickHandler(){

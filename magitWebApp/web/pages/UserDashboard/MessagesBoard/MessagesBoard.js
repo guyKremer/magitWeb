@@ -33,9 +33,8 @@ export default function MessagesBoard (props){
         })
 
         return(
-
             <div id="messagesWrapper">
-                {messages}
+                {props.messages.length === 0 ? <b>You have no new messages</b>:{messages}}
             </div>
         );
 }
