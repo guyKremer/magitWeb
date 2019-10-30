@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,6 +107,10 @@ public class BranchesServlet extends HttpServlet {
                 break;
             }
         }
+
+        Repository.m_repositoryPath =
+                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
+        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
         engine.setCurrentRepository(currRepo);
 

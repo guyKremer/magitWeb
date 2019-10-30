@@ -1,6 +1,9 @@
 package servlets;
 
+import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
+import users.UserManager;
+import utils.ServletUtils;
 import utils.SessionUtils;
 
 import javax.servlet.ServletException;
@@ -16,7 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import static constants.Constants.REPOSITORY;
+import static constants.Constants.*;
 
 @WebServlet(name = "WCServlet", urlPatterns = {"/WC"})
 public class WCServlet extends HttpServlet {
@@ -38,7 +41,25 @@ public class WCServlet extends HttpServlet {
 
     // COMMIT
     public void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userNameFromParameter= SessionUtils.getUsername(request);
+        String repoName=request.getParameter(REPOSITORY);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        Repository currRepo = null;
 
+        for(Repository repo : userManager.getRepositories(userNameFromParameter)){
+            if(repo.GetName().equals(repoName)){
+                currRepo = repo;
+                break;
+            }
+        }
+
+        Repository.m_repositoryPath =
+                Paths.get(
+                        CollaborationServlet.rootPath
+                                + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
+        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+
+        currRepo.createCommit(COMMITMSG);
     }
 
 
