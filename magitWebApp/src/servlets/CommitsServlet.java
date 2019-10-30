@@ -31,7 +31,8 @@ public class CommitsServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter= SessionUtils.getUsername(request);
         String repoName=request.getParameter(REPOSITORY);
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());        String branchName=request.getParameter(BRANCH);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String branchName=request.getParameter(BRANCH);
 
         Commit commit;
         Repository currRepo = null;
@@ -46,7 +47,8 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
-        Repository.m_repositoryPath = Paths.get(CollaborationServlet.rootPath + File.separator + currRepo.GetName());
+        Repository.m_repositoryPath =
+                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
         jsonArray = getAllBranchCommits(currRepo, branchName);
@@ -73,6 +75,10 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
+
+        Repository.m_repositoryPath =
+                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
+        Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
         if(sha1.equals("0")){
             //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
