@@ -9,15 +9,26 @@ export default class PullRequestButton extends React.Component{
     constructor(props) {
         super(props);
         this.state= {
-            showForm: false
+            showForm: false,
+            Rbs:[],
+            Rtbs:[]
         }
         this.onClick=this.onClick.bind(this);
     }
 
-    onClick(){
+   async onClick(){
+        let Rtbs;
+        let Rbs;
         let showForm=this.state.showForm === false? true:false;
+        Rtbs = await fetch('PR?repository='+this.props.repoName+ '&type=RTB', {method:'PUT',body:'', credentials: 'include'});
+        Rbs = await fetch('PR?repository='+this.props.repoName+ '&type=RB', {method:'PUT',body:'', credentials: 'include'});
+        Rtbs =await Rtbs.json();
+        Rbs= await Rbs.json();
+
         this.setState(()=>({
-            showForm: showForm
+            showForm: showForm,
+            Rbs:Rbs,
+            Rtbs:Rtbs
         }));
     }
 
@@ -27,7 +38,7 @@ export default class PullRequestButton extends React.Component{
                 <Dropdown.Toggle onClick={this.onClick} variant={"success"} id="dropdown-basic" size={"sm"}>
                     Create New Pull Request
                 </Dropdown.Toggle>
-                {this.state.showForm ? <PullRequestForm  closeForm={this.onClick} repoName={this.props.repoName} location={this.state.location}/>:""}
+                {this.state.showForm ? <PullRequestForm Rbs={this.state.Rbs} Rtbs={this.state.Rtbs}  closeForm={this.onClick} repoName={this.props.repoName} location={this.state.location}/>:""}
             </div>
         );
     }
