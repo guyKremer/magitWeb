@@ -238,7 +238,12 @@ export default class SingleRepository extends React.Component{
     }
    async pullOnClickHandler(){
         await fetch('collaboration?repository='+this.props.repoName+'&operation=pull&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
-       this.getBranches();
+       await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+       let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
+       folder = await folder.json();
+       this.setState(()=>({
+           fileHierarchy:[this.state.name],
+           fileTree: folder}));
        this.getCommitsSha1();
    }
 
