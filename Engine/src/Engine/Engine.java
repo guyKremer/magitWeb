@@ -522,7 +522,6 @@ public class Engine {
                 Commit branchCommit2 = null;
 
                 Branch branch;
-                RTBranch newRTBranch;
                 Branch newBranch;
 
                 initNewPaths(RRpath, m_currentRepository);
@@ -610,7 +609,6 @@ public class Engine {
         Path RRMagit = RRpath.resolve(".magit");
         Commit currCommit;
 
-        Map<String,Commit> localCommits = new HashMap<>();
         Map<String,Commit> remoteCommits = new HashMap<>();
 
         Repository.m_pathToMagitDirectory = RRMagit;
@@ -618,7 +616,7 @@ public class Engine {
 
         remoteCommits = i_RR.GetCommitsMap();
 
-        currCommit = i_RR.GetCurrentCommit();
+        currCommit = i_localRepository.GetCurrentCommit();
 
         while(currCommit.getSha1() != null && !currCommit.getSha1().isEmpty()){
             Repository.m_pathToMagitDirectory = RRMagit;

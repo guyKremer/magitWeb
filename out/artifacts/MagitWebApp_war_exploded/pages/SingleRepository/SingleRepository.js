@@ -215,10 +215,10 @@ export default class SingleRepository extends React.Component{
     }
 
     pushOnClickHandler(){
-        fetch('collaboration?repository='+this.props.repoName+'&operation=push', {method:'GET', credentials: 'include'});
+        fetch('collaboration?repository='+this.props.repoName+'&operation=push&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
     }
    async pullOnClickHandler(){
-        await fetch('collaboration?repository='+this.props.repoName+'&operation=pull', {method:'GET', credentials: 'include'});
+        await fetch('collaboration?repository='+this.props.repoName+'&operation=pull&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
        this.getBranches();
        this.getCommitsSha1();
    }

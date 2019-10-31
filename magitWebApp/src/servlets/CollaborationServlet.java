@@ -36,7 +36,7 @@ public class CollaborationServlet extends HttpServlet {
         engine.setCurrentRepository(localRepo);
 
         Repository.m_repositoryPath =
-                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + localRepo.GetName());
+                Paths.get(CollaborationServlet.rootPath + File.separator + remoteUser + File.separator + remoteRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
         if(operation.equals("push")){
