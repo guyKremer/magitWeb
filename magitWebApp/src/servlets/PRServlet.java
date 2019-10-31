@@ -16,11 +16,28 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
+import static constants.Constants.REMOTEUSER;
 import static constants.Constants.REPOSITORY;
 
 @WebServlet(name = "PRServlet", urlPatterns = {"/PR"})
 public class PRServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userNameFromParameter = SessionUtils.getUsername(request);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String repoName = request.getParameter(REPOSITORY);
+        String remoteUser = request.getParameter(REMOTEUSER);
+        String baseBranch = request.getParameter("baseBranch");
+        String targetBranch = request.getParameter("targetBranch");
+        Repository remoteRepo = null;
+
+        //find repo
+        for (Repository repo : userManager.getRepositories(userNameFromParameter)) {
+            if (repo.GetName().equals(repoName)) {
+                remoteRepo = repo;
+                break;
+            }
+        }
+
 
     }
 
