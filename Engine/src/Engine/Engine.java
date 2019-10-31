@@ -166,7 +166,7 @@ public class Engine {
 
         if(prevCommitSha1!=null && !prevCommitSha1.isEmpty()){
             m_currentRepository.clearWc();
-            Commit prevCommit = new Commit(prevCommitSha1);
+            Commit prevCommit = new Commit(prevCommitSha1,m_currentRepository.GetRepositoryPath());
             m_currentRepository.setCurrentCommit(prevCommit);
             originalCommit.flush();
             status = showStatus();
@@ -311,7 +311,7 @@ public class Engine {
 
         for(Commit commit : LR.GetCommitsMapObj().values()){
             commit.getRootFolder().saveInObjects();
-            Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
+            Engine.Utils.zipToFile(LR.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
                     , commit.toString());
         }
 
@@ -343,6 +343,7 @@ public class Engine {
         }
     }
 
+    /*
     public void Fetch() throws IOException {
 
         Path currMagitPath = Repository.m_pathToMagitDirectory;
@@ -392,6 +393,7 @@ public class Engine {
         m_currentRepository.SetBranches(newBranches);
 
     }
+     */
 
     public void Pull() throws IOException {
 
@@ -412,11 +414,7 @@ public class Engine {
 
             RR.GetCommitsMap();
 
-            branchCommit1 = new Commit(RR.GetHeadBranch().getCommitSha1());
-
-
-            Repository.m_pathToMagitDirectory = currMagitPath;
-            Repository.m_repositoryPath = currRepoPath;
+            branchCommit1 = new Commit(RR.GetHeadBranch().getCommitSha1(),currRepoPath);
 
             initNewPaths(m_currentRepository.GetRepositoryPath(), RR);
 
@@ -481,6 +479,7 @@ public class Engine {
 
     }
 
+    /*
     public void Push() throws IOException {
 
        // String RBcommit = m_currentRepository.GetBranch(
@@ -527,7 +526,7 @@ public class Engine {
 
                 initNewPaths(RRpath, m_currentRepository);
 
-                branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1());
+                branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1(),);
                 String headCommit = branchCommit1.getSha1();
 
 
@@ -598,6 +597,8 @@ public class Engine {
       //  }
 
     }
+    */
+
 
     /// NEED CHECK
     private void pushNewBranch() throws IOException {

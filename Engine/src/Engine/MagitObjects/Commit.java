@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.List;
 
 public class Commit implements CommitRepresentative {
+    private Path m_repositoryPath;
+    private Path m_pathToMagitDirectory;
     private String m_sha1;
     private String m_message;
     private Folder m_rootFolder;
@@ -28,7 +30,9 @@ public class Commit implements CommitRepresentative {
     private String m_dateOfCreation;
     private String m_creator;
 
-    public Commit(){
+    public Commit(Path repoPath){
+        m_repositoryPath=repoPath;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
         m_message=null;
         m_rootFolder=null;
         m_prevCommitSha1Array=null;
@@ -49,7 +53,9 @@ public class Commit implements CommitRepresentative {
         return date;
     }
 
-    public Commit(String i_sha1) throws FileNotFoundException,IOException {
+    public Commit(String i_sha1,Path repoPath) throws FileNotFoundException,IOException {
+        m_repositoryPath=repoPath;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
         unzipCommit(i_sha1);
     }
 
@@ -160,7 +166,7 @@ public class Commit implements CommitRepresentative {
     }
 
     public void unzipRootDirectory(List<String> i_commitLines){
-        m_rootFolder = new Folder(Repository.m_repositoryPath,i_commitLines.get(0),i_commitLines.get(5),i_commitLines.get(4));
+        m_rootFolder = new Folder(m_repositoryPath,i_commitLines.get(0),i_commitLines.get(5),i_commitLines.get(4));
         m_rootFolder.unzipAndSaveFolder(i_commitLines.get(0));
     }
 
@@ -182,7 +188,7 @@ public class Commit implements CommitRepresentative {
         m_sha1=createSha1();
 
         try{
-            Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
+            Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
                                     ,this.toString());
         }
         catch (java.io.IOException e){
@@ -205,8 +211,8 @@ public class Commit implements CommitRepresentative {
     }
 
     public void unzipCommit(String i_commitSha1) throws FileNotFoundException,IOException {
-        if( ! Files.exists(Repository.m_pathToMagitDirectory.resolve("objects").resolve(i_commitSha1))){
-            throw new FileNotFoundException(Repository.m_pathToMagitDirectory.resolve("objects").resolve(i_commitSha1).toString()
+        if( ! Files.exists(m_pathToMagitDirectory.resolve("objects").resolve(i_commitSha1))){
+            throw new FileNotFoundException(m_pathToMagitDirectory.resolve("objects").resolve(i_commitSha1).toString()
                     + "doesn't exist");
         }
         File unZippedCommit=Engine.Utils.UnzipFile(i_commitSha1);

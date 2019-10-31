@@ -21,8 +21,8 @@ import java.util.regex.Pattern;
 
 public class Repository {
     protected String m_name;
-    public static Path m_repositoryPath=null;
-    public static Path m_pathToMagitDirectory=null;
+    public  Path m_repositoryPath=null;
+    public  Path m_pathToMagitDirectory=null;
     public static SimpleDateFormat m_simpleDateFormat = null;
     private Map<String,Branch> m_branches = new HashMap<String, Branch>();
     private Branch m_headBranch;
@@ -53,7 +53,7 @@ public class Repository {
         Commit commit;
 
         for (Map.Entry<String, Branch> entry : m_branches.entrySet()){
-            commit = new Commit(entry.getValue().getCommitSha1());
+            commit = new Commit(entry.getValue().getCommitSha1(),m_repositoryPath);
             insertCommitsMapRec(commit);
         }
         return m_commitsMap;
@@ -66,10 +66,10 @@ public class Repository {
     private void insertCommitsMapRec(Commit commit) throws IOException {
         m_commitsMap.put(commit.getSha1(),commit);
         if(!commit.getFirstPrecedingSha1().isEmpty() && commit.getFirstPrecedingSha1() != null){
-            insertCommitsMapRec(new Commit(commit.getFirstPrecedingSha1()));
+            insertCommitsMapRec(new Commit(commit.getFirstPrecedingSha1(),m_repositoryPath));
         }
         if(!commit.getSecondPrecedingSha1().isEmpty() && commit.getSecondPrecedingSha1() != null){
-            insertCommitsMapRec(new Commit(commit.getSecondPrecedingSha1()));
+            insertCommitsMapRec(new Commit(commit.getSecondPrecedingSha1(),m_repositoryPath));
         }
     }
 
@@ -194,7 +194,7 @@ public class Repository {
     }
 
     private void GetHeadBranchCommitHistoryRec(List<Commit> i_res,String i_sha1)throws IOException {
-        Commit commitToInsert = new Commit(i_sha1);
+        Commit commitToInsert = new Commit(i_sha1,m_repositoryPath);
         i_res.add(commitToInsert);
         if(!commitToInsert.getFirstPrecedingSha1().isEmpty()){
             GetHeadBranchCommitHistoryRec(i_res,commitToInsert.getFirstPrecedingSha1());
@@ -259,7 +259,7 @@ public class Repository {
     }
 
     public void loadCommitFromBranch(Branch i_branch)throws java.io.IOException{
-        m_currentCommit = new Commit (i_branch.getCommitSha1());
+        m_currentCommit = new Commit (i_branch.getCommitSha1(),m_repositoryPath);
         m_WC = m_currentCommit.getRootFolder();
     }
 
@@ -370,7 +370,7 @@ public class Repository {
         loadBranches();
         setHeadBranchFromHead();
         if(!(m_headBranch.getCommitSha1().equals("") || m_headBranch.getCommitSha1().equals("null"))){
-            m_currentCommit = new Commit(m_headBranch.getCommitSha1());
+            m_currentCommit = new Commit(m_headBranch.getCommitSha1(),m_repositoryPath);
             flushCommit();
         }
         else{
@@ -495,7 +495,7 @@ public class Repository {
             branch.setCommitSha1(i_sha1);
             branch.flushBranch();
             m_branches.put(i_branchName,branch);
-            m_currentCommit = new Commit(i_sha1);
+            m_currentCommit = new Commit(i_sha1,m_repositoryPath);
             flushCommit();
         }
     }
@@ -507,7 +507,7 @@ public class Repository {
         String ncaSha1 = findAncestorSha1(oursSha1,theirsSha1);
 
         if(checkConflicts){
-            new Commit(i_theirsBranch.getCommitSha1()).flushForMerge(new Commit(findAncestorSha1(m_currentCommit.getSha1(),i_theirsBranch.getCommitSha1())),m_currentCommit);
+            new Commit(i_theirsBranch.getCommitSha1(),m_repositoryPath).flushForMerge(new Commit(findAncestorSha1(m_currentCommit.getSha1(),i_theirsBranch.getCommitSha1()),m_repositoryPath),m_currentCommit);
             conflicts =  checkConflicts (i_theirsBranch);
 
             if(conflicts.isEmpty()){
@@ -558,7 +558,7 @@ public class Repository {
    }
 
    private void switchCommit(String sha1)throws FileNotFoundException,IOException{
-       m_currentCommit = new Commit(sha1);
+       m_currentCommit = new Commit(sha1,m_repositoryPath);
        flushCommit();
        m_headBranch.setCommitSha1(m_currentCommit.getSha1());
        m_headBranch.flushBranch();
@@ -570,9 +570,9 @@ public class Repository {
         String ncaSha1 = findAncestorSha1(oursSha1,theirsSha1);
 
         if(!ncaSha1.isEmpty()){
-            Commit ncaCommit = new Commit(ncaSha1);
-            Commit oursCommit = new Commit(oursSha1);
-            Commit theirsCommit = new Commit(theirsSha1);
+            Commit ncaCommit = new Commit(ncaSha1,m_repositoryPath);
+            Commit oursCommit = new Commit(oursSha1,m_repositoryPath);
+            Commit theirsCommit = new Commit(theirsSha1,m_repositoryPath);
             return oursCommit.findConflicts(m_conflictsSet,ncaCommit,theirsCommit);
         }
         else{
@@ -583,7 +583,7 @@ public class Repository {
     private String findAncestorSha1(String i_ourSha1,String i_theirsSha1)throws FileNotFoundException,IOException {
         AncestorFinder anf = new AncestorFinder(sha1->{
             try{
-                return new Commit(sha1);
+                return new Commit(sha1,m_repositoryPath);
             }
             catch (IOException e ){
                 return null;
