@@ -82,9 +82,10 @@ public class BranchesServlet extends HttpServlet {
                 break;
             }
         }
+
         engine.setCurrentRepository(currRepo);
         engine.checkOut(branchName);
-        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1(),currRepo.m_repositoryPath);
         userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
     }
 
@@ -108,16 +109,17 @@ public class BranchesServlet extends HttpServlet {
             }
         }
 
+        /*
         Repository.m_repositoryPath =
                 Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
-
+        */
         engine.setCurrentRepository(currRepo);
 
         if (sha1.isEmpty()) {
             engine.AddBranch(newBranch,true);
         } else {
-            branch = new Branch(currRepo.GetPathToMagitDirectory().resolve("branches").resolve(newBranch),sha1);
+            branch = new Branch(currRepo.GetPathToMagitDirectory().resolve("branches").resolve(newBranch),sha1,currRepo.m_repositoryPath);
             currRepo.InsertBranch(branch);
             currRepo.checkOut(newBranch);
         }

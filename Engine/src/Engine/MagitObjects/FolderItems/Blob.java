@@ -20,15 +20,19 @@ import java.util.Map;
 import java.util.Set;
 
 public class Blob extends FolderItem {
+
     String m_content;
-    public Blob(Path i_blobPath,String i_content) {
-        super(i_blobPath);
+    public Blob(Path i_blobPath,String i_content,Path repositoryPath) {
+        super(i_blobPath,repositoryPath);
         m_type = "file";
         m_content = i_content;
         createSha1();
     }
 
-    public Blob(){}
+    public Blob(Path repositoryPath){
+        m_repositoryPath = repositoryPath;
+        m_pathToMagitDirectory = repositoryPath.resolve(".magit");
+    }
 
     public String GetContent() {
         return m_content;
@@ -37,8 +41,8 @@ public class Blob extends FolderItem {
     @Override
     public void saveInObjects() {
         try{
-            Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
-                                    ,m_content);
+            Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
+                                    ,m_content,m_repositoryPath);
         }
         catch (java.io.IOException e){
 
@@ -49,7 +53,7 @@ public class Blob extends FolderItem {
         File tempBlob;
 
         try{
-            tempBlob =Engine.Utils.UnzipFile(i_blobDesription[1]);
+            tempBlob =Engine.Utils.UnzipFile(i_blobDesription[1],m_repositoryPath);
             m_path = i_path;
             m_content = new String(Files.readAllBytes(tempBlob.toPath()));
             tempBlob.delete();

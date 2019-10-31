@@ -52,7 +52,8 @@ public class RepositoryServlet extends HttpServlet {
         }
 
         try {
-            xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter);
+            xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter,
+                    Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,7 +82,7 @@ public class RepositoryServlet extends HttpServlet {
 
             if(type.equals("LR")){
                 RRname = ((LocalRepository)repo).getRemoteRepoName();
-                RRuser = (repo.GetRepositoryPath().getParent()).getFileName().toString();
+                RRuser = Paths.get((((LocalRepository)repo).getRemoteRepoLocation())).getParent().getFileName().toString();
             }
 
             repositoryDetailsList.add(

@@ -47,9 +47,11 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
+        /*
         Repository.m_repositoryPath =
                 Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+         */
 
         jsonArray = getAllBranchCommits(currRepo, branchName);
         //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
@@ -75,24 +77,25 @@ public class CommitsServlet extends HttpServlet {
                 break;
             }
         }
-
+        /*
         Repository.m_repositoryPath =
                 Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+         */
 
         if(sha1.equals("0")){
             //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
             userManager.usersMap.get(userNameFromParameter).setRootFolder(currRepo.loadWC());
         }
         else{
-            commit = new Commit(sha1);
+            commit = new Commit(sha1, currRepo.m_repositoryPath);
             userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
         }
     }
 
     public JsonArray getAllBranchCommits(Repository i_repo, String i_branch) throws IOException {
         JsonArray jsonArray = new JsonArray();
-        Commit firstCommit = new Commit(i_repo.GetBranches().get(i_branch).getCommitSha1());
+        Commit firstCommit = new Commit(i_repo.GetBranches().get(i_branch).getCommitSha1(),i_repo.m_repositoryPath);
         Commit secondCommit = null;
         String pointedBranches = "";
 
@@ -114,7 +117,7 @@ public class CommitsServlet extends HttpServlet {
             pointedBranches = "";
 
             if(!firstCommit.getFirstPrecedingSha1().isEmpty()) {
-                firstCommit = new Commit(firstCommit.getFirstPrecedingSha1());
+                firstCommit = new Commit(firstCommit.getFirstPrecedingSha1(), i_repo.m_repositoryPath);
             }
             else{
                 break;

@@ -54,12 +54,13 @@ public class WCServlet extends HttpServlet {
                 break;
             }
         }
-
+        /*
         Repository.m_repositoryPath =
                 Paths.get(
                         CollaborationServlet.rootPath
                                 + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
+        */
         Engine.m_user = userNameFromParameter;
         currRepo.createCommit(msg);
     }

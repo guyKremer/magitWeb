@@ -166,7 +166,7 @@ public class Engine {
 
         if(prevCommitSha1!=null && !prevCommitSha1.isEmpty()){
             m_currentRepository.clearWc();
-            Commit prevCommit = new Commit(prevCommitSha1);
+            Commit prevCommit = new Commit(prevCommitSha1,m_currentRepository.GetRepositoryPath());
             m_currentRepository.setCurrentCommit(prevCommit);
             originalCommit.flush();
             status = showStatus();
@@ -178,9 +178,9 @@ public class Engine {
     }
 
     public static class Utils{
-        public static void zipToFile(Path i_pathToZippedFile, String i_fileContent) throws IOException{
+        public static void zipToFile(Path i_pathToZippedFile, String i_fileContent,Path repoPath) throws IOException{
             if(!Files.exists(i_pathToZippedFile)){
-                Path pathToTempSha1 = Repository.m_repositoryPath.resolve(i_pathToZippedFile.getFileName());//tempFile
+                Path pathToTempSha1 = repoPath.resolve(i_pathToZippedFile.getFileName());//tempFile
                 FileOutputStream fos = new FileOutputStream(i_pathToZippedFile.toString());
                 ZipOutputStream zipOut = new ZipOutputStream(fos);
                 File fileToZip=Files.createFile(pathToTempSha1).toFile();
@@ -204,10 +204,10 @@ public class Engine {
                 Files.deleteIfExists(pathToTempSha1);
             }
         }
-        public static File UnzipFile(String i_sha1)throws IOException{
-            Path fileZip = Repository.m_pathToMagitDirectory.resolve("objects").resolve(i_sha1);
+        public static File UnzipFile(String i_sha1,Path repoPath)throws IOException{
+            Path fileZip = repoPath.resolve(".magit").resolve("objects").resolve(i_sha1);
             //Files.createDirectories(Repository.m_pathToMagitDirectory.resolve("temp"));
-            File destDir = new File(Repository.m_pathToMagitDirectory.toString());
+            File destDir = new File(repoPath.resolve(".magit").toString());
             byte[] buffer = new byte[1024];
             ZipInputStream zis = new ZipInputStream(new FileInputStream(fileZip.toFile()));
             ZipEntry zipEntry = zis.getNextEntry();
@@ -290,17 +290,19 @@ public class Engine {
         }
     }
 
-    public void Clone(File i_RR, File i_LR, String repoName) throws IOException {
-        String RR = i_RR.getAbsolutePath();
+    public LocalRepository Clone(Repository RR,String RRpath ,File i_LR, String repoName) throws IOException {
+        //String RR = i_RR.getAbsolutePath();
         RBranch rb;
         RTBranch rtBranch;
-        switchRepository(RR);
+        //switchRepository(RR);
+        m_currentRepository = RR;
+        Repository repoRR = RR;
         Map<String,Branch> branches = m_currentRepository.GetBranches();
         Map<String,Commit> commitsMap = m_currentRepository.GetCommitsMap();
         LocalRepository LR = new LocalRepository(repoName,
                 i_LR.getAbsolutePath(),
                 false,
-                RR,
+                RRpath,
                 m_currentRepository.GetName());
 
         LR.SetCommitsMap(commitsMap);
@@ -311,8 +313,8 @@ public class Engine {
 
         for(Commit commit : LR.GetCommitsMapObj().values()){
             commit.getRootFolder().saveInObjects();
-            Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
-                    , commit.toString());
+            Engine.Utils.zipToFile(LR.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
+                    , commit.toString(), LR.m_repositoryPath);
         }
 
 
@@ -320,12 +322,12 @@ public class Engine {
             rb = new RBranch(LR.GetRepositoryPath().resolve(".magit").resolve("branches").resolve(m_currentRepository.GetName())
                     .resolve(branch.getName()),
                     m_currentRepository.GetName() + File.separator + branch.getName(),
-                    branch.getCommitSha1());
+                    branch.getCommitSha1(), LR.m_repositoryPath);
             LR.InsertBranch(rb);
         }
 
         rtBranch = new RTBranch(LR.GetRepositoryPath().resolve(".magit").resolve("branches").
-                resolve(m_currentRepository.GetHeadBranch().getName()), m_currentRepository.GetHeadBranch().getCommitSha1());
+                resolve(m_currentRepository.GetHeadBranch().getName()), m_currentRepository.GetHeadBranch().getCommitSha1(), LR.m_repositoryPath);
 
 
         LR.InsertBranch(rtBranch);
@@ -333,16 +335,18 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-        ////////////
+
+        return LR;
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
         for (Commit currentCommit : i_repo.GetCommitsMapObj().values())
         {
-            currentCommit.getRootFolder().initFolderPaths(i_NewPathOfRepository);
+            currentCommit.getRootFolder().initFolderPaths(i_NewPathOfRepository, i_NewPathOfRepository);
         }
     }
 
+    /*
     public void Fetch() throws IOException {
 
         Path currMagitPath = Repository.m_pathToMagitDirectory;
@@ -392,13 +396,15 @@ public class Engine {
         m_currentRepository.SetBranches(newBranches);
 
     }
+     */
 
+    /*
     public void Pull() throws IOException {
 
         if(!isChanges()) {
 
-            Path currRepoPath = Repository.m_repositoryPath;
-            Path currMagitPath = Repository.m_pathToMagitDirectory;
+            Path currRepoPath = m_currentRepository.m_repositoryPath;
+            Path currMagitPath = m_currentRepository.m_pathToMagitDirectory;
 
             Commit branchCommit1;
             Commit branchCommit2 = null;
@@ -412,11 +418,7 @@ public class Engine {
 
             RR.GetCommitsMap();
 
-            branchCommit1 = new Commit(RR.GetHeadBranch().getCommitSha1());
-
-
-            Repository.m_pathToMagitDirectory = currMagitPath;
-            Repository.m_repositoryPath = currRepoPath;
+            branchCommit1 = new Commit(RR.GetHeadBranch().getCommitSha1(),currRepoPath);
 
             initNewPaths(m_currentRepository.GetRepositoryPath(), RR);
 
@@ -431,7 +433,7 @@ public class Engine {
                 if (branchCommit1.getFirstPrecedingSha1() != null && !branchCommit1.getFirstPrecedingSha1().isEmpty() ||
                         (branchCommit1.getSecondPrecedingSha1() != null && !branchCommit1.getSecondPrecedingSha1().isEmpty())) {
                     branchCommit1.getRootFolder().saveInObjects();
-                    Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(branchCommit1.getSha1())
+                    Engine.Utils.zipToFile(m_currentRepository.m_pathToMagitDirectory.resolve("objects").resolve(branchCommit1.getSha1())
                             , branchCommit1.toString());
                     branchCommit1 = RR.GetCommitsMapObj().get(branchCommit1.getFirstPrecedingSha1());
                     branchCommit2 = RR.GetCommitsMapObj().get(branchCommit1.getSecondPrecedingSha1());
@@ -440,7 +442,7 @@ public class Engine {
                         (branchCommit2.getFirstPrecedingSha1() != null && !branchCommit2.getFirstPrecedingSha1().isEmpty()) ||
                         branchCommit2.getSecondPrecedingSha1() != null && !branchCommit2.getSecondPrecedingSha1().isEmpty()) {
                     branchCommit2.getRootFolder().saveInObjects();
-                    Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(branchCommit2.getSha1())
+                    Engine.Utils.zipToFile(m_currentRepository.m_pathToMagitDirectory.resolve("objects").resolve(branchCommit2.getSha1())
                             , branchCommit2.toString());
                     branchCommit1 = RR.GetCommitsMapObj().get(branchCommit2.getFirstPrecedingSha1());
                     branchCommit2 = RR.GetCommitsMapObj().get(branchCommit2.getSecondPrecedingSha1());
@@ -453,7 +455,7 @@ public class Engine {
                 branch = RR.GetBranches().get(m_currentRepository.GetHeadBranch().getName());
                 m_currentRepository.GetBranches().remove(RR.GetName() + File.separator + branch.getName());
 
-                newRBranch = new RBranch(Repository.m_pathToMagitDirectory.resolve("branches").resolve(RR.GetName()).resolve(branch.getName()),
+                newRBranch = new RBranch(m_currentRepository.m_pathToMagitDirectory.resolve("branches").resolve(RR.GetName()).resolve(branch.getName()),
                         RR.GetName() + File.separator + branch.getName(), branch.getCommitSha1());
 
                 m_currentRepository.InsertBranch(newRBranch);
@@ -462,7 +464,7 @@ public class Engine {
 
                 m_currentRepository.GetBranches().remove(m_currentRepository.GetHeadBranch().getName());
 
-                newRTBranch = new RTBranch(Repository.m_pathToMagitDirectory.resolve("branches").
+                newRTBranch = new RTBranch(m_currentRepository.m_pathToMagitDirectory.resolve("branches").
                         resolve(branch.getName()), branch.getCommitSha1());
 
                 m_currentRepository.InsertBranch(newRTBranch);
@@ -481,6 +483,9 @@ public class Engine {
 
     }
 
+     */
+
+    /*
     public void Push() throws IOException {
 
        // String RBcommit = m_currentRepository.GetBranch(
@@ -496,7 +501,7 @@ public class Engine {
             if (m_currentRepository.GetBranch(
                     ((LocalRepository) m_currentRepository).getRemoteRepoName()
                             + File.separator + m_currentRepository.GetHeadBranch()) == null) {
-                pushNewBranch();
+                //pushNewBranch();
             }
             // RTB
             else {
@@ -522,12 +527,11 @@ public class Engine {
                 Commit branchCommit2 = null;
 
                 Branch branch;
-                RTBranch newRTBranch;
                 Branch newBranch;
 
                 initNewPaths(RRpath, m_currentRepository);
 
-                branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1());
+                branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1(),);
                 String headCommit = branchCommit1.getSha1();
 
 
@@ -598,48 +602,56 @@ public class Engine {
       //  }
 
     }
+    */
+
 
     /// NEED CHECK
-    private void pushNewBranch() throws IOException {
-        String headBranchName = m_currentRepository.GetHeadBranch().getName();
-        String headCommit = m_currentRepository.GetHeadBranch().getCommitSha1();
+public void PushNewBranch(LocalRepository i_localRepository, Repository i_RR, String localUserName, String remoteUserName) throws IOException {
+        String rootPath = "c:\\magit-ex3";
+        String headBranchName = i_localRepository.GetHeadBranch().getName();
+        String headCommit = i_localRepository.GetHeadBranch().getCommitSha1();
+        Path currRepoPath =Paths.get(rootPath + File.separator + localUserName + File.separator + i_localRepository.GetName());
+        Path currMagitPath = currRepoPath.resolve(".magit");
+        Path RRpath = Paths.get(rootPath + File.separator + remoteUserName + File.separator + i_RR.GetName());
+        Path RRMagit = RRpath.resolve(".magit");
+        Commit currCommit;
 
-        Map<String,Commit> localCommits = m_currentRepository.GetCommitsMap();
-        Map<String,Commit> remoteCommits;
+        Map<String,Commit> remoteCommits = new HashMap<>();
 
-        Path currMagitPath = Repository.m_pathToMagitDirectory;
-        Path currRepoPath = Repository.m_repositoryPath;
-        boolean flag = false;
 
-        Repository RR = new Repository(((LocalRepository) m_currentRepository).getRemoteRepoName(),
-                ((LocalRepository) m_currentRepository).getRemoteRepoLocation(), true);
+        remoteCommits = i_RR.GetCommitsMap();
 
-        Path RRpath = RR.GetRepositoryPath();
-        Path RRMagit = Repository.m_pathToMagitDirectory;
+        currCommit = i_localRepository.GetCurrentCommit();
 
-        RTBranch rtBranch = new RTBranch(
-                Repository.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName)
-                ,headCommit);
+        while(currCommit.getSha1() != null && !currCommit.getSha1().isEmpty()){
 
-        remoteCommits = RR.GetCommitsMap();
 
-        Commit branchCommit1;
-        Commit branchCommit2 = null;
+            if(remoteCommits.get(currCommit.getSha1()) == null){
+                Engine.Utils.zipToFile(i_RR.m_pathToMagitDirectory.resolve("objects").resolve(currCommit.getSha1())
+                        ,currCommit.toString(),i_RR.m_repositoryPath);
+            }
 
-        initNewPaths(RRpath, m_currentRepository);
-        //branchCommit1 = new Commit(m_currentRepository.GetHeadBranch().getCommitSha1());
 
-        Repository.m_repositoryPath = RRpath;
-        Repository.m_pathToMagitDirectory = RRMagit;
-
-        for(Map.Entry<String,Commit> commit: localCommits.entrySet()){
-            if(remoteCommits.get(commit.getKey()) == null){
-                Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(commit.getKey())
-                        ,commit.getValue().toString());
+            if(currCommit.getFirstPrecedingSha1() != null && !currCommit.getSecondPrecedingSha1().isEmpty()){
+                currCommit = new Commit(currCommit.getFirstPrecedingSha1(), i_localRepository.m_repositoryPath);
+            }else{
+                break;
             }
         }
+        RTBranch rtBranch = new RTBranch(
+                i_localRepository.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName)
+                ,headCommit,i_localRepository.m_repositoryPath);
+
+        RBranch rBranch = new RBranch(
+                i_localRepository.m_pathToMagitDirectory.resolve("branches").resolve(i_RR.GetName()).resolve(headBranchName),
+                i_RR.GetName() + File.separator + headBranchName, headCommit,i_localRepository.m_repositoryPath);
+
+        i_localRepository.InsertBranch(rtBranch);
+        i_localRepository.InsertBranch(rBranch);
 
 
+        Branch branch = new Branch(i_RR.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName), headCommit, i_RR.m_repositoryPath);
+
+        i_RR.InsertBranch(branch);
     }
-
 }

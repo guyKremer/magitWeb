@@ -29,19 +29,22 @@ public class CollaborationServlet extends HttpServlet {
         Engine engine = new Engine();
         String userNameFromParameter = SessionUtils.getUsername(request);
         String repoName = request.getParameter(REPOSITORY);
+        String remoteUser = request.getParameter(REMOTEUSER);
         String operation = request.getParameter(OPERATION);
-        Repository repo = getUserRepo(userNameFromParameter,repoName);
-        engine.setCurrentRepository(repo);
+        Repository localRepo = getUserRepo(userNameFromParameter,repoName);
+        Repository remoteRepo =getUserRepo(remoteUser, ((LocalRepository)localRepo).getRemoteRepoName());
+        engine.setCurrentRepository(localRepo);
 
+        /*
         Repository.m_repositoryPath =
-                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + repo.GetName());
+                Paths.get(CollaborationServlet.rootPath + File.separator + remoteUser + File.separator + remoteRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
-
+         */
         if(operation.equals("push")){
-            engine.Push();
+            engine.PushNewBranch((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
         }
         else if(operation.equals("pull")) { // pull
-            engine.Pull();
+            //engine.Pull();
         }
 
         //check response
@@ -54,14 +57,26 @@ public class CollaborationServlet extends HttpServlet {
         String remoteUser = request.getParameter(REMOTEUSER);
         String remoteRepo = request.getParameter(REMOTEREPO);
         String localRepo = request.getParameter(LOCALREPO);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        Repository rr = null;
+        LocalRepository lr = null;
 
         File RR = new File(rootPath + File.separator + remoteUser + File.separator + remoteRepo);
         File LR = new File (rootPath + File.separator + userNameFromParameter + File.separator + localRepo);
-        engine.Clone(RR,LR,localRepo);
 
-        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+
+        //find repo
+        for(Repository repo : userManager.getRepositories(remoteUser)){
+            if(repo.GetName().equals(remoteRepo)){
+                rr = repo;
+                break;
+            }
+        }
+
+        lr = engine.Clone(rr, RR.getAbsolutePath(),LR,localRepo);
+
         userManager.usersMap.get(userNameFromParameter).
-                getRepositories().add(new LocalRepository(localRepo,LR.getAbsolutePath(),true, RR.getAbsolutePath(),remoteRepo));
+                getRepositories().add(lr);
 
         userManager.usersMap.get(remoteUser).AddMessage(new ForkMessage(remoteRepo,userNameFromParameter));
         //check response

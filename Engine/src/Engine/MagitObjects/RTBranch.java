@@ -6,8 +6,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 public class RTBranch extends Branch {
-    public RTBranch(Path i_pathToBranch, String i_commitSha1)throws java.io.IOException {
-        super(i_pathToBranch,i_commitSha1);
+    public RTBranch(Path i_pathToBranch, String i_commitSha1,Path repoPath)throws java.io.IOException {
+        super(i_pathToBranch,i_commitSha1,repoPath);
     }
 
     @Override
