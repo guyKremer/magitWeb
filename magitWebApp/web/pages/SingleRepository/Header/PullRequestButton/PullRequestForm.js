@@ -11,29 +11,29 @@ export default class PullRequestForm extends React.Component{
         super(props);
         this.state={
             sha1:false,
-            Rtbs:[],
-            Rbs:[]
         }
         this.onClickSubmit=this.onClickSubmit.bind(this);
     }
 
     render() {
+        let Rtbs = this.props.Rtbs.map((rtb)=>{
+            return(<option>{rtb}</option>)
+        });
+        let Rbs = this.props.Rbs.map((rb)=>{
+            return(<option>{rb}</option>)
+        });
     return(
         <Form>
             <Form.Group controlId="targetBranchInput">
                 <Form.Label>Target branch</Form.Label>
                 <Form.Control as="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    {Rtbs}
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="baseBranchInput">
                 <Form.Label>Base branch</Form.Label>
                 <Form.Control as="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    {Rbs}
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="prMessageInput">
