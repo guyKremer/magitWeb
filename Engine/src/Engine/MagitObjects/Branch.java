@@ -13,13 +13,20 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Branch {
+    public  Path m_repositoryPath;
+    public  Path m_pathToMagitDirectory;
     protected Path m_pathToBranch;
     protected String m_commitSha1;
     protected String m_name;
 
-    public Branch(){};
+    public Branch(Path pathToRepository){
+        m_repositoryPath=pathToRepository;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
+    };
 
-    public Branch(Path i_pathToBranch, String i_commitSha1)throws java.io.IOException {
+    public Branch(Path i_pathToBranch, String i_commitSha1,Path pathToRepository)throws java.io.IOException {
+        m_repositoryPath=pathToRepository;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
         m_pathToBranch = i_pathToBranch;
         m_name = i_pathToBranch.getFileName().toString();
         m_commitSha1 = i_commitSha1;
@@ -29,7 +36,9 @@ public class Branch {
         flushBranch();
     }
 
-    public Branch(Path i_pathToBranch, String i_name, String i_commitSha1) throws IOException {
+    public Branch(Path i_pathToBranch, String i_name, String i_commitSha1,Path pathToRepository) throws IOException {
+        m_repositoryPath=pathToRepository;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
         m_pathToBranch = i_pathToBranch;
         m_name = i_name;
         m_commitSha1 = i_commitSha1;
@@ -46,9 +55,11 @@ public class Branch {
         return m_name;
     }
 
-    public Branch(Path i_headBranch)throws java.io.IOException {
+    public Branch(Path i_headBranch,Path pathToRepository)throws java.io.IOException {
+        m_repositoryPath=pathToRepository;
+        m_pathToMagitDirectory=m_repositoryPath.resolve(".magit");
         String headBranch=FileUtils.readFileToString(i_headBranch.toFile(),Charset.forName("utf-8"));
-        m_pathToBranch=Repository.m_pathToMagitDirectory.resolve("branches").resolve(headBranch);
+        m_pathToBranch=m_pathToMagitDirectory.resolve("branches").resolve(headBranch);
         m_commitSha1=FileUtils.readFileToString(m_pathToBranch.toFile(), Charset.forName("utf-8"));
         if(m_commitSha1.equals("null")){
             m_commitSha1=null;
@@ -72,7 +83,7 @@ public class Branch {
         if(m_commitSha1 == null || m_commitSha1.isEmpty()){
             throw new FileNotFoundException ("Nothing was committed in  " + m_name);
         }
-        File unZippedCommit= Engine.Utils.UnzipFile(m_commitSha1);
+        File unZippedCommit= Engine.Utils.UnzipFile(m_commitSha1,m_repositoryPath);
         List<String> lines = Files.readAllLines(unZippedCommit.toPath());
         unZippedCommit.delete();
         return lines.get(2);

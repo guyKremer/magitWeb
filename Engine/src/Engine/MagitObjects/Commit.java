@@ -82,8 +82,10 @@ public class Commit implements CommitRepresentative {
     }
 
     public Commit(String i_message, Folder i_root, String i_FirstCommitSha1, String i_SecondCommitSha1,
-                  String i_dateOfCreation, String i_creator)
+                  String i_dateOfCreation, String i_creator,Path repoPath)
     {
+        m_repositoryPath=repoPath;
+        m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
         m_message=i_message;
         m_rootFolder=i_root;
         m_rootFolder.saveInObjects();
@@ -166,7 +168,7 @@ public class Commit implements CommitRepresentative {
     }
 
     public void unzipRootDirectory(List<String> i_commitLines){
-        m_rootFolder = new Folder(m_repositoryPath,i_commitLines.get(0),i_commitLines.get(5),i_commitLines.get(4));
+        m_rootFolder = new Folder(m_repositoryPath,i_commitLines.get(0),i_commitLines.get(5),i_commitLines.get(4),m_repositoryPath);
         m_rootFolder.unzipAndSaveFolder(i_commitLines.get(0));
     }
 
@@ -189,7 +191,7 @@ public class Commit implements CommitRepresentative {
 
         try{
             Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
-                                    ,this.toString());
+                                    ,this.toString(),m_repositoryPath);
         }
         catch (java.io.IOException e){
 
@@ -215,7 +217,7 @@ public class Commit implements CommitRepresentative {
             throw new FileNotFoundException(m_pathToMagitDirectory.resolve("objects").resolve(i_commitSha1).toString()
                     + "doesn't exist");
         }
-        File unZippedCommit=Engine.Utils.UnzipFile(i_commitSha1);
+        File unZippedCommit=Engine.Utils.UnzipFile(i_commitSha1,m_repositoryPath);
         List<String> lines = Files.readAllLines(unZippedCommit.toPath());
         unZippedCommit.delete();
         unzipRootDirectory(lines);

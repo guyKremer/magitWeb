@@ -52,7 +52,8 @@ public class RepositoryServlet extends HttpServlet {
         }
 
         try {
-            xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter);
+            xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter,
+                    Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter));
         } catch (Exception e) {
             e.printStackTrace();
         }

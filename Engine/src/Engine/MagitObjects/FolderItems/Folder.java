@@ -21,8 +21,8 @@ import org.apache.commons.io.FileUtils;
 public class Folder extends FolderItem{
     private List<FolderItem> m_items = new ArrayList<>();
 
-    public Folder(Path i_folderPath){
-        super(i_folderPath);
+    public Folder(Path i_folderPath,Path repositoryPath){
+        super(i_folderPath,repositoryPath);
         m_type="folder";
     }
 
@@ -30,8 +30,8 @@ public class Folder extends FolderItem{
         return m_items;
     }
 
-    public Folder(Path i_path, String[] i_fileDescription){
-        super(i_path);
+    public Folder(Path i_path, String[] i_fileDescription,Path repositoryPath){
+        super(i_path,repositoryPath);
         m_sha1 = i_fileDescription[1];
         m_type="folder";
         m_updater=i_fileDescription[3];
@@ -43,8 +43,8 @@ public class Folder extends FolderItem{
         Collections.sort(m_items);
     }
 
-    public Folder(Path i_folderPath,String i_sha1,String i_updater, String i_lastModified){
-        super(i_folderPath);
+    public Folder(Path i_folderPath,String i_sha1,String i_updater, String i_lastModified,Path repositoryPath){
+        super(i_folderPath,repositoryPath);
         m_type="folder";
         m_sha1=i_sha1;
         m_updater=i_updater;
@@ -55,20 +55,18 @@ public class Folder extends FolderItem{
         return m_path;
     }
 
-    public Folder(){}
-
     public void loadFolder() throws IOException {
         Blob blobToInsert;
         Folder folderToInsert;
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(m_path)){
             for(Path entry: stream){
                 if(!Files.isDirectory(entry)){
-                    blobToInsert=new Blob(entry,new String(Files.readAllBytes(entry)));
+                    blobToInsert=new Blob(entry,new String(Files.readAllBytes(entry)),m_repositoryPath);
                     InsertItem(blobToInsert);
                 }
                 else{
                     if(!(entry.getFileName().toString().equals(".magit"))){
-                        folderToInsert=new Folder(entry);
+                        folderToInsert=new Folder(entry,m_repositoryPath);
                         folderToInsert.loadFolder();
                         if(folderToInsert.m_items.size()!=0){
                             InsertItem(folderToInsert);
@@ -106,8 +104,8 @@ public class Folder extends FolderItem{
             }
             */
 
-            Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
-                                    ,createListString());
+            Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_sha1)
+                                    ,createListString(),m_repositoryPath);
         }
         catch(java.io.IOException e){
 
@@ -161,18 +159,18 @@ public class Folder extends FolderItem{
             Blob blobToInsert;
             Folder folderToInsert;
             String[] parsedFolderLine;
-            File tempFile = Engine.Utils.UnzipFile(i_directorySha1);
+            File tempFile = Engine.Utils.UnzipFile(i_directorySha1,m_repositoryPath);
             List<String> lines = Files.readAllLines(tempFile.toPath());
             tempFile.delete();
             for(String line: lines){
                 parsedFolderLine=parseFolderLine(line);
                 if(parsedFolderLine[2].equals("file")){
-                    blobToInsert = new Blob();
+                    blobToInsert = new Blob(m_repositoryPath);
                     blobToInsert.unzipAndSaveFile(m_path.resolve(parsedFolderLine[0]),parsedFolderLine);
                     InsertItem(blobToInsert);
                 }
                 else{
-                    folderToInsert=new Folder(m_path.resolve(parsedFolderLine[0]),parsedFolderLine);
+                    folderToInsert=new Folder(m_path.resolve(parsedFolderLine[0]),parsedFolderLine,m_repositoryPath);
                     folderToInsert.unzipAndSaveFolder(folderToInsert.m_sha1);
                     InsertItem(folderToInsert);
                 }

@@ -127,7 +127,7 @@ public class Repository {
         m_simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy-hh:mm:ss:SSS");
         m_branches = new HashMap<String, Branch>();
         m_pathToMagitDirectory = m_repositoryPath.resolve(".magit");
-        m_WC = new Folder(m_repositoryPath);
+        m_WC = new Folder(m_repositoryPath,m_repositoryPath);
         m_conflictsSet = createConflictsSet();
 
         if(!i_exists){
@@ -173,7 +173,7 @@ public class Repository {
         FileUtils.writeStringToFile(pathToBranchDirectory.resolve("HEAD").toFile(), "master", Charset.forName("utf-8"),false);
         Path masterPath = pathToBranchDirectory.resolve("master");
         Files.createFile(masterPath);
-        Branch master = new Branch(masterPath,"");
+        Branch master = new Branch(masterPath,"",m_repositoryPath);
         m_branches.put(master.getName(),master);
         SetHeadBranch(master);
     }
@@ -208,7 +208,7 @@ public class Repository {
     public Folder loadWC() throws IOException {
         Folder res=null;
         if(m_repositoryPath != null) {
-            res = new Folder(m_repositoryPath);
+            res = new Folder(m_repositoryPath,m_repositoryPath);
             res.loadFolder();
         }
         return res;
@@ -241,19 +241,19 @@ public class Repository {
         m_WC.UpdateChangedFolderItems(status,pathToItemMap);
          if(m_currentCommit!=null){
              m_currentCommit = new Commit(i_message,m_WC,m_currentCommit.getSha1(),null
-                     ,m_simpleDateFormat.format(new Date()),Engine.m_user);
+                     ,m_simpleDateFormat.format(new Date()),Engine.m_user,m_repositoryPath);
 
          }
          else{
              m_currentCommit = new Commit(i_message,m_WC,null,null
-                     ,m_simpleDateFormat.format(new Date()),Engine.m_user);
+                     ,m_simpleDateFormat.format(new Date()),Engine.m_user,m_repositoryPath);
              m_currentCommit.setSecondPrecedingSha1(null);
          }
 
         m_headBranch.setCommitSha1(m_currentCommit.getSha1());
         m_headBranch.flushBranch();
         Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_currentCommit.getSha1())
-                ,m_currentCommit.toString());
+                ,m_currentCommit.toString(),m_repositoryPath);
 
         //m_commitsMap.put(m_currentCommit.getSha1(), m_currentCommit);
     }
@@ -287,7 +287,7 @@ public class Repository {
             throw new FileAlreadyExistsException("The branch " + i_branchName +" already exists");
         }
         else{
-            m_branches.put(i_branchName, new Branch(pathToBranch,m_headBranch.getCommitSha1()));
+            m_branches.put(i_branchName, new Branch(pathToBranch,m_headBranch.getCommitSha1(),m_repositoryPath));
         }
         if(i_checkout){
             checkOut(i_branchName);
@@ -396,11 +396,11 @@ public class Repository {
                      */
                     if(lines.size() == 2) {
                         m_branches.put(entry.getFileName().toString(),
-                                new RTBranch(entry, lines.get(0)));
+                                new RTBranch(entry, lines.get(0),m_repositoryPath));
                     }
                     else{
                         m_branches.put(entry.getFileName().toString(),
-                                new Branch(entry, lines.get(0)));
+                                new Branch(entry, lines.get(0),m_repositoryPath));
                     }
                 }
                 else if(entry.toAbsolutePath().toFile().isDirectory()){
@@ -409,7 +409,7 @@ public class Repository {
                             lines = Files.readAllLines(entry1.toAbsolutePath());
                             RBranch rb = new RBranch(entry1,
                                     entry.getFileName().toString() + File.separator + entry1.getFileName().toString(),
-                                    lines.get(0));
+                                    lines.get(0),m_repositoryPath);
                             m_branches.put(rb.getName(), rb);
                         }
                     }
@@ -466,7 +466,7 @@ public class Repository {
             if(i_newHeadBranch.contains(File.separator)){
                 parts = i_newHeadBranch.split(pattern);
                 rtBranch = new RTBranch(m_pathToMagitDirectory.resolve("branches").
-                        resolve(parts[1]), m_branches.get(i_newHeadBranch).getCommitSha1());
+                        resolve(parts[1]), m_branches.get(i_newHeadBranch).getCommitSha1(),m_repositoryPath);
 
                 InsertBranch(rtBranch);
                 SetHeadBranch(rtBranch);

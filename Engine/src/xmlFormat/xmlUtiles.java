@@ -42,7 +42,7 @@ public class xmlUtiles {
     }
 
 
-    public static Repository LoadXmlEx3(String i_XMLContent, String i_UserName) throws Exception {
+    public static Repository LoadXmlEx3(String i_XMLContent, String i_UserName,Path repoPath) throws Exception {
 
         m_mr = parseFromXmlFileToXmlMagitRepository(i_XMLContent);
         loadRepositoryListsObjects();
@@ -50,7 +50,7 @@ public class xmlUtiles {
 
         checkXMLvalidation();
 
-        parseRepository(i_UserName);
+        parseRepository(i_UserName,repoPath);
 
         return m_repository;
     }
@@ -303,7 +303,7 @@ public class xmlUtiles {
         return "There is 2 or more " + magitObj + " with the same ID";
     }
 
-    private static Repository parseRepository(String i_UserName) throws Exception {
+    private static Repository parseRepository(String i_UserName,Path repoPath) throws Exception {
 
         String userFolderLocation = rootPath + File.separator + i_UserName + File.separator;
 
@@ -330,8 +330,8 @@ public class xmlUtiles {
 
         Map<String, String> commitIdSha1 = new HashMap<String, String>(m_mscList.size());
 
-        createAllCommits(commitIdSha1);
-        createAllBranches(commitIdSha1);
+        createAllCommits(commitIdSha1,Paths.get(repoPath + File.separator + m_mr.getName()));
+        createAllBranches(commitIdSha1,Paths.get(repoPath + File.separator + m_mr.getName()));
         m_repository.loadCommitFromBranch(m_repository.GetHeadBranch());
         m_repository.SetCommitFromBranch(m_repository.GetHeadBranch(),true);
         return m_repository;
@@ -364,15 +364,15 @@ public class xmlUtiles {
 
 
 
-    private static void createAllCommits(Map<String, String> i_commitIdSha1) throws IOException {
+    private static void createAllCommits(Map<String, String> i_commitIdSha1,Path repoPath) throws IOException {
         for (MagitSingleCommit msc : m_mscList) {
             if (!i_commitIdSha1.containsKey(msc.getId())) {
-                createCommitRec(msc, i_commitIdSha1);
+                createCommitRec(msc, i_commitIdSha1,repoPath);
             }
         }
     }
 
-    private static void createAllBranches(Map<String, String> i_commitIdSha1) throws IOException {
+    private static void createAllBranches(Map<String, String> i_commitIdSha1,Path repoPath) throws IOException {
         String currCommitSha1;
         Branch currBranch;
 
@@ -380,21 +380,24 @@ public class xmlUtiles {
             currCommitSha1 = i_commitIdSha1.get(msb.getPointedCommit().getId());
             if(msb.isRemote != null && msb.isRemote == true) {
                 currBranch = new RBranch(
-                        Repository.m_pathToMagitDirectory.resolve("branches").resolve(msb.getName()),
+                        repoPath.resolve(".magit").resolve("branches").resolve(msb.getName()),
                         msb.getName(),
-                        currCommitSha1
+                        currCommitSha1,
+                        repoPath
                 );
             }
             else if(msb.tracking != null && msb.tracking == true){
                 currBranch = new RTBranch(
-                        Repository.m_pathToMagitDirectory.resolve("branches").resolve(msb.getName()),
-                        currCommitSha1
+                        repoPath.resolve(".magit").resolve("branches").resolve(msb.getName()),
+                        currCommitSha1,
+                        repoPath
                 );
             }
             else{
                 currBranch = new Branch(
-                        Repository.m_pathToMagitDirectory.resolve("branches").resolve(msb.getName()),
-                        currCommitSha1
+                        repoPath.resolve(".magit").resolve("branches").resolve(msb.getName()),
+                        currCommitSha1,
+                        repoPath
                 );
             }
             m_repository.InsertBranch(currBranch);
@@ -405,7 +408,7 @@ public class xmlUtiles {
         m_repository.flushBranches();
     }
 
-    private static void createCommitRec(MagitSingleCommit i_msc, Map<String, String> i_map) throws IOException {
+    private static void createCommitRec(MagitSingleCommit i_msc, Map<String, String> i_map,Path repoPath) throws IOException {
         String secondCommitId = "", firstCommitId = "";
         if (i_msc.getPrecedingCommits() != null && i_msc.getPrecedingCommits().getPrecedingCommit().size() != 0) {
             firstCommitId = i_msc.getPrecedingCommits().getPrecedingCommit().get(0).getId();
@@ -415,22 +418,22 @@ public class xmlUtiles {
             }
 
             if (!i_map.containsKey(firstCommitId)) {
-                createCommitRec(findById(firstCommitId, m_mscList), i_map);
+                createCommitRec(findById(firstCommitId, m_mscList), i_map,repoPath);
             }
             if(secondCommitId != "" && !i_map.containsKey(secondCommitId)){
-                createCommitRec(findById(secondCommitId, m_mscList), i_map);
+                createCommitRec(findById(secondCommitId, m_mscList), i_map,repoPath);
             }
-            i_map.put(i_msc.getId(), parseCommit(i_msc, i_map.get(firstCommitId), i_map.get(secondCommitId)).getSha1());
+            i_map.put(i_msc.getId(), parseCommit(i_msc, i_map.get(firstCommitId), i_map.get(secondCommitId),repoPath).getSha1());
 
         }
         else {
-            i_map.put(i_msc.getId(), parseCommit(i_msc, "","").getSha1());
+            i_map.put(i_msc.getId(), parseCommit(i_msc, "","",repoPath).getSha1());
         }
     }
 
     private static Commit parseCommit(MagitSingleCommit i_msc,
                                       String i_firstCommitSha1,
-                                      String i_secondCommitSha1) throws IOException {
+                                      String i_secondCommitSha1,Path repoPath) throws IOException {
         Commit commit;
         MagitSingleFolder folder = null;
         String id;
@@ -440,22 +443,22 @@ public class xmlUtiles {
 
         commit = new Commit(i_msc.getMessage(),
                 parseFolder(folder,
-                        m_mr.getLocation()),
+                        m_mr.getLocation(),repoPath),
                 i_firstCommitSha1,
                 i_secondCommitSha1,
                 i_msc.getDateOfCreation(),
-                i_msc.getAuthor());
+                i_msc.getAuthor(),repoPath);
         //commit.setSecondPrecedingSha1(i_secondCommitSha1);
         commit.getRootFolder().saveInObjects();
 
-        Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
-                , commit.toString());
+        Engine.Utils.zipToFile(repoPath.resolve(".magit").resolve("objects").resolve(commit.getSha1())
+                , commit.toString(),repoPath);
 
         return commit;
     }
 
-    private static Folder parseFolder(MagitSingleFolder i_msf, String i_location) {
-        Folder folder = new Folder(Paths.get(i_location));
+    private static Folder parseFolder(MagitSingleFolder i_msf, String i_location,Path repoPath) {
+        Folder folder = new Folder(Paths.get(i_location),repoPath);
         MagitBlob mb = null;
         Blob blob = null;
         MagitSingleFolder msf = null;
@@ -463,14 +466,14 @@ public class xmlUtiles {
         for (Item item : i_msf.getItems().getItem()) {
             if (item.getType().toLowerCase().equals("blob")) {
                 mb = findById(item.getId(), m_mbList);
-                blob = new Blob(Paths.get(i_location).resolve(mb.getName()), mb.getContent());
+                blob = new Blob(Paths.get(i_location).resolve(mb.getName()), mb.getContent(),repoPath);
                 blob.SetUpdater(mb.getLastUpdater());
                 blob.SetLastModified(mb.getLastUpdateDate());
                 blob.createSha1();
                 folder.InsertItem(blob);
             } else { // folder
                 msf = findById(item.getId(), m_msfList);
-                folder.InsertItem(parseFolder(msf, Paths.get(i_location).resolve(msf.getName()).toString()));
+                folder.InsertItem(parseFolder(msf, Paths.get(i_location).resolve(msf.getName()).toString(),repoPath));
             }
         }
 

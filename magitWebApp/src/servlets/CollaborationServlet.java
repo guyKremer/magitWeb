@@ -35,15 +35,16 @@ public class CollaborationServlet extends HttpServlet {
         Repository remoteRepo =getUserRepo(remoteUser, ((LocalRepository)localRepo).getRemoteRepoName());
         engine.setCurrentRepository(localRepo);
 
+        /*
         Repository.m_repositoryPath =
                 Paths.get(CollaborationServlet.rootPath + File.separator + remoteUser + File.separator + remoteRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
-
+         */
         if(operation.equals("push")){
             engine.PushNewBranch((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
         }
         else if(operation.equals("pull")) { // pull
-            engine.Pull();
+            //engine.Pull();
         }
 
         //check response

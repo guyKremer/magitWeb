@@ -9,6 +9,8 @@ import Engine.MagitObjects.Repository;
 import Engine.Status;
 
 public abstract class FolderItem implements Comparable<FolderItem>{
+    public  Path m_repositoryPath;
+    public  Path m_pathToMagitDirectory;
     protected String m_sha1=null;
     protected String m_name;
     protected Path m_path;
@@ -16,7 +18,9 @@ public abstract class FolderItem implements Comparable<FolderItem>{
     protected String m_updater=null;
     protected String m_lastModified=null;
 
-    public FolderItem(Path i_path){
+    public FolderItem(Path i_path,Path repoistoryPath){
+        m_repositoryPath=repoistoryPath;
+        m_pathToMagitDirectory = repoistoryPath.resolve(".magit");
         m_path=i_path;
         m_name= m_path.getFileName().toString();
     }
