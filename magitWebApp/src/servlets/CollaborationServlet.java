@@ -44,7 +44,7 @@ public class CollaborationServlet extends HttpServlet {
             engine.PushNewBranch((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
         }
         else if(operation.equals("pull")) { // pull
-            //engine.Pull();
+            engine.Pull((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
         }
 
         //check response
