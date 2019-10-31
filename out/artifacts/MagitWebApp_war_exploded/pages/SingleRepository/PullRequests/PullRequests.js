@@ -1,5 +1,6 @@
 import React from 'react';
 import './pullRequests.css';
+import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 
 export default class PullRequests extends React.Component{
@@ -16,6 +17,10 @@ export default class PullRequests extends React.Component{
         }
     }
 
+    async viewOnClickHandler(targetBranch,baseBranch){
+        //fetch call
+    }
+
     render() {
         let pullRequestView = this.state.pullRequests.map((pr,index)=>{
             return(
@@ -26,6 +31,7 @@ export default class PullRequests extends React.Component{
                 <td>{pr.baseBranch}</td>
                 <td>{pr.date}</td>
                 <td>{pr.status}</td>
+                <Button onClick={()=>{this.viewOnClickHandler(pr.targetBranch,pr.baseBranch)}} size={"sm"} variant={"success"}>View</Button>
             </tr>
             );
         });
