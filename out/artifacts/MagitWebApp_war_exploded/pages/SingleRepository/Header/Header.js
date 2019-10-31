@@ -18,7 +18,8 @@ function Header(props){
                            <div className={"RRrepoName"}>
                                <b>{"Remote Repository: "+props.RRuser + '/' + props.RRname}</b>
                            </div>
-                       </React.Fragment>:""
+                       </React.Fragment>:
+                        <Button variant={"secondary"} size={"sm"} id={"viewPrs"} onClick={props.showPRsOnClick}>Pull Requests</Button>
                     }
                 </div>
                 <div className={"row"}>

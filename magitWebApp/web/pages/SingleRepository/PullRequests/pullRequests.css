@@ -1,0 +1,4 @@
+.pullRequests{
+    display: flex;
+    flex-direction: row;
+}
