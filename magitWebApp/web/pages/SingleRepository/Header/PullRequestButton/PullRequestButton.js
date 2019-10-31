@@ -9,15 +9,26 @@ export default class PullRequestButton extends React.Component{
     constructor(props) {
         super(props);
         this.state= {
-            showForm: false
+            showForm: false,
+            Rbs:[],
+            Rtbs:[]
         }
         this.onClick=this.onClick.bind(this);
     }
 
-    onClick(){
+   async onClick(){
+        let Rtbs;
+        let Rbs;
         let showForm=this.state.showForm === false? true:false;
+
+        if(showForm){
+             Rtbs = await fetch('PR?repository='+this.props.repoName+ '&type=RTB', {method:'PUT',body:'', credentials: 'include'});
+             Rbs = await fetch('PR?repository='+this.props.repoName+ '&type=RB', {method:'PUT',body:'', credentials: 'include'});
+        }
         this.setState(()=>({
             showForm: showForm
+            Rbs:Rbs,
+            Rtbs:Rtbs
         }));
     }
 

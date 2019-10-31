@@ -10,7 +10,9 @@ export default class PullRequestForm extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            sha1:false
+            sha1:false,
+            Rtbs:[],
+            Rbs:[]
         }
         this.onClickSubmit=this.onClickSubmit.bind(this);
     }
@@ -62,7 +64,8 @@ export default class PullRequestForm extends React.Component{
         let baseBranchName = document.getElementById("baseBranchInput").value;
         let prMessage = document.getElementById("prMessageInput").value;
 
-        console.log(targetBranchName+' '+baseBranchName +' ' +prMessage);
+        fetch('?repository='+this.props.repoName+ '&branch='+branchName+'&sha1='+sha1, {method:'PUT',body:'', credentials: 'include'});
+
     }
 
 }
