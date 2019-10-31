@@ -398,11 +398,40 @@ public class Engine {
     }
      */
 
-    /*
-    public void Pull() throws IOException {
 
-        if(!isChanges()) {
+    public void Pull(LocalRepository i_localRepository, Repository i_RR, String localUserName, String remoteUserName) throws IOException {
+       // if(!isChanges()) {
+        //String rootPath = "c:\\magit-ex3";
+        Branch localBranch = i_localRepository.GetHeadBranch();
+        Branch remoteBranch = i_RR.GetBranch(localBranch.getName());
+        String localCommitSha1 = localBranch.getCommitSha1();
+        Commit remoteCommit = new Commit(remoteBranch.getCommitSha1(),i_RR.m_repositoryPath);
+        Commit copyCommit;
 
+        // remote --> local
+            while(!localCommitSha1.equals(remoteCommit.getSha1())){
+                copyCommit = new Commit(remoteCommit);
+                copyCommit.getRootFolder().initFolderPaths(i_localRepository.m_repositoryPath, i_localRepository.m_repositoryPath);
+                copyCommit.getRootFolder().saveInObjects();
+                Engine.Utils.zipToFile(i_localRepository.m_pathToMagitDirectory.resolve("objects").resolve(copyCommit.getSha1())
+                        ,copyCommit.toString(),i_localRepository.m_repositoryPath);
+
+                if(remoteCommit.getFirstPrecedingSha1() != null && !remoteCommit.getFirstPrecedingSha1().isEmpty()){
+                    remoteCommit = new Commit(remoteCommit.getFirstPrecedingSha1(),i_RR.m_repositoryPath);
+                }
+                else{
+                    break;
+                }
+            }
+
+            i_localRepository.GetHeadBranch().setCommitSha1(remoteBranch.getCommitSha1());
+            i_localRepository.GetBranch(i_RR.GetName() + File.separator + i_localRepository.GetHeadBranch().getName()).setCommitSha1(remoteBranch.getCommitSha1());
+            i_localRepository.checkOut(GetHeadBranch().getName());
+
+
+        //}
+
+            /*
             Path currRepoPath = m_currentRepository.m_repositoryPath;
             Path currMagitPath = m_currentRepository.m_pathToMagitDirectory;
 
@@ -477,13 +506,13 @@ public class Engine {
 
                 initNewPaths(m_currentRepository.GetRepositoryPath(), m_currentRepository);
             }
-        }else{
-            throw new FileNotFoundException("Working copy dirty, please commit before pull");
-        }
+
+             */
+        //else{
+        //    throw new FileNotFoundException("Working copy dirty, please commit before pull");
+        //}
 
     }
-
-     */
 
     /*
     public void Push() throws IOException {
@@ -615,6 +644,7 @@ public void PushNewBranch(LocalRepository i_localRepository, Repository i_RR, St
         Path RRpath = Paths.get(rootPath + File.separator + remoteUserName + File.separator + i_RR.GetName());
         Path RRMagit = RRpath.resolve(".magit");
         Commit currCommit;
+        Commit copyCommit;
 
         Map<String,Commit> remoteCommits = new HashMap<>();
 
@@ -623,10 +653,13 @@ public void PushNewBranch(LocalRepository i_localRepository, Repository i_RR, St
 
         currCommit = i_localRepository.GetCurrentCommit();
 
+
         while(currCommit.getSha1() != null && !currCommit.getSha1().isEmpty()){
 
-
             if(remoteCommits.get(currCommit.getSha1()) == null){
+                copyCommit = new Commit(currCommit);
+                copyCommit.getRootFolder().initFolderPaths(i_RR.m_repositoryPath, i_RR.m_repositoryPath);
+                currCommit.getRootFolder().saveInObjects();
                 Engine.Utils.zipToFile(i_RR.m_pathToMagitDirectory.resolve("objects").resolve(currCommit.getSha1())
                         ,currCommit.toString(),i_RR.m_repositoryPath);
             }
