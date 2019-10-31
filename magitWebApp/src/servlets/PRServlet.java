@@ -62,7 +62,8 @@ public class PRServlet extends HttpServlet {
             if (type.equals("RTB")) {
                 if (branch.getClass().equals(RTBranch.class)) {
                     jsonArray.add(branch.getName());
-                } else {//RB
+                }
+            }else {//RB
                     if (branch.getName().contains(File.separator)) {
                         jsonArray.add(branch.getName());
                     }
@@ -73,6 +74,5 @@ public class PRServlet extends HttpServlet {
             ServletUtils.SendJsonResponse(response, jsonArray);
 
         }
-    }
 
 }
