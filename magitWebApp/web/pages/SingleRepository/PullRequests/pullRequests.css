@@ -1,0 +1,43 @@
+.pullRequests{
+    display: flex;
+    flex-direction: row;
+}
+
+.singleChange{
+    display: flex;
+    flex-direction: column;
+    margin-top: 7%;
+}
+.changeTitle{
+    display: flex;
+    flex-direction: row;
+}
+
+.changeTitle p{
+    margin-left: 1%;
+}
+
+.commit {
+    color: -webkit-link;
+}
+
+.singleChange textarea{
+    margin-top: 1%;
+}
+
+.changedFiles{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 20%;
+    margin-top: 2%;
+    width: 60%;
+}
+
+.fileChanges{
+    display: flex;
+    flex-direction: column;
+}
+
+

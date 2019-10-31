@@ -3,6 +3,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Branches from './branches/Branches';
 import Button from 'react-bootstrap/Button';
 import NewBranchButton from './NewBranchButton/NewBranchButton';
+import PullRequestButton from './PullRequestButton/PullRequestButton';
 import './header.css';
 
 
@@ -18,18 +19,19 @@ function Header(props){
                            <div className={"RRrepoName"}>
                                <b>{"Remote Repository: "+props.RRuser + '/' + props.RRname}</b>
                            </div>
-                       </React.Fragment>:""
+                       </React.Fragment>:
+                        <Button variant={"secondary"} size={"sm"} id={"viewPrs"} onClick={props.showPRsOnClick}>Pull Requests</Button>
                     }
                 </div>
                 <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
-                    <NewBranchButton repoName={props.repoName}/>
+                    <PullRequestButton repoName={props.repoName}/>
                     <Button variant={"success"} id={"commit"} onClick={()=>{
                         let msg = window.prompt("Enter commit message");
                         props.commitOnClick(msg);
                     }} size={"sm"}>
                         Commit</Button>
-                    <Button variant={"success"} id={"pr"}  className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Create Pull Request</Button>
+                    <NewBranchButton repoName={props.repoName}/>
                     <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Pull</Button>
                     <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pushOnClick} size={"sm"}>Push</Button>
                 </div>

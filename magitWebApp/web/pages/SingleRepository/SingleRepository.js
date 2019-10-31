@@ -3,7 +3,7 @@ import Header from './Header/Header';
 import Center from './Center/Center';
 import Commits from './Center/Commits/Commits';
 import MessageBoard from '../UserDashboard/MessagesBoard/MessagesBoard';
-
+import PullRequests from './PullRequests/PullRequests';
 import './singleRepository.css';
 
 export default class SingleRepository extends React.Component{
@@ -28,7 +28,8 @@ export default class SingleRepository extends React.Component{
             chosenFileContent:"",
             chosenFileName:"",
             createNewFile:false,
-            messages:[]
+            messages:[],
+            showPr:false
         }
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
@@ -43,6 +44,7 @@ export default class SingleRepository extends React.Component{
         this.getMessages=this.getMessages.bind(this);
         this.commitButtonOnClickHandler=this.commitButtonOnClickHandler.bind(this);
         this.commitSha1OnClickHandler=this.commitSha1OnClickHandler.bind(this);
+        this.showPrsOnClickHandler=this.showPrsOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -72,16 +74,29 @@ export default class SingleRepository extends React.Component{
 
 
     render() {
+        if(!this.state.showPr){
             return(
                 <div className={"singleRepository"}>
                     <Header
-                        commitOnClick={this.commitButtonOnClickHandler} backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
+                        showPRsOnClick={this.showPrsOnClickHandler} commitOnClick={this.commitButtonOnClickHandler} backOnClick={this.props.backOnClick} repoName={this.state.name} pullOnClick={this.pullOnClickHandler} pushOnClick={this.pushOnClickHandler} checkOut={this.chekoutHandler} headBranchName={this.state.headBranch} regularBranchesNames={this.state.regularBranchesNames} RRname={this.props.RRname} RRuser={this.props.RRuser} isLR={this.state.type === "LR" ? true:false}
                     />
                     <Center  isHeadBranchCommit={this.state.isHeadBranchCommit} messages={this.state.messages} saveOnClickHandler={this.saveOnClickHandler} editFileCancelOnClickHandler={this.editFileCancelOnClickHandler} createNewFile={this.state.createNewFile} createNewFileOnClick={this.createNewFileOnClickHandler}  chosenFileContent={this.state.chosenFileContent} fileEditor={this.state.fileEditor} itemOnClick={this.itemOnClickHandler} barButtonOnClick={this.barButtonOnClickHandler} fileHierarchy={this.state.fileHierarchy} fileTree={this.state.fileTree}/>
                     <Commits commitSha1OnClick={this.commitSha1OnClickHandler} commits={this.state.commits}/>
                 </div>
             );
+        }
+        else{
+            return(
+                <PullRequests/>
+            );
+        }
 
+    }
+
+    showPrsOnClickHandler(){
+        this.setState(()=>({
+            showPr:true
+        }));
     }
 
     async commitSha1OnClickHandler(sha1){
@@ -97,6 +112,10 @@ export default class SingleRepository extends React.Component{
             chosenFileName:"",
             isHeadBranchCommit:this.state.headBranchCommit===sha1 ? true:false
         }));
+    }
+
+    createPullRequestOnClickHandler(){
+        window.prompt()
     }
 
     async commitButtonOnClickHandler(msg){
@@ -219,7 +238,12 @@ export default class SingleRepository extends React.Component{
     }
    async pullOnClickHandler(){
         await fetch('collaboration?repository='+this.props.repoName+'&operation=pull&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
-       this.getBranches();
+       await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+       let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
+       folder = await folder.json();
+       this.setState(()=>({
+           fileHierarchy:[this.state.name],
+           fileTree: folder}));
        this.getCommitsSha1();
    }
 
