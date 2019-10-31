@@ -252,7 +252,7 @@ public class Repository {
 
         m_headBranch.setCommitSha1(m_currentCommit.getSha1());
         m_headBranch.flushBranch();
-        Engine.Utils.zipToFile(Repository.m_pathToMagitDirectory.resolve("objects").resolve(m_currentCommit.getSha1())
+        Engine.Utils.zipToFile(m_pathToMagitDirectory.resolve("objects").resolve(m_currentCommit.getSha1())
                 ,m_currentCommit.toString());
 
         //m_commitsMap.put(m_currentCommit.getSha1(), m_currentCommit);
