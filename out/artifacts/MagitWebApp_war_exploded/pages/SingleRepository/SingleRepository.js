@@ -114,6 +114,10 @@ export default class SingleRepository extends React.Component{
         }));
     }
 
+    createPullRequestOnClickHandler(){
+        window.prompt()
+    }
+
     async commitButtonOnClickHandler(msg){
         if(msg===""){
             window.alert("You have to enter a message to the commit");

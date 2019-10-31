@@ -28,11 +28,33 @@ export default class PullRequests extends React.Component{
             //array of files
             [
                 {
-                    filePath:"repo-for-maerge/a.txt",
+                    path:"repo-for-maerge/a.txt",
                     //array of changes
                     changes:[
                         {
-                            commit: "0000000000", //the commit that change was made
+                            commitSha1: "0000000000", //the commit that change was made
+                            status: "modified", // added/deleted/modified
+                            content: "Naor is a dush!!" // if deleted should be empty string
+                        }
+                    ]
+                },
+                {
+                    path:"repo-for-maerge/a.txt",
+                    //array of changes
+                    changes:[
+                        {
+                            commitSha1: "0000000000", //the commit that change was made
+                            status: "modified", // added/deleted/modified
+                            content: "Naor is a dush!!" // if deleted should be empty string
+                        }
+                    ]
+                },
+                {
+                    path:"repo-for-maerge/a.txt",
+                    //array of changes
+                    changes:[
+                        {
+                            commitSha1: "0000000000", //the commit that change was made
                             status: "modified", // added/deleted/modified
                             content: "Naor is a dush!!" // if deleted should be empty string
                         }
@@ -41,7 +63,7 @@ export default class PullRequests extends React.Component{
             ];
         this.setState(()=>({
             viewPressed: true,
-            changedFiles:file
+            changedFiles:files
         }))
     }
 
@@ -80,8 +102,39 @@ export default class PullRequests extends React.Component{
 
     singlePrRender(){
         let changedFiles=this.state.changedFiles.map((file)=> {
-            let singleFile
+            let singleFileChanges = file.changes .map((change)=>{
+                return(
+                    <div className={"singleChange"}>
+                        <div className={"changeTitle"}>
+                            <p>Commit:</p>
+                            <p className={"commit"}>{change.commitSha1}</p>
+                            <p>Status:</p>
+                            <p>{change.status}</p>
+                        </div>
+                        {
+                            change.status==="modified" || change.status === "added" ?
+                                <textarea readOnly>
+                                    change.content
+                                </textarea>
+                                :
+                                ""
+                        }
+                    </div>
+                );
+            });
+            return(
+            <div className={"fileChanges"}>
+                <b>{file.path}</b>
+                {singleFileChanges}
+            </div>
+            );
         });
+
+        return(
+            <div className={"changedFiles"}>
+                {changedFiles}
+            </div>
+        )
     }
 
     render() {
