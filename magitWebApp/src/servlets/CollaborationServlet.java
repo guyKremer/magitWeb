@@ -29,16 +29,18 @@ public class CollaborationServlet extends HttpServlet {
         Engine engine = new Engine();
         String userNameFromParameter = SessionUtils.getUsername(request);
         String repoName = request.getParameter(REPOSITORY);
+        String remoteUser = request.getParameter(REMOTEUSER);
         String operation = request.getParameter(OPERATION);
-        Repository repo = getUserRepo(userNameFromParameter,repoName);
-        engine.setCurrentRepository(repo);
+        Repository localRepo = getUserRepo(userNameFromParameter,repoName);
+        Repository remoteRepo =getUserRepo(remoteUser, ((LocalRepository)localRepo).getRemoteRepoName());
+        engine.setCurrentRepository(localRepo);
 
         Repository.m_repositoryPath =
-                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + repo.GetName());
+                Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + localRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
 
         if(operation.equals("push")){
-            engine.Push();
+            engine.PushNewBranch((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
         }
         else if(operation.equals("pull")) { // pull
             engine.Pull();
