@@ -29,8 +29,10 @@ public abstract class FolderItem implements Comparable<FolderItem>{
         return m_path;
     }
 
-    public void setPath(Path i_path) {
+    public void setPath(Path i_path, Path i_repoPath) {
         this.m_path = i_path;
+        m_repositoryPath = i_repoPath;
+        m_pathToMagitDirectory = i_repoPath.resolve(".magit");
     }
 
     public void SetUpdater(String m_updater) {

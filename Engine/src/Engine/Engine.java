@@ -290,17 +290,19 @@ public class Engine {
         }
     }
 
-    public void Clone(File i_RR, File i_LR, String repoName) throws IOException {
-        String RR = i_RR.getAbsolutePath();
+    public LocalRepository Clone(Repository RR,String RRpath ,File i_LR, String repoName) throws IOException {
+        //String RR = i_RR.getAbsolutePath();
         RBranch rb;
         RTBranch rtBranch;
-        switchRepository(RR);
+        //switchRepository(RR);
+        m_currentRepository = RR;
+        Repository repoRR = RR;
         Map<String,Branch> branches = m_currentRepository.GetBranches();
         Map<String,Commit> commitsMap = m_currentRepository.GetCommitsMap();
         LocalRepository LR = new LocalRepository(repoName,
                 i_LR.getAbsolutePath(),
                 false,
-                RR,
+                RRpath,
                 m_currentRepository.GetName());
 
         LR.SetCommitsMap(commitsMap);
@@ -312,7 +314,7 @@ public class Engine {
         for(Commit commit : LR.GetCommitsMapObj().values()){
             commit.getRootFolder().saveInObjects();
             Engine.Utils.zipToFile(LR.m_pathToMagitDirectory.resolve("objects").resolve(commit.getSha1())
-                    , commit.toString(),LR.m_repositoryPath);
+                    , commit.toString(), LR.m_repositoryPath);
         }
 
 
@@ -320,12 +322,12 @@ public class Engine {
             rb = new RBranch(LR.GetRepositoryPath().resolve(".magit").resolve("branches").resolve(m_currentRepository.GetName())
                     .resolve(branch.getName()),
                     m_currentRepository.GetName() + File.separator + branch.getName(),
-                    branch.getCommitSha1(),LR.m_repositoryPath);
+                    branch.getCommitSha1(), LR.m_repositoryPath);
             LR.InsertBranch(rb);
         }
 
         rtBranch = new RTBranch(LR.GetRepositoryPath().resolve(".magit").resolve("branches").
-                resolve(m_currentRepository.GetHeadBranch().getName()), m_currentRepository.GetHeadBranch().getCommitSha1(),LR.m_repositoryPath);
+                resolve(m_currentRepository.GetHeadBranch().getName()), m_currentRepository.GetHeadBranch().getCommitSha1(), LR.m_repositoryPath);
 
 
         LR.InsertBranch(rtBranch);
@@ -333,13 +335,14 @@ public class Engine {
         m_currentRepository = LR;
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
-        ////////////
+
+        return LR;
     }
 
     private void initNewPaths(Path i_NewPathOfRepository, Repository i_repo) throws IOException {
         for (Commit currentCommit : i_repo.GetCommitsMapObj().values())
         {
-            currentCommit.getRootFolder().initFolderPaths(i_NewPathOfRepository);
+            currentCommit.getRootFolder().initFolderPaths(i_NewPathOfRepository, i_NewPathOfRepository);
         }
     }
 

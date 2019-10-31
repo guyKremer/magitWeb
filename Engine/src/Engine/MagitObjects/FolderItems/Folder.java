@@ -266,15 +266,19 @@ public class Folder extends FolderItem{
         return res;
     }
 
-    public void initFolderPaths(Path i_NewPathOfRepository) {
+    public void initFolderPaths(Path i_NewPathOfRepository, Path i_repoPath) {
         this.m_path = i_NewPathOfRepository;
+        m_repositoryPath = i_repoPath;
+        m_pathToMagitDirectory = i_repoPath.resolve(".magit");
 
         for (FolderItem item : this.m_items) {
             if (item.m_type.equals("folder")) {
                 Folder currentFolder = (Folder) item;
-                currentFolder.initFolderPaths(i_NewPathOfRepository.resolve(currentFolder.GetName()));
+                currentFolder.initFolderPaths(i_NewPathOfRepository.resolve(currentFolder.GetName()),i_repoPath);
             } else
-                item.setPath(i_NewPathOfRepository.resolve(item.GetName()));
+                item.setPath(i_NewPathOfRepository.resolve(item.GetName()),i_repoPath);
         }
+
+
     }
 }

@@ -45,7 +45,7 @@ public class Repository {
     }
 
     public void SetCommitsMap(Map<String, Commit> m_commitsMap) {
-        this.m_commitsMap = m_commitsMap;
+        this.m_commitsMap = new HashMap<>(m_commitsMap);
     }
 
     // getters
