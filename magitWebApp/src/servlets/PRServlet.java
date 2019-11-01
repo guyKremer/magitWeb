@@ -18,12 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import static constants.Constants.REMOTEUSER;
 import static constants.Constants.REPOSITORY;
 
 @WebServlet(name = "PRServlet", urlPatterns = {"/PR"})
 public class PRServlet extends HttpServlet {
+
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String userNameFromParameter = SessionUtils.getUsername(request);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
@@ -34,6 +36,8 @@ public class PRServlet extends HttpServlet {
         String PRMsg = request.getParameter("msg");
         Repository remoteRepo = null;
         Engine engine = new Engine();
+
+        targetBranch = Paths.get(targetBranch).getFileName().toString();
 
         //find repo
         for (Repository repo : userManager.getRepositories(userNameFromParameter)) {
