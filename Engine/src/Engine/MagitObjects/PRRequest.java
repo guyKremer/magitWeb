@@ -2,19 +2,24 @@ package Engine.MagitObjects;
 
 import users.PRMessage;
 
+import java.util.List;
+import java.util.Map;
+
 public class PRRequest {
     private String targetBranch;
-    private String basisBranch;
+    private String baseBranch;
     private String userCreator;
     private String date;
-    private PRMessage.Status status;
+    private Map<String, List<Changes>> prData;
+    private String msg;
 
-    public PRRequest(String targetBranch, String basisBranch, String userCreator, String date, PRMessage.Status status) {
+    public PRRequest(String targetBranch, String baseBranch, String userCreator, String date, Map<String, List<Changes>> prData, String msg) {
         this.targetBranch = targetBranch;
-        this.basisBranch = basisBranch;
+        this.baseBranch = baseBranch;
         this.userCreator = userCreator;
         this.date = date;
-        this.status = status;
+        this.prData = prData;
+        this.msg = msg;
     }
 
     public String getTargetBranch() {
@@ -25,12 +30,12 @@ public class PRRequest {
         this.targetBranch = targetBranch;
     }
 
-    public String getBasisBranch() {
-        return basisBranch;
+    public String getBaseBranch() {
+        return baseBranch;
     }
 
-    public void setBasisBranch(String basisBranch) {
-        this.basisBranch = basisBranch;
+    public void setBaseBranch(String baseBranch) {
+        this.baseBranch = baseBranch;
     }
 
     public String getUserCreator() {
@@ -49,12 +54,11 @@ public class PRRequest {
         this.date = date;
     }
 
-    public PRMessage.Status getStatus() {
-        return status;
+    public Map<String, List<Changes>> getPrData() {
+        return prData;
     }
 
-    public void setStatus(PRMessage.Status status) {
-        this.status = status;
+    public void setPrData(Map<String, List<Changes>> prData) {
+        this.prData = prData;
     }
-
 }

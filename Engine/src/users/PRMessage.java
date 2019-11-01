@@ -13,10 +13,10 @@ public class PRMessage extends Message {
     }
 
     private String repositoryName;
+    private String creatorUserName;
     private String targetUserName;
-    private String basisUserName;
     private String targetBranch;
-    private String basisBranch;
+    private String baseBranch;
     private String PRMsg;
     private PRMessage.Status status;
 
@@ -29,18 +29,18 @@ public class PRMessage extends Message {
             String i_PRMsg){
         repositoryName = i_repoName;
         targetUserName = i_targetUserName;
-        basisUserName = i_basisUserName;
+        creatorUserName = i_basisUserName;
         targetBranch = i_targetBranch;
-        basisBranch = i_basisBranch;
+        baseBranch = i_basisBranch;
         PRMsg = i_PRMsg;
         status = Status.WAITING;
     }
 
     public void setStatus(boolean bool){
         if(bool){
-            status = Status.CONFIRMED;
+            this.status = Status.CONFIRMED;
         }else{
-            status = Status.DENIED;
+            this.status = Status.DENIED;
         }
     }
 
@@ -51,9 +51,9 @@ public class PRMessage extends Message {
         jsonObject.addProperty("date",Date.toString());
         jsonObject.addProperty("repositoryName",repositoryName);
         jsonObject.addProperty("targetUserName",targetUserName);
-        jsonObject.addProperty("basisUserName",basisUserName);
+        jsonObject.addProperty("creatorUserName",creatorUserName);
         jsonObject.addProperty("targetBranch",targetBranch);
-        jsonObject.addProperty("basisBranch",basisBranch);
+        jsonObject.addProperty("baseBranch",baseBranch);
         jsonObject.addProperty("PRMsg",PRMsg);
 
         return jsonObject;
