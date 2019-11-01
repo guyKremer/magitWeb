@@ -21,7 +21,7 @@ import java.util.Map;
 
 import static constants.Constants.REPOSITORY;
 
-@WebServlet(name = "PRServlet", urlPatterns = {"/PRData"})
+@WebServlet(name = "PRDataServlet", urlPatterns = {"/PRData"})
 public class PRDataServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
