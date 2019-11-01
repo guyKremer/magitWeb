@@ -55,6 +55,7 @@ public class PRMessage extends Message {
         jsonObject.addProperty("targetBranch",targetBranch);
         jsonObject.addProperty("baseBranch",baseBranch);
         jsonObject.addProperty("PRMsg",PRMsg);
+        jsonObject.addProperty("status",status.toString());
 
         return jsonObject;
     }

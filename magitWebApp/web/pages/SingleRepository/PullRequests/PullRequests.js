@@ -18,15 +18,15 @@ export default class PullRequests extends React.Component{
 
     async componentDidMount() {
         let pullRequests = await fetch('PR?repository='+this.props.repository, {method:'GET', credentials: 'include'});
-        pullRequests = pullRequests.json();
+        pullRequests = await pullRequests.json();
         this.setState(()=>({
-            pullRequests = pullRequests
+            pullRequests : pullRequests
         }));
     }
 
     async viewOnClickHandler(date){
         let changedFiles = await fetch('PRData?repository='+this.props.repository+'&date='+date, {method:'GET', credentials: 'include'});
-        changedFiles = changedFiles.json();
+        changedFiles = await changedFiles.json();
         this.setState(()=>({
             viewPressed: true,
             changedFiles:changedFiles
@@ -84,7 +84,7 @@ export default class PullRequests extends React.Component{
                         {
                             change.status==="modified" || change.status === "added" ?
                                 <textarea readOnly>
-                                    change.content
+                                    {change.content}
                                 </textarea>
                                 :
                                 ""

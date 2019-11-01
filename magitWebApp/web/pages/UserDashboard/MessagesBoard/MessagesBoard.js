@@ -19,7 +19,7 @@ export default function MessagesBoard (props){
                 );
             }
             else {
-                if(message.status==="pending"){
+                if(message.status==="WAITING"){
                     return(
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
@@ -27,8 +27,8 @@ export default function MessagesBoard (props){
                                 {message.creatorUserName+' has added a PR to '+ message.repositoryName}
                             </header>
                             <p className="Toast__message-text">
-                                {"Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
-                                + "Status: "+ message.status}
+                                {"Message: "+message.PRMsg+ " Target branch: "+message.targetBranch+" Base branch: "+message.baseBranch
+                                + " Status: "+ message.status}
                             </p>
                         </main>
                     </div>
@@ -39,11 +39,11 @@ export default function MessagesBoard (props){
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
-                                {'Your PR was '+message.status + 'by '+message.targetUserName}
+                                {'Your PR was '+message.status + ' by '+message.targetUserName}
                             </header>
                             <p className="Toast__message-text">
-                                {"PR Detailes- Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
-                                + "Status: "+ message.status}
+                                {"PR Detailes- Message: "+message.PRMsg+ " Target branch: "+message.targetBranch+" Base branch: "+message.baseBranch
+                                + " Status: "+ message.status}
                             </p>
                         </main>
                     </div>

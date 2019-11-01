@@ -93,7 +93,7 @@ public class PRServlet extends HttpServlet {
             }
         }
 
- for (Branch branch : currRepo.GetBranches().values()) {
+        for (Branch branch : currRepo.GetBranches().values()) {
             if (type.equals("RTB")) {
                 if (branch.getClass().equals(RTBranch.class)) {
                     jsonArray.add(branch.getName());

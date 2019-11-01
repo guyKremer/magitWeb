@@ -13,6 +13,7 @@ public class PRRequest {
     private String date;
     private Map<String, List<Changes>> prData;
     private String msg;
+    private PRMessage.Status status;
 
     public PRRequest(String targetBranch, String baseBranch, String userCreator, String date, Map<String, List<Changes>> prData, String msg) {
         this.targetBranch = targetBranch;
@@ -21,6 +22,7 @@ public class PRRequest {
         this.date = date;
         this.prData = prData;
         this.msg = msg;
+        status = PRMessage.Status.WAITING;
     }
 
     public String getTargetBranch() {
@@ -73,7 +75,7 @@ public class PRRequest {
         jsonObject.addProperty("targetBranch",targetBranch);
         jsonObject.addProperty("baseBranch",baseBranch);
         jsonObject.addProperty("msg",msg);
-
+        jsonObject.addProperty("status",status.toString());
         return jsonObject;
     }
 
