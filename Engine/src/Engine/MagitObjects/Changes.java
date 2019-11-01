@@ -1,5 +1,7 @@
 package Engine.MagitObjects;
 
+import com.google.gson.JsonObject;
+
 public class Changes {
     String commitSha1;
     String status;
@@ -33,4 +35,16 @@ public class Changes {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public JsonObject toJson(){
+
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("commitSha1",commitSha1);
+        jsonObject.addProperty("status",status);
+        jsonObject.addProperty("content",content);
+
+        return jsonObject;
+    }
+
 }

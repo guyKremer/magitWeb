@@ -1,5 +1,6 @@
 package Engine.MagitObjects;
 
+import com.google.gson.JsonObject;
 import users.PRMessage;
 
 import java.util.List;
@@ -61,4 +62,19 @@ public class PRRequest {
     public void setPrData(Map<String, List<Changes>> prData) {
         this.prData = prData;
     }
+
+
+    public JsonObject toJson(){
+
+        JsonObject jsonObject = new JsonObject();
+
+        jsonObject.addProperty("date",date);
+        jsonObject.addProperty("userCreator",userCreator);
+        jsonObject.addProperty("targetBranch",targetBranch);
+        jsonObject.addProperty("baseBranch",baseBranch);
+        jsonObject.addProperty("msg",msg);
+
+        return jsonObject;
+    }
+
 }

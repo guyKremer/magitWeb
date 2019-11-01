@@ -44,6 +44,17 @@ public class Repository {
         prRequests.add(i_request);
     }
 
+    public PRRequest GetPRByDate(String i_date){
+        PRRequest res= null;
+        for(PRRequest pr : prRequests){
+            if(pr.getDate().equals(i_date)){
+                res = pr;
+            }
+        }
+
+        return res;
+    }
+
     public void SetCommitsMap(Map<String, Commit> m_commitsMap) {
         this.m_commitsMap = new HashMap<>(m_commitsMap);
     }
