@@ -37,10 +37,10 @@ public class PRServlet extends HttpServlet {
         Repository remoteRepo = null;
         Engine engine = new Engine();
 
-        targetBranch = Paths.get(targetBranch).getFileName().toString();
+        //targetBranch = Paths.get(targetBranch).getFileName().toString();
 
         //find repo
-        for (Repository repo : userManager.getRepositories(userNameFromParameter)) {
+        for (Repository repo : userManager.getRepositories(remoteUser)) {
             if (repo.GetName().equals(repoName)) {
                 remoteRepo = repo;
                 break;
