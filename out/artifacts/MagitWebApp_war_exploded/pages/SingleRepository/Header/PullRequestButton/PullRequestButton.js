@@ -36,9 +36,9 @@ export default class PullRequestButton extends React.Component{
         return (
             <div className={"newBranch"}>
                 <Dropdown.Toggle onClick={this.onClick} variant={"success"} id="dropdown-basic" size={"sm"}>
-                    Create New Pull Request
+                    Create New Pull Requests
                 </Dropdown.Toggle>
-                {this.state.showForm ? <PullRequestForm Rbs={this.state.Rbs} Rtbs={this.state.Rtbs}  closeForm={this.onClick} repoName={this.props.repoName} location={this.state.location}/>:""}
+                {this.state.showForm ? <PullRequestForm RRuser={this.props.RRuser} RRname={this.props.RRname} Rbs={this.state.Rbs} Rtbs={this.state.Rtbs}  closeForm={this.onClick} repoName={this.props.repoName} location={this.state.location}/>:""}
             </div>
         );
     }

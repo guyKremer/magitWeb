@@ -22,6 +22,12 @@ export default class PullRequests extends React.Component{
         this.singlePrRender=this.singlePrRender.bind(this);
     }
 
+    async componentDidMount() {
+        let pullRequests = await fetch('PR', {method:'GET', credentials: 'include'});
+
+
+    }
+
     async viewOnClickHandler(targetBranch,baseBranch){
         //fetch call reuturns:
       let files=
@@ -77,7 +83,9 @@ export default class PullRequests extends React.Component{
                     <td>{pr.baseBranch}</td>
                     <td>{pr.date}</td>
                     <td>{pr.status}</td>
-                    <Button onClick={()=>{this.viewOnClickHandler(pr.targetBranch,pr.baseBranch)}} size={"sm"} variant={"success"}>View</Button>
+                    <Button onClick={()=>{this.viewOnClickHandler(pr.targetBranch,pr.baseBranch)}} size={"sm"} variant={"info"}>View</Button>
+                    <Button  size={"sm"} variant={"success"}>Accept</Button>
+                    <Button  size={"sm"} variant={"danger"}>Decline</Button>
                 </tr>
             );
         });

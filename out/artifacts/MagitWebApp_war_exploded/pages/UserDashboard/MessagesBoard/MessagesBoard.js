@@ -18,17 +18,34 @@ export default function MessagesBoard (props){
                     </div>
                 );
             }
-            else if (message.type==="PRMsg"){
-                <div className="Toast Toast--success">
-                    <main className="Toast__message">
-                        <header className="Toast__message-category">
-                            {message.targetUserName+' has added a PR to '+ props.repositoryName}
-                        </header>
-                        <p className="Toast__message-text">
-                            {"Message: "+props.PRMsg+ "Target branch: "+props.targetBranch+"Base branch: "+props.basisBranch}
-                        </p>
-                    </main>
-                </div>
+            else {
+                if(message.status==="pending"){
+                    <div className="Toast Toast--success">
+                        <main className="Toast__message">
+                            <header className="Toast__message-category">
+                                {message.targetUserName+' has added a PR to '+ message.repositoryName}
+                            </header>
+                            <p className="Toast__message-text">
+                                {"Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
+                                + "Status: "+ message.status}
+                            </p>
+                        </main>
+                    </div>
+                }
+                else{
+                    <div className="Toast Toast--success">
+                        <main className="Toast__message">
+                            <header className="Toast__message-category">
+                                {'Your PR was '+message.status + 'by '+message.baseUser}
+                            </header>
+                            <p className="Toast__message-text">
+                                {"PR Detailes- Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
+                                + "Status: "+ message.status}
+                            </p>
+                        </main>
+                    </div>
+                }
+
             }
         })
 

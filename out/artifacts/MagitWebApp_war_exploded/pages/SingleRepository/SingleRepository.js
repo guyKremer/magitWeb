@@ -94,6 +94,7 @@ export default class SingleRepository extends React.Component{
     }
 
     showPrsOnClickHandler(){
+
         this.setState(()=>({
             showPr:true
         }));
