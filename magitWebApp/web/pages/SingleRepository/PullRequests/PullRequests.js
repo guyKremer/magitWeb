@@ -76,7 +76,6 @@ export default class PullRequests extends React.Component{
 
     }
 
-    this.acceptOnClickHandler(pr.date,"accept")
 
     singlePrRender(){
         let changedFiles=this.state.changedFiles.map((file)=> {
