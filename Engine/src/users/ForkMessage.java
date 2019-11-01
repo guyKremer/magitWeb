@@ -23,6 +23,7 @@ public class ForkMessage extends Message{
     public JsonObject toJson(){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("type","forkMsg");
+        jsonObject.addProperty("date",Date.toString());
         jsonObject.addProperty("repositoryName",repositoryName);
         jsonObject.addProperty("userName",userName);
 
