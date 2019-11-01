@@ -7,13 +7,7 @@ export default class PullRequests extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            pullRequests:[{
-                userName:"keren",
-                targetBranch:"target",
-                baseBranch:"base",
-                date:"31/10/2019",
-                status:"open"
-            }],
+            pullRequests:[],
             viewPressed:false,
             changedFiles:[]
         }
@@ -22,48 +16,20 @@ export default class PullRequests extends React.Component{
         this.singlePrRender=this.singlePrRender.bind(this);
     }
 
-    async viewOnClickHandler(targetBranch,baseBranch){
-        //fetch call reuturns:
-      let files=
-            //array of files
-            [
-                {
-                    path:"repo-for-maerge/a.txt",
-                    //array of changes
-                    changes:[
-                        {
-                            commitSha1: "0000000000", //the commit that change was made
-                            status: "modified", // added/deleted/modified
-                            content: "Naor is a dush!!" // if deleted should be empty string
-                        }
-                    ]
-                },
-                {
-                    path:"repo-for-maerge/a.txt",
-                    //array of changes
-                    changes:[
-                        {
-                            commitSha1: "0000000000", //the commit that change was made
-                            status: "modified", // added/deleted/modified
-                            content: "Naor is a dush!!" // if deleted should be empty string
-                        }
-                    ]
-                },
-                {
-                    path:"repo-for-maerge/a.txt",
-                    //array of changes
-                    changes:[
-                        {
-                            commitSha1: "0000000000", //the commit that change was made
-                            status: "modified", // added/deleted/modified
-                            content: "Naor is a dush!!" // if deleted should be empty string
-                        }
-                    ]
-                }
-            ];
+    async componentDidMount() {
+        let pullRequests = await fetch('PR?repository='+this.props.repository, {method:'GET', credentials: 'include'});
+        pullRequests = await pullRequests.json();
+        this.setState(()=>({
+            pullRequests : pullRequests
+        }));
+    }
+
+    async viewOnClickHandler(date){
+        let changedFiles = await fetch('PRData?repository='+this.props.repository+'&date='+date, {method:'GET', credentials: 'include'});
+        changedFiles = await changedFiles.json();
         this.setState(()=>({
             viewPressed: true,
-            changedFiles:files
+            changedFiles:changedFiles
         }))
     }
 
@@ -72,12 +38,15 @@ export default class PullRequests extends React.Component{
             return(
                 <tr>
                     <td>{index}</td>
-                    <td>{pr.userName}</td>
+                    <td>{pr.msg}</td>
+                    <td>{pr.userCreator}</td>
                     <td>{pr.targetBranch}</td>
                     <td>{pr.baseBranch}</td>
                     <td>{pr.date}</td>
                     <td>{pr.status}</td>
-                    <Button onClick={()=>{this.viewOnClickHandler(pr.targetBranch,pr.baseBranch)}} size={"sm"} variant={"success"}>View</Button>
+                    <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
+                    <Button  size={"sm"} variant={"success"}>Accept</Button>
+                    <Button  size={"sm"} variant={"danger"}>Decline</Button>
                 </tr>
             );
         });
@@ -86,7 +55,8 @@ export default class PullRequests extends React.Component{
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>User</th>
+                    <th>Message</th>
+                    <th>Creator</th>
                     <th>Target branch</th>
                     <th>Base branch</th>
                     <th>Date of creation</th>
@@ -114,7 +84,7 @@ export default class PullRequests extends React.Component{
                         {
                             change.status==="modified" || change.status === "added" ?
                                 <textarea readOnly>
-                                    change.content
+                                    {change.content}
                                 </textarea>
                                 :
                                 ""

@@ -25,7 +25,7 @@ function Header(props){
                 </div>
                 <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
-                    <PullRequestButton repoName={props.repoName}/>
+                    <PullRequestButton RRuser={props.RRuser} RRname={props.RRname} repoName={props.repoName}/>
                     <Button variant={"success"} id={"commit"} onClick={()=>{
                         let msg = window.prompt("Enter commit message");
                         props.commitOnClick(msg);

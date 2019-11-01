@@ -10,28 +10,30 @@ export default class PullRequestForm extends React.Component{
     constructor(props){
         super(props);
         this.state={
-            sha1:false
+            sha1:false,
         }
         this.onClickSubmit=this.onClickSubmit.bind(this);
     }
 
     render() {
+        let Rtbs = this.props.Rtbs.map((rtb)=>{
+            return(<option>{rtb}</option>)
+        });
+        let Rbs = this.props.Rbs.map((rb)=>{
+            return(<option>{rb}</option>)
+        });
     return(
         <Form>
             <Form.Group controlId="targetBranchInput">
                 <Form.Label>Target branch</Form.Label>
                 <Form.Control as="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    {Rtbs}
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="baseBranchInput">
                 <Form.Label>Base branch</Form.Label>
                 <Form.Control as="select">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    {Rbs}
                 </Form.Control>
             </Form.Group>
             <Form.Group controlId="prMessageInput">
@@ -62,7 +64,10 @@ export default class PullRequestForm extends React.Component{
         let baseBranchName = document.getElementById("baseBranchInput").value;
         let prMessage = document.getElementById("prMessageInput").value;
 
-        console.log(targetBranchName+' '+baseBranchName +' ' +prMessage);
+        baseBranchName = baseBranchName.split('\\');
+        baseBranchName = baseBranchName[1];
+
+        fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
     }
 
 }
