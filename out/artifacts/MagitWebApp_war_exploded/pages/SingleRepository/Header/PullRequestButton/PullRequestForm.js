@@ -64,7 +64,10 @@ export default class PullRequestForm extends React.Component{
         let baseBranchName = document.getElementById("baseBranchInput").value;
         let prMessage = document.getElementById("prMessageInput").value;
 
-        fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
+        baseBranchName = baseBranchName.split('\\');
+        baseBranchName = baseBranchName[1];
+
+        fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
     }
 
 }

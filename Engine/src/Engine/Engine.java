@@ -166,7 +166,7 @@ public class Engine {
             m_currentRepository.clearWc();
             Commit prevCommit = new Commit(prevCommitSha1, m_currentRepository.GetRepositoryPath());
             m_currentRepository.setCurrentCommit(prevCommit);
-            originalCommit.flush();
+            commit.flush();
             status = showStatus();
         }
         m_currentRepository.setCurrentCommit(originalCommit);
@@ -174,6 +174,27 @@ public class Engine {
         originalWc.flushToWc();
         return status;
     }
+
+
+    public Status showStatusAgainstCommits(Repository repo, Commit commit, String prevCommitSha1) throws IOException {
+        setCurrentRepository(repo);
+        Commit originalCommit = repo.GetCurrentCommit();
+        Folder originalWc = repo.loadWC();
+        Status status = new Status(repo.m_repositoryPath.toString(), repo.GetName(), m_user, null, null, null, null);
+
+        if (prevCommitSha1 != null && !prevCommitSha1.isEmpty()) {
+            repo.clearWc();
+            Commit prevCommit = new Commit(prevCommitSha1, repo.GetRepositoryPath());
+            repo.setCurrentCommit(prevCommit);
+            commit.flush();
+            status = showStatus();
+        }
+        repo.setCurrentCommit(originalCommit);
+        repo.clearWc();
+        originalWc.flushToWc();
+        return status;
+    }
+
 
     public static class Utils {
         public static void zipToFile(Path i_pathToZippedFile, String i_fileContent, Path repoPath) throws IOException {
@@ -676,80 +697,81 @@ public class Engine {
         i_localRepository.InsertBranch(rtBranch);
         i_localRepository.InsertBranch(rBranch);
 
-
         Branch branch = new Branch(i_RR.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName), headCommit, i_RR.m_repositoryPath);
 
         i_RR.InsertBranch(branch);
     }
 
 
-    public void createPRData(Repository i_RR, String i_baseBranch, String i_targetBranch, String i_userCreator , String msg) throws IOException {
+    public void createPRData(Repository i_RR, String i_baseBranch, String i_targetBranch, String i_userCreator, String msg) throws IOException {
         Commit targetCommit = new Commit(i_RR.GetBranch(i_targetBranch).getCommitSha1(), i_RR.GetRepositoryPath());
         String baseCommitSha1 = i_RR.GetBranch(i_baseBranch).getCommitSha1();
         Status currStatus;
         Changes currChanges;
-        Map<String,List<Changes>> data = new HashMap<>();
+        Map<String, List<Changes>> data = new HashMap<>();
         List<Changes> lst;
         FolderItem item;
+        String fileName;
 
-        while(!targetCommit.getSha1().equals(baseCommitSha1)){
-            currStatus = showStatusAgainstOtherCommits(targetCommit, targetCommit.getFirstPrecedingSha1());
-            for(String str : currStatus.getDeletedFiles()){
+        while (!targetCommit.getSha1().equals(baseCommitSha1)) {
+            currStatus = showStatusAgainstCommits(i_RR, targetCommit, targetCommit.getFirstPrecedingSha1());
+            for (String str : currStatus.getDeletedFiles()) {
                 currChanges = new Changes(targetCommit.getSha1(), "deleted");
                 currChanges.setContent("");
 
-                if(data.get(str) == null){
+                if (data.get(str) == null) {
                     lst = new ArrayList<>();
-                }else{
+                } else {
                     lst = data.get(str);
                 }
                 lst.add(currChanges);
 
-                data.put(str,lst);
+                data.put(str, lst);
             }
 
-            for(String str : currStatus.getModifiedFiles()) {
+            for (String str : currStatus.getModifiedFiles()) {
                 currChanges = new Changes(targetCommit.getSha1(), "modified");
 
-                if(data.get(str) == null){
+                if (data.get(str) == null) {
                     lst = new ArrayList<>();
-                }else{
+                } else {
                     lst = data.get(str);
                 }
-
-                if(!str.equals(targetCommit.getRootFolder())) {
-                    item = targetCommit.getRootFolder().GetItem(Paths.get(str).getFileName().toString());
-                    if(!item.GetType().equals("folder")){
-                        currChanges.setContent(((Blob)item).GetContent());
-                    }else{
+                fileName = Paths.get(str).getFileName().toString();
+                if (!fileName.equals(targetCommit.getRootFolder().GetName())) {
+                    item = getItem(targetCommit.getRootFolder(),Paths.get(str).getFileName().toString());
+                   if (!item.GetType().equals("folder")) {
+                        currChanges.setContent(((Blob) item).GetContent());
+                    } else {
                         currChanges.setContent("");
                     }
                 }
 
                 lst.add(currChanges);
-                data.put(str,lst);
+                data.put(str, lst);
             }
 
-            for(String str : currStatus.getAddedFiles()) {
+            for (String str : currStatus.getAddedFiles()) {
                 currChanges = new Changes(targetCommit.getSha1(), "added");
 
-                if(data.get(str) == null){
+                if (data.get(str) == null) {
                     lst = new ArrayList<>();
-                }else{
+                } else {
                     lst = data.get(str);
                 }
+                fileName = Paths.get(str).getFileName().toString();
 
-                if(!str.equals(targetCommit.getRootFolder())) {
-                    item = targetCommit.getRootFolder().GetItem(Paths.get(str).getFileName().toString());
-                    if(!item.GetType().equals("folder")){
-                        currChanges.setContent(((Blob)item).GetContent());
-                    }else{
+                if (!fileName.equals(targetCommit.getRootFolder().GetName())) {
+                    item = getItem(targetCommit.getRootFolder(),Paths.get(str).getFileName().toString());
+                    if (!item.GetType().equals("folder")) {
+                        currChanges.setContent(((Blob) item).GetContent());
+                    } else {
                         currChanges.setContent("");
                     }
                 }
 
                 lst.add(currChanges);
-                data.put(str,lst);
+                data.put(str, lst);
             }
 
             targetCommit = new Commit(targetCommit.getFirstPrecedingSha1(), i_RR.GetRepositoryPath());
@@ -764,4 +786,23 @@ public class Engine {
                 msg
         ));
     }
+
+
+    public FolderItem getItem(Folder rootFolder, String itemName) {
+        FolderItem res = null;
+
+        for (FolderItem item : rootFolder.GetItems()) {
+            if (item.GetName().equals(itemName)) {
+                res = item;
+                break;
+            } else if (item.GetType().equals("folder")) {
+                res = getItem((Folder) item, itemName);
+                if (res != null) {
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+
 }

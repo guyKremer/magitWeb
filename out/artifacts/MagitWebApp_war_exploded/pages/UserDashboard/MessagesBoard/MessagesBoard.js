@@ -20,6 +20,7 @@ export default function MessagesBoard (props){
             }
             else {
                 if(message.status==="pending"){
+                    return(
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
@@ -31,8 +32,10 @@ export default function MessagesBoard (props){
                             </p>
                         </main>
                     </div>
+                    );
                 }
                 else{
+                    return(
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
@@ -44,6 +47,7 @@ export default function MessagesBoard (props){
                             </p>
                         </main>
                     </div>
+                    );
                 }
 
             }
