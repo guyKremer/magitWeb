@@ -87,7 +87,7 @@ export default class SingleRepository extends React.Component{
         }
         else{
             return(
-                <PullRequests/>
+                <PullRequests repository={this.state.name}/>
             );
         }
 
