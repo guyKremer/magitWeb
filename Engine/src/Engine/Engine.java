@@ -805,4 +805,15 @@ public class Engine {
         return res;
     }
 
+    public void doPR(Repository i_repo, String i_targetBranch, String i_baseBranch) throws IOException {
+        Branch targetBranch = i_repo.GetBranch(i_targetBranch);
+        Branch baseBranch = i_repo.GetBranch(i_baseBranch);
+
+        baseBranch.setCommitSha1(targetBranch.getCommitSha1());
+        baseBranch.flushBranch();
+        if(i_repo.GetHeadBranch().getName().equals(baseBranch)){
+            i_repo.checkOut(i_baseBranch);
+        }
+    }
+
 }

@@ -14,6 +14,7 @@ export default class PullRequests extends React.Component{
 
         this.prListRender=this.prListRender.bind(this);
         this.singlePrRender=this.singlePrRender.bind(this);
+        this.acceptOnClickHandler=this.acceptOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -45,7 +46,7 @@ export default class PullRequests extends React.Component{
                     <td>{pr.date}</td>
                     <td>{pr.status}</td>
                     <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
-                    <Button  size={"sm"} variant={"success"}>Accept</Button>
+                    <Button  onClick={()=>{this.acceptOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
                     <Button  size={"sm"} variant={"danger"}>Decline</Button>
                 </tr>
             );
@@ -69,6 +70,13 @@ export default class PullRequests extends React.Component{
             </Table>
         );
     }
+
+    acceptOnClickHandler(date,status){
+        fetch('PRData?repository='+this.props.repository+'&date='+date+'&status='+status, {method:'POST',body:'', credentials: 'include'});
+
+    }
+
+    this.acceptOnClickHandler(pr.date,"accept")
 
     singlePrRender(){
         let changedFiles=this.state.changedFiles.map((file)=> {

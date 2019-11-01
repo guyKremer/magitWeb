@@ -1,5 +1,6 @@
 package servlets;
 
+import Engine.Engine;
 import Engine.MagitObjects.Changes;
 import Engine.MagitObjects.PRRequest;
 import Engine.MagitObjects.Repository;
@@ -60,6 +61,30 @@ public class PRDataServlet extends HttpServlet {
         ServletUtils.SendJsonResponse(response, jsonArray);
     }
 
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String userNameFromParameter = SessionUtils.getUsername(request);
+        UserManager userManager = ServletUtils.getUserManager(getServletContext());
+        String repoName = request.getParameter(REPOSITORY);
+        String date = request.getParameter("date");
+        Repository currRepo = null;
+        PRRequest pr;
+        JsonArray jsonArray = new JsonArray();
+        JsonArray inner = new JsonArray();
+        Engine engine = new Engine();
+
+        //find repo
+        for (Repository repo : userManager.getRepositories(userNameFromParameter)) {
+            if (repo.GetName().equals(repoName)) {
+                currRepo = repo;
+                break;
+            }
+        }
+
+        pr = currRepo.GetPRByDate(date);
+        engine.doPR(currRepo,pr.getTargetBranch(),pr.getBaseBranch());
+        ///create MSG
+    }
 
 
 

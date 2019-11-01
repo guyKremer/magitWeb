@@ -270,7 +270,7 @@ public class Repository {
     }
 
     public void loadCommitFromBranch(Branch i_branch)throws java.io.IOException{
-        m_currentCommit = new Commit (i_branch.getCommitSha1(),m_repositoryPath);
+        m_currentCommit = new Commit(i_branch.getCommitSha1(),m_repositoryPath);
         m_WC = m_currentCommit.getRootFolder();
     }
 
