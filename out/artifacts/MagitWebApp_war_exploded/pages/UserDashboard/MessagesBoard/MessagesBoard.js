@@ -24,7 +24,7 @@ export default function MessagesBoard (props){
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
-                                {message.targetUserName+' has added a PR to '+ message.repositoryName}
+                                {message.creatorUserName+' has added a PR to '+ message.repositoryName}
                             </header>
                             <p className="Toast__message-text">
                                 {"Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
@@ -39,7 +39,7 @@ export default function MessagesBoard (props){
                     <div className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
-                                {'Your PR was '+message.status + 'by '+message.baseUser}
+                                {'Your PR was '+message.status + 'by '+message.targetUserName}
                             </header>
                             <p className="Toast__message-text">
                                 {"PR Detailes- Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
