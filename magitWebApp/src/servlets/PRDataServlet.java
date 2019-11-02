@@ -90,17 +90,26 @@ public class PRDataServlet extends HttpServlet {
             pr.setStatus(PRMessage.Status.CONFIRMED);
             userManager.usersMap.get(pr.getUserCreator()).AddMessage(new PRMessage(
                     repoName,
-
+                    userNameFromParameter,
+                    pr.getUserCreator(),
+                    pr.getTargetBranch(),
+                    pr.getBaseBranch(),
+                    pr.getMsg(),
+                    PRMessage.Status.CONFIRMED
+            ));
+        }else{ //denied
+            pr.setStatus(PRMessage.Status.DENIED);
+            userManager.usersMap.get(pr.getUserCreator()).AddMessage(new PRMessage(
+                    repoName,
+                    userNameFromParameter,
+                    pr.getUserCreator(),
+                    pr.getTargetBranch(),
+                    pr.getBaseBranch(),
+                    pr.getMsg(),
+                    PRMessage.Status.DENIED
             ));
         }
-        else{ //denied
-            pr.setStatus(PRMessage.Status.DENIED);
-        }
-        ///create MSG
-
 
     }
-
-
 
 }

@@ -18,6 +18,11 @@ public class PRMessage extends Message {
     private String targetBranch;
     private String baseBranch;
     private String PRMsg;
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     private PRMessage.Status status;
 
     public PRMessage(
@@ -34,6 +39,23 @@ public class PRMessage extends Message {
         baseBranch = i_basisBranch;
         PRMsg = i_PRMsg;
         status = Status.WAITING;
+    }
+
+    public PRMessage(
+            String i_repoName,
+            String i_targetUserName,
+            String i_basisUserName,
+            String i_targetBranch,
+            String i_basisBranch,
+            String i_PRMsg,
+            Status i_status){
+        repositoryName = i_repoName;
+        targetUserName = i_targetUserName;
+        creatorUserName = i_basisUserName;
+        targetBranch = i_targetBranch;
+        baseBranch = i_basisBranch;
+        PRMsg = i_PRMsg;
+        status = i_status;
     }
 
     public void setStatus(boolean bool){
