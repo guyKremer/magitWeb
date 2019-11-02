@@ -14,7 +14,7 @@ export default class PullRequests extends React.Component{
 
         this.prListRender=this.prListRender.bind(this);
         this.singlePrRender=this.singlePrRender.bind(this);
-        this.acceptOnClickHandler=this.acceptOnClickHandler.bind(this);
+        this.acceptOrDeclineOnClickHandler=this.acceptOrDeclineOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -46,8 +46,8 @@ export default class PullRequests extends React.Component{
                     <td>{pr.date}</td>
                     <td>{pr.status}</td>
                     <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
-                    <Button  onClick={()=>{this.acceptOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
-                    <Button  size={"sm"} variant={"danger"}>Decline</Button>
+                    <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
+                    <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
                 </tr>
             );
         });
@@ -71,10 +71,10 @@ export default class PullRequests extends React.Component{
         );
     }
 
-    acceptOnClickHandler(date,status){
+    acceptOrDeclineOnClickHandler(date,status){
         fetch('PRData?repository='+this.props.repository+'&date='+date+'&status='+status, {method:'POST',body:'', credentials: 'include'});
-
     }
+
 
 
     singlePrRender(){
