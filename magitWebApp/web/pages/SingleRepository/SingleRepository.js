@@ -236,6 +236,7 @@ export default class SingleRepository extends React.Component{
         this.setState(()=>({
             fileHierarchy:[this.state.name],
             fileTree: folder,
+            fileEditor:false,
             headBranch : newHeadBranch,
             regularBranchesNames: regularBranchesName}));
     }

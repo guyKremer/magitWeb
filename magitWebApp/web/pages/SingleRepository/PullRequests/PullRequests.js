@@ -39,7 +39,6 @@ export default class PullRequests extends React.Component{
         let pullRequestView = this.state.pullRequests.map((pr,index)=>{
             return(
                 <React.Fragment>
-                    <Button variant={"success"} onClick={this.props.pullRequestBackButtonOnClick}>Back</Button>
                     <tr>
                         <td>{index}</td>
                         <td>{pr.msg}</td>
@@ -49,8 +48,15 @@ export default class PullRequests extends React.Component{
                         <td>{pr.date}</td>
                         <td>{pr.status}</td>
                         <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
-                        <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
-                        <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
+                        {
+                            pr.status==="WAITING"?
+                                <React.Fragment>
+                                    <Button onClick={() => {
+                                        this.acceptOrDeclineOnClickHandler(pr.date, "accept")
+                                    }} size={"sm"} variant={"success"}>Accept</Button>
+                                    < Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
+                                </React.Fragment>:""
+                        }
                     </tr>
                 </React.Fragment>
 
@@ -58,7 +64,7 @@ export default class PullRequests extends React.Component{
         });
         return (
             <React.Fragment>
-                <Button variant={"success"} onClick={this.singlePrBackOnClickHandler}>Back</Button>
+                <Button variant={"success"} onClick={this.props.pullRequestBackButtonOnClick}>Back</Button>
                 <Table >
                     <thead>
                     <tr>
@@ -100,22 +106,22 @@ export default class PullRequests extends React.Component{
         let changedFiles=this.state.changedFiles.map((file)=> {
             let singleFileChanges = file.changes .map((change)=>{
                 return(
-                    <div className={"singleChange"}>
-                        <div className={"changeTitle"}>
-                            <p>Commit:</p>
-                            <p className={"commit"}>{change.commitSha1}</p>
-                            <p>Status:</p>
-                            <p>{change.status}</p>
-                        </div>
-                        {
-                            change.status==="modified" || change.status === "added" ?
-                                <textarea readOnly>
+                        <div className={"singleChange"}>
+                            <div className={"changeTitle"}>
+                                <p>Commit:</p>
+                                <p className={"commit"}>{change.commitSha1}</p>
+                                <p>Status:</p>
+                                <p>{change.status}</p>
+                            </div>
+                            {
+                                change.status==="modified" || change.status === "added" ?
+                                    <textarea readOnly>
                                     {change.content}
                                 </textarea>
-                                :
-                                ""
-                        }
-                    </div>
+                                    :
+                                    ""
+                            }
+                        </div>
                 );
             });
             return(
@@ -128,6 +134,7 @@ export default class PullRequests extends React.Component{
 
         return(
             <div className={"changedFiles"}>
+                <Button variant={"success"} onClick={this.singlePrBackOnClickHandler}>Back</Button>
                 {changedFiles}
             </div>
         )

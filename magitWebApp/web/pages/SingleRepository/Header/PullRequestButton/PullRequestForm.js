@@ -68,6 +68,7 @@ export default class PullRequestForm extends React.Component{
         baseBranchName = baseBranchName[1];
 
         fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
+        this.props.closeForm();
     }
 
 }

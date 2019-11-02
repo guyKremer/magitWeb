@@ -20,7 +20,7 @@ export default class NewBranchForm extends React.Component{
         return(
             <div class="form-style-2">
                 <div class="form-style-2-heading">Branch Details</div>
-                <label for="field1"><span>Name</span><input type="text" class="input-field" id={"branchNameInput"} name="field1"  /></label>
+                <label htmlFor="field1"><span>Name</span><input type="text" class="input-field" id={"branchNameInput"} name="field1"  /></label>
                 <label htmlFor="field1"><span>Enter Sha1</span></label>
                 <input type="checkbox" id="myCheck" onClick={this.onClickCheckBox}/>
                 {this.state.sha1===true ? <label htmlFor="field1"><span>Enter Sha1</span><input type="text" class="input-field" id={"sha1Input"} name="field1"  /></label>:""}
