@@ -1,24 +1,38 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
+import Table from 'react-bootstrap/Table';
 import './commits.css';
 
 function Commits(props){
 
     let commmits = props.commits.map((commit,index)=>{
         return (
-            <div key={commit.sha1+index} className="singleCommit">
+            <tr key={commit.sha1+index}>
                 <Button onClick={()=>{props.commitSha1OnClick(commit.sha1)}} variant={"link"}>{commit.sha1}</Button>
-                <p>{commit.message}</p>
-                <p>{commit.date}</p>
-                <p>{commit.creator}</p>
-                <p>{commit.pointedBranches}</p>
-            </div>
+                <td>{commit.message}</td>
+                <td>{commit.date}</td>
+                <td>{commit.creator}</td>
+                <td>{commit.pointedBranches}</td>
+            </tr>
         );
     });
     return(
         <div className={"commits"}>
             <b>Commits</b>
-            {commmits}
+            <Table >
+                <thead>
+                <tr>
+                    <th>Sha1</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Creator</th>
+                    <th>Pointed by </th>
+                </tr>
+                </thead>
+                <tbody>
+                {commmits}
+                </tbody>
+            </Table>
         </div>
     )
 }
