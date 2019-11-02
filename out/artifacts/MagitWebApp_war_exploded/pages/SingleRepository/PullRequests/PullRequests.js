@@ -40,7 +40,7 @@ export default class PullRequests extends React.Component{
             return(
                 <React.Fragment>
                     <tr key={"prs"+pr.date+index}>
-                        <td>{index}</td>
+                        <td>{index+1}</td>
                         <td>{pr.msg}</td>
                         <td>{pr.userCreator}</td>
                         <td>{pr.targetBranch}</td>
@@ -55,7 +55,7 @@ export default class PullRequests extends React.Component{
                                         this.acceptOrDeclineOnClickHandler(pr.date, "accept")
                                     }} size={"sm"} variant={"success"}>Accept</Button>
                                     < Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
-                                </React.Fragment>:""
+                                </React.Fragment>:null
                         }
                     </tr>
                 </React.Fragment>
@@ -119,7 +119,7 @@ export default class PullRequests extends React.Component{
                                     {change.content}
                                 </textarea>
                                     :
-                                    ""
+                                    null
                             }
                         </div>
                 );
@@ -133,10 +133,12 @@ export default class PullRequests extends React.Component{
         });
 
         return(
-            <div className={"changedFiles"}>
-                <Button variant={"success"} onClick={this.singlePrBackOnClickHandler}>Back</Button>
-                {changedFiles}
-            </div>
+            <React.Fragment>
+                <Button  variant={"success"} onClick={this.singlePrBackOnClickHandler}>Back</Button>
+                <div className={"changedFiles"}>
+                    {changedFiles}
+                </div>
+            </React.Fragment>
         )
     }
 

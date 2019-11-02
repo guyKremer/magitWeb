@@ -23,7 +23,7 @@ export default class UserDashboard extends React.Component{
             messages:[],
             repositories:[]
         };
-
+        this.getUserDataInterval;
         this.getUserData=this.getUserData.bind(this);
         this.userOnClickHandler=this.userOnClickHandler.bind(this);
 
@@ -31,9 +31,12 @@ export default class UserDashboard extends React.Component{
 
     componentDidMount() {
         this.getUserData();
-        setInterval(async ()=>{
+        this.getUserDataInterval = setInterval(async ()=>{
             this.getUserData();
         }, 1000);
+    }
+    componentWillUnmount() {
+        clearInterval(this.getUserDataInterval);
     }
 
     render(){
