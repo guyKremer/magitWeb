@@ -3,6 +3,7 @@ package servlets;
 import Engine.Engine;
 import Engine.MagitObjects.LocalRepository;
 import Engine.MagitObjects.Repository;
+import com.google.gson.JsonObject;
 import users.ForkMessage;
 import users.User;
 import users.UserManager;
@@ -34,17 +35,26 @@ public class CollaborationServlet extends HttpServlet {
         Repository localRepo = getUserRepo(userNameFromParameter,repoName);
         Repository remoteRepo =getUserRepo(remoteUser, ((LocalRepository)localRepo).getRemoteRepoName());
         engine.setCurrentRepository(localRepo);
+        JsonObject jsonObject= new JsonObject();
 
         /*
         Repository.m_repositoryPath =
                 Paths.get(CollaborationServlet.rootPath + File.separator + remoteUser + File.separator + remoteRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
          */
-        if(operation.equals("push")){
-            engine.PushNewBranch((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
+        engine.setCurrentRepository(localRepo);
+
+        if(!engine.isChanges()){
+            jsonObject.addProperty("msg","you have open changes please commit them first");
+            ServletUtils.SendErrorResponse(response,jsonObject);
         }
-        else if(operation.equals("pull")) { // pull
-            engine.Pull((LocalRepository)localRepo,remoteRepo,userNameFromParameter,remoteUser);
+        else {
+
+            if (operation.equals("push")) {
+                engine.PushNewBranch((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
+            } else if (operation.equals("pull")) { // pull
+                engine.Pull((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
+            }
         }
 
         //check response

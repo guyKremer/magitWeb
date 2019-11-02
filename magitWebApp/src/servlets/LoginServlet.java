@@ -35,9 +35,10 @@ public class LoginServlet extends HttpServlet {
             jsonObject.addProperty(Constants.USERNAME,SessionUtils.getUsername(request));
             ServletUtils.SendJsonResponse(response,jsonObject);
         }
+        else{
+            ServletUtils.SendErrorResponse(response,jsonObject);
+        }
     }
-
-
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         BufferedReader reader = request.getReader();

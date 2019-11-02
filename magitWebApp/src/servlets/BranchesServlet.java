@@ -83,10 +83,17 @@ public class BranchesServlet extends HttpServlet {
             }
         }
 
+
         engine.setCurrentRepository(currRepo);
-        engine.checkOut(branchName);
-        commit = new Commit(currRepo.GetHeadBranch().getCommitSha1(),currRepo.m_repositoryPath);
-        userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+        if(!engine.isChanges()){
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("msg","you have open changes please commit them first");
+            ServletUtils.SendErrorResponse(response,jsonObject);
+        }else {
+            engine.checkOut(branchName);
+            commit = new Commit(currRepo.GetHeadBranch().getCommitSha1(), currRepo.m_repositoryPath);
+            userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+        }
     }
 
 

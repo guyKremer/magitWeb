@@ -59,6 +59,16 @@ public class ServletUtils {
         return response;
     }
 
+    public static HttpServletResponse SendErrorResponse(HttpServletResponse response, JsonElement jsonObj) throws IOException {
+        PrintWriter out=response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(209);
+        out.print(jsonObj);
+        out.flush();
+        return response;
+    }
+
     /*
     public static ChatManager getChatManager(ServletContext servletContext) {
         synchronized (chatManagerLock) {
