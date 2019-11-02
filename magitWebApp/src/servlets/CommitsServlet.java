@@ -52,11 +52,12 @@ public class CommitsServlet extends HttpServlet {
                 Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter + File.separator + currRepo.GetName());
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
          */
-
-        jsonArray = getAllBranchCommits(currRepo, branchName);
-        //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
-        //userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
-        ServletUtils.SendJsonResponse(response, jsonArray);
+        if(!branchName.isEmpty()) {
+            jsonArray = getAllBranchCommits(currRepo, branchName);
+            //commit = new Commit(currRepo.GetHeadBranch().getCommitSha1());
+            //userManager.usersMap.get(userNameFromParameter).setRootFolder(commit.getRootFolder());
+            ServletUtils.SendJsonResponse(response, jsonArray);
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
