@@ -34,7 +34,9 @@ public class MessagesServlet extends HttpServlet{
         List<Message> msgList = userManager.getAllMessages(userNameFromParameter);
         JsonArray jsonArray = new JsonArray();
         for (Message msg : msgList) {
-            jsonArray.add(msg.toJson());
+            if(!msg.isOpened()) {
+                jsonArray.add(msg.toJson());
+            }
         }
         ServletUtils.SendJsonResponse(response,jsonArray);
     }

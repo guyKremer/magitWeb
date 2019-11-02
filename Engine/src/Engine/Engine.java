@@ -354,6 +354,10 @@ public class Engine {
 
         checkOut(m_currentRepository.GetHeadBranch().getName());
 
+        if(!m_currentRepository.GetHeadBranch().getName().equals("master")){
+            m_currentRepository.DeleteBranch("master");
+        }
+
         return LR;
     }
 
@@ -745,10 +749,9 @@ public class Engine {
                     } else {
                         currChanges.setContent("");
                     }
-                }
-
                 lst.add(currChanges);
                 data.put(str, lst);
+                }
             }
 
             for (String str : currStatus.getAddedFiles()) {
@@ -768,10 +771,10 @@ public class Engine {
                     } else {
                         currChanges.setContent("");
                     }
-                }
-
                 lst.add(currChanges);
                 data.put(str, lst);
+                }
+
             }
 
             targetCommit = new Commit(targetCommit.getFirstPrecedingSha1(), i_RR.GetRepositoryPath());
@@ -811,7 +814,7 @@ public class Engine {
 
         baseBranch.setCommitSha1(targetBranch.getCommitSha1());
         baseBranch.flushBranch();
-        if(i_repo.GetHeadBranch().getName().equals(baseBranch)){
+        if(i_repo.GetHeadBranch().getName().equals(baseBranch.getName())){
             i_repo.checkOut(i_baseBranch);
         }
     }
