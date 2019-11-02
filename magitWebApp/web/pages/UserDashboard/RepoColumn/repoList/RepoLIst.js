@@ -6,7 +6,7 @@ function RepoColumn(props){
 
     let reposArrayToRender = props.repositories.map((repo,index)=>{
         return(
-        <tr key={repo.repositoryName+index} onClick={()=>{props.repoChoosingHandler(repo.repositoryName,repo.type,repo.RRname,repo.RRuser);}}>
+        <tr key={"repoList"+repo.repositoryName+index} onClick={()=>{props.repoChoosingHandler(repo.repositoryName,repo.type,repo.RRname,repo.RRuser);}}>
             <td >{repo.repositoryName}</td>
             <td>{repo.activeBranch}</td>
             <td>{repo.amountOfBranches}</td>

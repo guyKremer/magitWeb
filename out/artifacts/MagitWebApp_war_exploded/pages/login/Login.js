@@ -12,8 +12,8 @@ export default class SignUp extends React.Component {
 
     async componentDidMount() {
         let response = await fetch('login', {method:'GET', credentials: 'include'});
-        response = await response.json()
         if(response.ok){
+            response = await response.json();
             this.props.handleLogin(response.userName);
         }
     }

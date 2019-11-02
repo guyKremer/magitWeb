@@ -27,8 +27,7 @@ export default function MessagesBoard (props){
                                 {message.creatorUserName+' has added a pr to '+ message.repositoryName}
                             </header>
                             <p className="Toast__message-text">
-                                {"Message:"+message.PRMsg+ " Target branch:"+message.targetBranch+" Base branch:"+message.baseBranch
-                                + " Status: "+ message.status}
+                                {"Message:"+message.PRMsg+ " Target branch:"+message.targetBranch+" Base branch:"+message.baseBranch}
                             </p>
                         </main>
                     </div>
@@ -42,8 +41,7 @@ export default function MessagesBoard (props){
                                 {'Your PR was '+message.status + ' by '+message.targetUserName}
                             </header>
                             <p className="Toast__message-text">
-                                {"PR Detailes- Message:"+message.PRMsg+ " Target branch:"+message.targetBranch+" Base branch:"+message.baseBranch
-                                + " Status:"+ message.status}
+                                {"PR Detailes- Message:"+message.PRMsg+ " Target branch:"+message.targetBranch+" Base branch:"+message.baseBranch}
                             </p>
                         </main>
                     </div>

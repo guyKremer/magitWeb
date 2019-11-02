@@ -39,7 +39,7 @@ export default class PullRequests extends React.Component{
         let pullRequestView = this.state.pullRequests.map((pr,index)=>{
             return(
                 <React.Fragment>
-                    <tr>
+                    <tr key={"prs"+pr.date+index}>
                         <td>{index}</td>
                         <td>{pr.msg}</td>
                         <td>{pr.userCreator}</td>
@@ -106,7 +106,7 @@ export default class PullRequests extends React.Component{
         let changedFiles=this.state.changedFiles.map((file)=> {
             let singleFileChanges = file.changes .map((change)=>{
                 return(
-                        <div className={"singleChange"}>
+                        <div key={"changes"+file.path+change.commitSha1} className={"singleChange"}>
                             <div className={"changeTitle"}>
                                 <p>Commit:</p>
                                 <p className={"commit"}>{change.commitSha1}</p>
@@ -114,8 +114,8 @@ export default class PullRequests extends React.Component{
                                 <p>{change.status}</p>
                             </div>
                             {
-                                change.status==="modified" || change.status === "added" ?
-                                    <textarea readOnly>
+                                change.content!=="" ?
+                                    <textarea readOnly  rows="5">
                                     {change.content}
                                 </textarea>
                                     :
@@ -125,7 +125,7 @@ export default class PullRequests extends React.Component{
                 );
             });
             return(
-            <div className={"fileChanges"}>
+            <div key={"single"+file.path} className={"fileChanges"}>
                 <b>{file.path}</b>
                 {singleFileChanges}
             </div>

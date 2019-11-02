@@ -8,15 +8,15 @@ import EditFile from './EditFile/EditFile';
 
 function FileSystem(props) {
 
-    let items = props.items.map((item)=>{
+    let items = props.items.map((item,index)=>{
         if(item.type==="file"){
             return(
-                <File itemOnClick={props.itemOnClick} name={item.name}/>
+                <File key={"fileSystem"+item.name+index} itemOnClick={props.itemOnClick} name={item.name}/>
             );
         }
         else{
             return(
-                <Folder itemOnClick={props.itemOnClick} name={item.name}/>
+                <Folder key={"fileSystem"+item.name+index} itemOnClick={props.itemOnClick} name={item.name}/>
             );
         }
     });
@@ -26,7 +26,7 @@ function FileSystem(props) {
         if(index === 0){
             delimiter="";
         }
-        return(<Button variant={"link"} size={"lg"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
+        return(<Button key={"bar"+file+index} variant={"link"} size={"lg"} onClick={()=>{props.barButtonOnClick(file,index)}}>{delimiter+file}</Button>)
     });
 
     if(props.fileEditor===false){
