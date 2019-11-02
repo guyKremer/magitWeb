@@ -1,6 +1,7 @@
 package servlets;
 
 import Engine.Engine;
+import Engine.MagitObjects.Branch;
 import Engine.MagitObjects.LocalRepository;
 import Engine.MagitObjects.Repository;
 import com.google.gson.JsonObject;
@@ -51,7 +52,13 @@ public class CollaborationServlet extends HttpServlet {
         else {
 
             if (operation.equals("push")) {
-                engine.PushNewBranch((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
+                if (!localRepo.GetHeadBranch().getClass().equals(Branch.class)){
+                    engine.PushNewBranch((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
+                }
+                else{
+                    jsonObject.addProperty("msg","Can't push this branch");
+                    ServletUtils.SendErrorResponse(response,jsonObject);
+                }
             } else if (operation.equals("pull")) { // pull
                 engine.Pull((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
             }

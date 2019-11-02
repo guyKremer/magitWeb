@@ -3,6 +3,7 @@ package servlets;
 import Engine.Engine;
 import Engine.MagitObjects.Repository;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import users.UserManager;
 import utils.ServletUtils;
 import utils.SessionUtils;
@@ -47,6 +48,7 @@ public class WCServlet extends HttpServlet {
         String msg = request.getParameter(COMMITMSG);
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         Repository currRepo = null;
+        Engine engine = new Engine();
 
         for(Repository repo : userManager.getRepositories(userNameFromParameter)){
             if(repo.GetName().equals(repoName)){
@@ -62,7 +64,14 @@ public class WCServlet extends HttpServlet {
         Repository.m_pathToMagitDirectory = Repository.m_repositoryPath.resolve(".magit");
         */
         Engine.m_user = userNameFromParameter;
+        engine.setCurrentRepository(currRepo);
+        if(!engine.isOpenChangesEx3()){
         currRepo.createCommit(msg);
+        }else{
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("msg","You don't have open changes");
+            ServletUtils.SendErrorResponse(response,jsonObject);
+        }
     }
 
 
