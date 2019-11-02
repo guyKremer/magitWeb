@@ -27,8 +27,8 @@ export default function MessagesBoard (props){
                                 {message.creatorUserName+' has added a PR to '+ message.repositoryName}
                             </header>
                             <p className="Toast__message-text">
-                                {"Message: "+message.PRMsg+ "Target branch: "+message.targetBranch+"Base branch: "+message.baseBranch
-                                + "Status: "+ message.status}
+                                {"Message: "+message.PRMsg+ " Target branch: "+message.targetBranch+" Base branch: "+message.baseBranch
+                                + " Status: "+ message.status}
                             </p>
                         </main>
                     </div>

@@ -6,6 +6,7 @@ import Engine.MagitObjects.PRRequest;
 import Engine.MagitObjects.Repository;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import users.PRMessage;
 import users.UserManager;
 import utils.ServletUtils;
 import utils.SessionUtils;
@@ -67,6 +68,7 @@ public class PRDataServlet extends HttpServlet {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         String repoName = request.getParameter(REPOSITORY);
         String date = request.getParameter("date");
+        String status = request.getParameter("status");
         Repository currRepo = null;
         PRRequest pr;
         JsonArray jsonArray = new JsonArray();
@@ -82,8 +84,21 @@ public class PRDataServlet extends HttpServlet {
         }
 
         pr = currRepo.GetPRByDate(date);
-        engine.doPR(currRepo,pr.getTargetBranch(),pr.getBaseBranch());
+
+        if(status.equals("accept")) {
+            engine.doPR(currRepo, pr.getTargetBranch(), pr.getBaseBranch());
+            pr.setStatus(PRMessage.Status.CONFIRMED);
+            userManager.usersMap.get(pr.getUserCreator()).AddMessage(new PRMessage(
+                    repoName,
+
+            ));
+        }
+        else{ //denied
+            pr.setStatus(PRMessage.Status.DENIED);
+        }
         ///create MSG
+
+
     }
 
 

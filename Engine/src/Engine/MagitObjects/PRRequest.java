@@ -15,6 +15,8 @@ public class PRRequest {
     private String msg;
     private PRMessage.Status status;
 
+
+
     public PRRequest(String targetBranch, String baseBranch, String userCreator, String date, Map<String, List<Changes>> prData, String msg) {
         this.targetBranch = targetBranch;
         this.baseBranch = baseBranch;
@@ -79,4 +81,11 @@ public class PRRequest {
         return jsonObject;
     }
 
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public void setStatus(PRMessage.Status status) {
+        this.status = status;
+    }
 }
