@@ -31,6 +31,7 @@ export default class SingleRepository extends React.Component{
             messages:[],
             showPr:false
         }
+        this.interval;
         this.getBranches=this.getBranches.bind(this);
         this.getCommitsSha1=this.getCommitsSha1.bind(this);
         this.pullOnClickHandler=this.pullOnClickHandler.bind(this);
@@ -52,7 +53,7 @@ export default class SingleRepository extends React.Component{
         this.getMessages();
         this.getBranches();
         this.getCommitsSha1();
-        setInterval(async ()=>{
+        this.interval = setInterval(async ()=>{
             this.getBranches();
             this.getCommitsSha1();
             this.getMessages();
@@ -64,8 +65,11 @@ export default class SingleRepository extends React.Component{
             fileTree: folder,
         }));
     }
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
 
-   async getMessages(){
+    async getMessages(){
         let messagesRespone = await fetch('messages', {method:'GET', credentials: 'include'});
         messagesRespone = await messagesRespone.json();
         this.setState(()=>({

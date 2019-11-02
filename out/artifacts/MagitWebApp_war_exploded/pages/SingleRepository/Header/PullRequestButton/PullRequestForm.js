@@ -45,21 +45,11 @@ export default class PullRequestForm extends React.Component{
             </Button>
         </Form>
     );
-        /*
-        return(
-            <div class="form-style-2">
-                <div class="form-style-2-heading">Branch Details</div>
-                <label for="field1"><span>Target branch</span><input type="text" class="input-field" id={"targetBranchInput"} name="field1"/></label>
-                <label htmlFor="field1"><span>Base branch</span><input type="text" className="input-field" id={"baseBranchInput"} name="field1"/></label>
-                <label htmlFor="field1"><span>Message</span><input type="text" className="input-field" id={"prMessageInput"} name="field1"/></label>
-                <Button variant={"success"} onClick={this.onClickSubmit} size={"sm"}>Submit</Button>
-            </div>
-        );
-         */
+
     }
 
 
-    onClickSubmit(){
+    async onClickSubmit(){
         let targetBranchName=document.getElementById("targetBranchInput").value;
         let baseBranchName = document.getElementById("baseBranchInput").value;
         let prMessage = document.getElementById("prMessageInput").value;
@@ -67,8 +57,15 @@ export default class PullRequestForm extends React.Component{
         baseBranchName = baseBranchName.split('\\');
         baseBranchName = baseBranchName[1];
 
-        fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
         this.props.closeForm();
+
+       let response =  await fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
+       if(response.ok){
+           alert("Pull Request created successfully");
+       }
+       else{
+           alert("Something went wrong please try again");
+       }
     }
 
 }

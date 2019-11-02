@@ -18,7 +18,7 @@ function RepoColumn(props){
                      if(repoName!==null) {
                          props.forkOnClick(repo.repositoryName,repoName)
                      }
-                 }} size={"sm"}>Fork</Button>:""
+                 }} size={"sm"}>Fork</Button>:null
             }
         </tr>
         );
