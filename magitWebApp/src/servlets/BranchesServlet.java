@@ -85,6 +85,7 @@ public class BranchesServlet extends HttpServlet {
 
 
         engine.setCurrentRepository(currRepo);
+
         if(engine.isOpenChangesEx3()){
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("msg","you have open changes please commit them first");

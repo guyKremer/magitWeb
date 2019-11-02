@@ -687,7 +687,7 @@ public class Engine {
             if (remoteCommits.get(currCommit.getSha1()) == null) {
                 copyCommit = new Commit(currCommit);
                 copyCommit.getRootFolder().initFolderPaths(i_RR.m_repositoryPath, i_RR.m_repositoryPath);
-                currCommit.getRootFolder().saveInObjects();
+                copyCommit.getRootFolder().saveInObjects();
                 Engine.Utils.zipToFile(i_RR.m_pathToMagitDirectory.resolve("objects").resolve(currCommit.getSha1())
                         , currCommit.toString(), i_RR.m_repositoryPath);
             }
@@ -709,6 +709,8 @@ public class Engine {
 
         i_localRepository.InsertBranch(rtBranch);
         i_localRepository.InsertBranch(rBranch);
+
+        checkOut(rtBranch.getName());
 
         Branch branch = new Branch(i_RR.m_pathToMagitDirectory.resolve("branches").resolve(headBranchName), headCommit, i_RR.m_repositoryPath);
 
