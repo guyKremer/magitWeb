@@ -14,8 +14,11 @@ function RepoColumn(props){
             <td>{repo.lastCommitMsg}</td>
             {props.forkOption===true?
                  <Button variant={"success"} onClick={()=>{
-                     let repoName = window.prompt("Enter repo name")
-                     props.forkOnClick(repo.repositoryName,repoName)}} size={"sm"}>Fork</Button>:""
+                     let repoName = window.prompt("Enter repo name");
+                     if(repoName!==null) {
+                         props.forkOnClick(repo.repositoryName,repoName)
+                     }
+                 }} size={"sm"}>Fork</Button>:""
             }
         </tr>
         );
