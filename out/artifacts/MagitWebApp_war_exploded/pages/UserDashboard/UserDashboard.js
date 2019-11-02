@@ -40,7 +40,7 @@ export default class UserDashboard extends React.Component{
         if(this.state.userPressed === false){
             return(
                 <React.Fragment>
-                    <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
+                    <Bar logutHandler={this.props.logutHandler} homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
                     <div id="main">
                         <RepoColumn repoChoosingHandler={this.props.repoChoosingHandler} repositories={this.state.repositories} userName={this.state.userName}/>
                         <MessagesBoard messages={this.state.messages}/>
@@ -52,7 +52,7 @@ export default class UserDashboard extends React.Component{
         else{
             return(
             <React.Fragment>
-             <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
+             <Bar logutHandler={this.props.logutHandler} homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
              <UserRepositories backOnclick={()=>this.setState(()=>({userPressed:false}))} forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />
             </React.Fragment>
             );
@@ -68,6 +68,7 @@ export default class UserDashboard extends React.Component{
             pressedUserName:userName
         }));
     }
+
 
     async getUserData(){
         let messagesRespone = await fetch('messages', {method:'GET', credentials: 'include'});

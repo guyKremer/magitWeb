@@ -14,7 +14,7 @@ return(
         </Nav>
         <Dropdown as={ButtonToolbar}>
             <DropdownButton variant= "secondary"title={props.userName} size="sm">
-                <Dropdown.Item href="#/action-1">Logout</Dropdown.Item>
+                <Dropdown.Item onClick={props.logutHandler}>Logout</Dropdown.Item>
             </DropdownButton>
         </Dropdown>
     </Navbar>
