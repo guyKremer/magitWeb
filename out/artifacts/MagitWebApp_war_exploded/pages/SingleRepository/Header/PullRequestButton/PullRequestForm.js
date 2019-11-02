@@ -49,7 +49,7 @@ export default class PullRequestForm extends React.Component{
     }
 
 
-    onClickSubmit(){
+    async onClickSubmit(){
         let targetBranchName=document.getElementById("targetBranchInput").value;
         let baseBranchName = document.getElementById("baseBranchInput").value;
         let prMessage = document.getElementById("prMessageInput").value;
@@ -57,8 +57,15 @@ export default class PullRequestForm extends React.Component{
         baseBranchName = baseBranchName.split('\\');
         baseBranchName = baseBranchName[1];
 
-        fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
         this.props.closeForm();
+
+       let response =  await fetch('PR?repository='+this.props.RRname+ '&remoteUser='+this.props.RRuser+'&baseBranch='+baseBranchName+'&targetBranch='+targetBranchName +'&msg='+prMessage, {method:'POST',body:'', credentials: 'include'});
+       if(response.ok){
+           alert("Pull Request created successfully");
+       }
+       else{
+           alert("Something went wrong please try again");
+       }
     }
 
 }

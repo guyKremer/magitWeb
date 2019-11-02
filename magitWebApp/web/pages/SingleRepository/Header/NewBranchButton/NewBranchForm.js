@@ -35,7 +35,7 @@ export default class NewBranchForm extends React.Component{
             }));
     }
 
-    onClickSubmit(){
+    async onClickSubmit(){
         let branchName=document.getElementById("branchNameInput").value;
         let sha1=""
         if(this.state.sha1){
@@ -46,8 +46,14 @@ export default class NewBranchForm extends React.Component{
             window.alert("Branch name is mendatory");
         }
         else{
-            fetch('branches?repository='+this.props.repoName+ '&branch='+branchName+'&sha1='+sha1, {method:'PUT',body:'', credentials: 'include'});
             this.props.closeForm();
+            let response = await fetch('branches?repository='+this.props.repoName+ '&branch='+branchName+'&sha1='+sha1, {method:'PUT',body:'', credentials: 'include'});
+            if(response.ok){
+                alert(branchName+" created successfully");
+            }
+            else{
+                alert("Something went wrong please try again");
+            }
         }
     }
 
