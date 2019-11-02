@@ -69,10 +69,10 @@ public class Engine {
     }
 
     public Status showStatus() throws java.io.IOException {
-        isRepositoryInitialized();
-        if (!isFirstCommitExist()) {
-            throw new FileNotFoundException("Cant show status because  nothing was committed");
-        }
+        //isRepositoryInitialized();
+        //if (!isFirstCommitExist()) {
+        //    throw new FileNotFoundException("Cant show status because  nothing was committed");
+       // }
         Map<String, List<String>> changesMap = m_currentRepository.checkChanges();
         Status res;
         res = new Status(m_currentRepository.m_repositoryPath.toString(), m_currentRepository.GetName(), m_user,

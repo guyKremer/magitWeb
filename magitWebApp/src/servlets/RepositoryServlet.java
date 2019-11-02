@@ -55,11 +55,12 @@ public class RepositoryServlet extends HttpServlet {
             xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter,
                     Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter));
         } catch (Exception e) {
-            e.printStackTrace();
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("msg",e.getMessage());
+            ServletUtils.SendErrorResponse(response,jsonObject);
         }
 
         getAllRepos(userNameFromParameter);
-
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
