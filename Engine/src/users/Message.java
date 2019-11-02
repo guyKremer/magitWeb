@@ -9,4 +9,12 @@ import java.text.SimpleDateFormat;
     protected boolean opened = false;
 
       public abstract JsonObject toJson();
-}
+
+     public boolean isOpened() {
+         return opened;
+     }
+
+     public void setOpened(boolean opened) {
+         this.opened = opened;
+     }
+ }
