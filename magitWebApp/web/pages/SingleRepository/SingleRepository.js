@@ -258,8 +258,8 @@ export default class SingleRepository extends React.Component{
 
     async pushOnClickHandler(){
         let response= await fetch('collaboration?repository='+this.props.repoName+'&operation=push&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
-        if(!res.ok){
-            response=await respnse.json()
+        if(!response.ok){
+            response=await response.json()
             alert(response.msg);
         }
         else{
