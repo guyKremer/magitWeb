@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -65,11 +66,11 @@ public class WCServlet extends HttpServlet {
         */
         Engine.m_user = userNameFromParameter;
         engine.setCurrentRepository(currRepo);
-        if(!engine.isOpenChangesEx3()){
+        try{
         currRepo.createCommit(msg);
-        }else{
+        }catch (FileAlreadyExistsException e){
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("msg","You don't have open changes");
+            jsonObject.addProperty("msg",e.getMessage());
             ServletUtils.SendErrorResponse(response,jsonObject);
         }
     }
