@@ -32,13 +32,18 @@ public class xmlUtiles {
     private static Set<String> m_commitsIds;
     private static final String rootPath = "c:\\magit-ex3";
 
-    private static MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException
-    {
-        InputStream inputStream = new ByteArrayInputStream(i_XMLContent.getBytes());
-        JAXBContext jc = JAXBContext.newInstance(MagitRepository.class);
-        Unmarshaller u = jc.createUnmarshaller();
+    private static MagitRepository parseFromXmlFileToXmlMagitRepository(String i_XMLContent) throws JAXBException, FileNotFoundException, XmlValidatorException {
+        try {
+            InputStream inputStream = new ByteArrayInputStream(i_XMLContent.getBytes());
+            JAXBContext jc = JAXBContext.newInstance(MagitRepository.class);
+            Unmarshaller u = jc.createUnmarshaller();
 
-        return (MagitRepository) u.unmarshal(inputStream);
+            return (MagitRepository) u.unmarshal(inputStream);
+
+        }catch(Exception e){
+            throw new XmlValidatorException("Not Valid XML file");
+        }
+
     }
 
 
