@@ -14,14 +14,17 @@ function Header(props){
                 <div className={"row"}>
                     <Button onClick={props.backOnClick} variant={"success"} size={"sm"}>Back</Button>
                         <b>{"Repository: "+props.repoName}</b>
-                    { props.isLR===true ?
-                       <React.Fragment>
-                           <div className={"RRrepoName"}>
-                               <b>{"Remote Repository: "+props.RRuser + '/' + props.RRname}</b>
-                           </div>
-                       </React.Fragment>:
-                        <Button variant={"secondary"} size={"sm"} id={"viewPrs"} onClick={props.showPRsOnClick}>Pull Requests</Button>
+                    {props.isLR === true ?
+                        <React.Fragment>
+                            <div className={"RRrepoName"}>
+                                <b>{"Remote Repository: " + props.RRuser + '/' + props.RRname}</b>
+                            </div>
+                        </React.Fragment>
+                        : ""
                     }
+                        <Button variant={"secondary"} size={"sm"} id={"viewPrs"} onClick={props.showPRsOnClick}>Pull
+                            Requests</Button>
+
                 </div>
                 <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
@@ -34,8 +37,17 @@ function Header(props){
                     }} size={"sm"}>
                         Commit</Button>
                     <NewBranchButton repoName={props.repoName}/>
-                    <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className= { "noHeightIncrease "  +props.isLR === false ? "hide":""}  onClick={props.pullOnClick} size={"sm"}>Pull</Button>
-                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={  "noHeightIncrease " + props.isLR === false ? "hide":"" }  onClick={props.pushOnClick} size={"sm"}>Push</Button>
+                    {
+                        props.isLR ===true ?
+                        <React.Fragment>
+                            <Button onClick={props.pullOnClick} variant={"success"} id={"pull"}
+                                    className={"noHeightIncrease"} onClick={props.pullOnClick}
+                                    size={"sm"}>Pull</Button>
+                            < Button  onClick={props.pushOnClick} variant={"success"} id={"push"}  className={"noHeightIncrease"}  onClick={props.pushOnClick} size={"sm"}>Push</Button>
+                        </React.Fragment>
+                            :""
+
+                    }
                 </div>
             </div>
     )
