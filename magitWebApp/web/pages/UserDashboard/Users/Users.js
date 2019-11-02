@@ -11,7 +11,7 @@ function Users(props) {
             return (<Button onClick={()=>{props.onClick(userName);}} variant={"link"}>{userName}</Button>);
         }
         else{
-            return (<p key={userName}>{userName}</p>);
+            return (<p key={"users"+userName}>{userName}</p>);
         }
     });
         return (
