@@ -25,5 +25,10 @@ margin-left: 10%;
 
 .row .btn {
     margin-left: 1%;
+
+}
+
+.noHeightIncrease{
+    height: min-content;
 }
 

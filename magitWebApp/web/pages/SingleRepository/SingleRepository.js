@@ -225,34 +225,56 @@ export default class SingleRepository extends React.Component{
         newHeadBranch = newHeadBranch.replace('\\','^');
         newHeadBranch = newHeadBranch.replace(" ",'^^');
 
-        await fetch('branches?repository='+this.state.name, {method:'POST',body:newHeadBranch, credentials: 'include'});
-        let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
-            return branchName!==newHeadBranch;
-        });
-        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
-        let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
-         folder = await folder.json();
 
-        this.setState(()=>({
-            fileHierarchy:[this.state.name],
-            fileTree: folder,
-            fileEditor:false,
-            headBranch : newHeadBranch,
-            regularBranchesNames: regularBranchesName}));
+        let responseBranches= await fetch('branches?repository='+this.state.name, {method:'POST',body:newHeadBranch, credentials: 'include'});
+        if(responseBranches.ok){
+            let regularBranchesName = this.state.regularBranchesNames.filter((branchName)=>{
+                return branchName!==newHeadBranch;
+            });
+            await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+            let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
+            folder = await folder.json();
+
+            this.setState(()=>({
+                fileHierarchy:[this.state.name],
+                fileTree: folder,
+                fileEditor:false,
+                headBranch : newHeadBranch,
+                regularBranchesNames: regularBranchesName}));
+        }
+        else{
+            responseBranches = await responseBranches.json();
+            alert(responseBranches.msg);
+        }
+
     }
 
-    pushOnClickHandler(){
-        fetch('collaboration?repository='+this.props.repoName+'&operation=push&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
+    async pushOnClickHandler(){
+        let response= await fetch('collaboration?repository='+this.props.repoName+'&operation=push&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
+        if(!res.ok){
+            response=await respnse.json()
+        }
+        else{
+            alert("Push Succeded");
+        }
     }
    async pullOnClickHandler(){
-        await fetch('collaboration?repository='+this.props.repoName+'&operation=pull&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
-       await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
-       let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
-       folder = await folder.json();
-       this.setState(()=>({
-           fileHierarchy:[this.state.name],
-           fileTree: folder}));
-       this.getCommitsSha1();
+        let colResponse =  await fetch('collaboration?repository='+this.props.repoName+'&operation=pull&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
+        if(colResponse.ok){
+            await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+            let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
+            folder = await folder.json();
+            this.setState(()=>({
+                fileHierarchy:[this.state.name],
+                fileTree: folder}));
+            this.getCommitsSha1();
+            alert("Pull Succeded")
+        }
+        else{
+            colResponse=await colResponse.json();
+            alert(colResponse);
+        }
+
    }
 
    async getBranches(){

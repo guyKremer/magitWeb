@@ -26,7 +26,7 @@ function Header(props){
                 <div className={"row"}>
                     <Branches checkOut={props.checkOut} headBranchName={props.headBranchName} regularBranchesNames={props.regularBranchesNames}/>
                     <PullRequestButton RRuser={props.RRuser} RRname={props.RRname} repoName={props.repoName}/>
-                    <Button variant={"success"} id={"commit"} onClick={()=>{
+                    <Button className={"noHeightIncrease"} variant={"success"} id={"commit"} onClick={()=>{
                         let msg = window.prompt("Enter commit message");
                         if(msg!==null){
                             props.commitOnClick(msg);
@@ -34,8 +34,8 @@ function Header(props){
                     }} size={"sm"}>
                         Commit</Button>
                     <NewBranchButton repoName={props.repoName}/>
-                    <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className={props.isLR === false ? "hide":""} onClick={props.pullOnClick} size={"sm"}>Pull</Button>
-                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={props.isLR === false ? "hide":""}  onClick={props.pushOnClick} size={"sm"}>Push</Button>
+                    <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className= { "noHeightIncrease "  +props.isLR === false ? "hide":""}  onClick={props.pullOnClick} size={"sm"}>Pull</Button>
+                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={  "noHeightIncrease " + props.isLR === false ? "hide":"" }  onClick={props.pushOnClick} size={"sm"}>Push</Button>
                 </div>
             </div>
     )

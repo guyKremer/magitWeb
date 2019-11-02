@@ -54,13 +54,14 @@ public class RepositoryServlet extends HttpServlet {
         try {
             xmlUtiles.LoadXmlEx3(fileContent.toString(), userNameFromParameter,
                     Paths.get(CollaborationServlet.rootPath + File.separator + userNameFromParameter));
+            getAllRepos(userNameFromParameter);
         } catch (Exception e) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.addProperty("msg",e.getMessage());
             ServletUtils.SendErrorResponse(response,jsonObject);
         }
 
-        getAllRepos(userNameFromParameter);
+
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,6 +102,8 @@ public class RepositoryServlet extends HttpServlet {
 
         ServletUtils.SendJsonResponse(response, repositoryDetailsList);
     }
+
+
 
     private void getAllRepos(String i_userName) throws IOException {
         //String userNameFromParameter= SessionUtils.getUsername(request);
