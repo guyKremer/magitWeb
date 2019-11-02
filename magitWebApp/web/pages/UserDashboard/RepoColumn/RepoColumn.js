@@ -51,7 +51,7 @@ export default class RepoColumn extends React.Component{
                                 let newResponse = await fetch("repositories?userName="+this.props.userName, {method:'POST', body:formData,credentials: 'include'});
                                 if(!newResponse.ok){
                                    newResponse=await newResponse.json();
-                                    alert(newResponse);
+                                    alert(newResponse.msg);
                                 }
                                 this.setState(()=>({newRepoPressed:false}));
                             }}/>

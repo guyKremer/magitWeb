@@ -253,6 +253,7 @@ export default class SingleRepository extends React.Component{
         let response= await fetch('collaboration?repository='+this.props.repoName+'&operation=push&remoteUser='+this.props.RRuser, {method:'GET', credentials: 'include'});
         if(!res.ok){
             response=await respnse.json()
+            alert(response.msg);
         }
         else{
             alert("Push Succeded");
@@ -272,7 +273,7 @@ export default class SingleRepository extends React.Component{
         }
         else{
             colResponse=await colResponse.json();
-            alert(colResponse);
+            alert(colResponse.msg);
         }
 
    }

@@ -8,7 +8,7 @@ function Users(props) {
 
     const onlineUsers = props.onlineUsers.map((userName) => {
         if(userName!==props.selfName){
-            return (<Button onClick={()=>{props.onClick(userName);}} variant={"link"}>{userName}</Button>);
+            return (<Button key={"users"+userName} onClick={()=>{props.onClick(userName);}} variant={"link"}>{userName}</Button>);
         }
         else{
             return (<p key={"users"+userName}>{userName}</p>);

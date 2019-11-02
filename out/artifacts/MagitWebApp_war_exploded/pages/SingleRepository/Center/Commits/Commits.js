@@ -4,9 +4,9 @@ import './commits.css';
 
 function Commits(props){
 
-    let commmits = props.commits.map((commit)=>{
+    let commmits = props.commits.map((commit,index)=>{
         return (
-            <div className="singleCommit">
+            <div key={commit.sha1+index} className="singleCommit">
                 <Button onClick={()=>{props.commitSha1OnClick(commit.sha1)}} variant={"link"}>{commit.sha1}</Button>
                 <p>{commit.message}</p>
                 <p>{commit.date}</p>
