@@ -19,14 +19,6 @@ export default class RepoColumn extends React.Component{
         this.newRepoEventHandler=this.newRepoEventHandler.bind(this);
     }
 
-    /*
-    componentDidMount() {
-        setInterval(async ()=>{
-            let response = await fetch("repositories", {method:'GET',credentials: 'include'});
-            let parsedResponse = await response.json();
-        }, 3000);
-    }
-*/
     newRepoEventHandler(){
         this.setState(()=>({
             newRepoPressed:true
@@ -58,8 +50,8 @@ export default class RepoColumn extends React.Component{
                                 formData.append("input",input.files[0]);
                                 let newResponse = await fetch("repositories?userName="+this.props.userName, {method:'POST', body:formData,credentials: 'include'});
                                 if(!newResponse.ok){
-                                   // newResponse=await newResponse.json();
-                                    alert("newResponse");
+                                   newResponse=await newResponse.json();
+                                    alert(newResponse);
                                 }
                                 this.setState(()=>({newRepoPressed:false}));
                             }}/>

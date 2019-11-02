@@ -3,10 +3,10 @@ import './messages.css';
 
 export default function MessagesBoard (props){
 
-        let messages=props.messages.map((message)=>{
+        let messages=props.messages.map((message,index)=>{
             if(message.type==="forkMsg"){
                 return(
-                    <div className="Toast Toast--success">
+                    <div key={"forked"+index} className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
                                 {'You\'ve been forked!'}
@@ -21,7 +21,7 @@ export default function MessagesBoard (props){
             else {
                 if(message.status==="WAITING"){
                     return(
-                    <div className="Toast Toast--success">
+                    <div key={"prAdd"+index} className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
                                 {message.creatorUserName+' has added a pr to '+ message.repositoryName}
@@ -36,7 +36,7 @@ export default function MessagesBoard (props){
                 }
                 else{
                     return(
-                    <div className="Toast Toast--success">
+                    <div key={"review"+index} className="Toast Toast--success">
                         <main className="Toast__message">
                             <header className="Toast__message-category">
                                 {'Your PR was '+message.status + ' by '+message.targetUserName}

@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button';
 
 function RepoColumn(props){
 
-    let reposArrayToRender = props.repositories.map((repo)=>{
+    let reposArrayToRender = props.repositories.map((repo,index)=>{
         return(
-        <tr onClick={()=>{props.repoChoosingHandler(repo.repositoryName,repo.type,repo.RRname,repo.RRuser);}}>
+        <tr key={repo.repositoryName+index} onClick={()=>{props.repoChoosingHandler(repo.repositoryName,repo.type,repo.RRname,repo.RRuser);}}>
             <td >{repo.repositoryName}</td>
             <td>{repo.activeBranch}</td>
             <td>{repo.amountOfBranches}</td>
