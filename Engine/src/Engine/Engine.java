@@ -693,7 +693,7 @@ public class Engine {
             }
 
 
-            if (currCommit.getFirstPrecedingSha1() != null && !currCommit.getSecondPrecedingSha1().isEmpty()) {
+            if (currCommit.getFirstPrecedingSha1() != null && !currCommit.getFirstPrecedingSha1().isEmpty()) {
                 currCommit = new Commit(currCommit.getFirstPrecedingSha1(), i_localRepository.m_repositoryPath);
             } else {
                 break;

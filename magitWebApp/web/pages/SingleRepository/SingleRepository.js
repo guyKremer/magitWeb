@@ -104,9 +104,15 @@ export default class SingleRepository extends React.Component{
         }));
     }
 
-    pullRequestBackButtonOnClick(){
+    async pullRequestBackButtonOnClick(){
+        await fetch('commits?repository='+this.state.name+'&sha1=0', {method:'POST', credentials: 'include'});
+        let folder = await fetch('folderItem?folderItem='+this.props.repoName, {method:'GET', credentials: 'include'});
+        folder = await folder.json();
         this.setState(()=>({
-            showPr:false
+            showPr:false,
+            fileHierarchy:[this.state.name],
+            fileTree: folder,
+            fileEditor:false
         }));
     }
 

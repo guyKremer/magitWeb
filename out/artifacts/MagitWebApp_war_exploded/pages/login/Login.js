@@ -35,16 +35,23 @@ export default class SignUp extends React.Component {
      async loginActionEventHandler(e) {
         e.preventDefault();
         const userName = e.target.elements.userName.value;
-        let response = await fetch('login', {method:'POST', body: userName, credentials: 'include'});
+        console.log(userName);
+        if(userName !==""){
+            let response = await fetch('login', {method:'POST', body: userName, credentials: 'include'});
 
-        if(response.ok){
-            let name = await response.json();
-            name = name.userName;
-            this.props.handleLogin(name);
+            if(response.ok){
+                let name = await response.json();
+                name = name.userName;
+                this.props.handleLogin(name);
+            }
+            else{
+                let errorMsg = await response.json()
+                this.setState(()=> ({errMessage: errorMsg}));
+            }
         }
         else{
-            let errorMsg = await response.json()
-            this.setState(()=> ({errMessage: errorMsg}));
+            alert("Empty name is not allowed");
         }
+
     }
 }
