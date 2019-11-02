@@ -31,6 +31,7 @@ export default class BaseContainer extends React.Component{
         this.loginHandler = this.loginHandler.bind(this);
         this.repoChoosingHandler = this.repoChoosingHandler.bind(this);
         this.homeHandler=this.homeHandler.bind(this);
+        this.logoutHandler=this.logoutHandler.bind(this);
     }
 
     render() {
@@ -43,19 +44,25 @@ export default class BaseContainer extends React.Component{
 
         else if(this.state.location === Consts.MAIN) {
             return(
-                    <Main repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
+                    <Main logutHandler={this.logoutHandler}  repoChoosingHandler={this.repoChoosingHandler} userName={this.state.userName}/>
             );
         }
         else{
             return (
                 <React.Fragment>
-                    <Bar homeHandler={this.homeHandler} userName={this.state.userName}/>
+                    <Bar logutHandler={this.logoutHandler} homeHandler={this.homeHandler} userName={this.state.userName}/>
                     <SingleRepository backOnClick={this.homeHandler} type={this.state.choserRepoType} RRname={this.state.RRname} RRuser={this.state.RRuser} repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )
         }
     }
 
+    async logoutHandler(){
+        await fetch('login', {method:'DELETE', credentials: 'include'});
+        this.setState(()=> ({
+            location: Consts.LOGIN,
+        }));
+    }
     homeHandler(){
         this.setState(()=> ({
             location: Consts.MAIN,

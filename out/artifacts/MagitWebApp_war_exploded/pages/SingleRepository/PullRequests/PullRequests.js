@@ -102,7 +102,6 @@ export default class PullRequests extends React.Component{
     }
 
 
-
     singlePrRender(){
         let changedFiles=this.state.changedFiles.map((file)=> {
             let singleFileChanges = file.changes .map((change)=>{
