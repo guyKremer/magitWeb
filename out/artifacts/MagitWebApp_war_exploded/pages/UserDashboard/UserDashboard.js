@@ -53,7 +53,7 @@ export default class UserDashboard extends React.Component{
             return(
             <React.Fragment>
              <Bar homeHandler={()=>this.setState(()=>({userPressed:false}))} userName={this.state.userName}/>
-             <UserRepositories forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />
+             <UserRepositories backOnclick={()=>this.setState(()=>({userPressed:false}))} forkOnClick={()=>this.setState(()=>({userPressed:false}))} userName={this.state.pressedUserName} userRepos={this.state.pressedUserRepos} />
             </React.Fragment>
             );
                 }

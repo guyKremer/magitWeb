@@ -49,7 +49,7 @@ export default class BaseContainer extends React.Component{
         else{
             return (
                 <React.Fragment>
-                    <Bar  homeHandler={this.homeHandler} userName={this.state.userName}/>
+                    <Bar homeHandler={this.homeHandler} userName={this.state.userName}/>
                     <SingleRepository backOnClick={this.homeHandler} type={this.state.choserRepoType} RRname={this.state.RRname} RRuser={this.state.RRuser} repoName={this.state.chosenRepoName}/>
                 </React.Fragment>
             )
