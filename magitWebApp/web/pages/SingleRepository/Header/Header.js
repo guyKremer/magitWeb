@@ -34,8 +34,8 @@ function Header(props){
                     }} size={"sm"}>
                         Commit</Button>
                     <NewBranchButton repoName={props.repoName}/>
-                    <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className={ "noHeightIncrease" + props.isLR === false ? "hide":"" } onClick={props.pullOnClick} size={"sm"}>Pull</Button>
-                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={"noHeightIncrease" + props.isLR === false ? "hide":"" }  onClick={props.pushOnClick} size={"sm"}>Push</Button>
+                    <Button onClick={props.pullOnClick} variant={"success"} id={"pull"} className= { "noHeightIncrease "  +props.isLR === false ? "hide":""}  onClick={props.pullOnClick} size={"sm"}>Pull</Button>
+                    <Button  onClick={props.pushOnClick} variant={"success"} id={"push"} className={  "noHeightIncrease " + props.isLR === false ? "hide":"" }  onClick={props.pushOnClick} size={"sm"}>Push</Button>
                 </div>
             </div>
     )
