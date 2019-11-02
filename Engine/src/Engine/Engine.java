@@ -278,12 +278,21 @@ public class Engine {
         m_currentRepository.AddBranch(i_branchName, i_checkout);
     }
 
-    private void isOpenChanges() throws FileNotFoundException, IOException {
+    public void isOpenChanges() throws FileNotFoundException, IOException {
         Status status = showStatus();
         if (!status.getModifiedFiles().isEmpty() || !status.getAddedFiles().isEmpty()
                 || !status.getDeletedFiles().isEmpty()) {
             throw new FileNotFoundException("Cant perform action because You have open changes");
         }
+    }
+
+    public boolean isOpenChangesEx3() throws FileNotFoundException, IOException {
+        Status status = showStatus();
+        if (!status.getModifiedFiles().isEmpty() || !status.getAddedFiles().isEmpty()
+                || !status.getDeletedFiles().isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     public Map<Path, Conflict> Merge(String i_theirs, boolean checkConflicts) throws FileNotFoundException, IOException {

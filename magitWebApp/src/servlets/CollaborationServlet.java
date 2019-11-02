@@ -44,7 +44,7 @@ public class CollaborationServlet extends HttpServlet {
          */
         engine.setCurrentRepository(localRepo);
 
-        if(!engine.isChanges()){
+        if(engine.isOpenChangesEx3()){
             jsonObject.addProperty("msg","you have open changes please commit them first");
             ServletUtils.SendErrorResponse(response,jsonObject);
         }
