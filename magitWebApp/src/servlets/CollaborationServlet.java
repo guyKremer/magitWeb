@@ -52,7 +52,7 @@ public class CollaborationServlet extends HttpServlet {
         else {
 
             if (operation.equals("push")) {
-                if (!localRepo.GetHeadBranch().getClass().equals(Branch.class)){
+                if (localRepo.GetHeadBranch().getClass().equals(Branch.class)){
                     engine.PushNewBranch((LocalRepository) localRepo, remoteRepo, userNameFromParameter, remoteUser);
                 }
                 else{
