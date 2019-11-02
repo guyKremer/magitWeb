@@ -16,11 +16,11 @@ export default class PullRequestForm extends React.Component{
     }
 
     render() {
-        let Rtbs = this.props.Rtbs.map((rtb)=>{
-            return(<option>{rtb}</option>)
+        let Rtbs = this.props.Rtbs.map((rtb,index)=>{
+            return(<option key={"RTB"+rtb+index}>{rtb}</option>)
         });
-        let Rbs = this.props.Rbs.map((rb)=>{
-            return(<option>{rb}</option>)
+        let Rbs = this.props.Rbs.map((rb,index)=>{
+            return(<option key={"RB"+rb+index}>{rb}</option>)
         });
     return(
         <Form>

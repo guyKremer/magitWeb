@@ -2,8 +2,8 @@ import React from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 function Branches(props){
-    let regularBranchesNames=props.regularBranchesNames.map((branchName)=>{
-        return(<Dropdown.Item onClick={()=>{props.checkOut(branchName)}}>{branchName}</Dropdown.Item>);
+    let regularBranchesNames=props.regularBranchesNames.map((branchName,index)=>{
+        return(<Dropdown.Item key={"branches"+branchName+index} onClick={()=>{props.checkOut(branchName)}}>{branchName}</Dropdown.Item>);
     });
 
 
