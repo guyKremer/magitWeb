@@ -114,7 +114,7 @@ export default class PullRequests extends React.Component{
                                 <p>{change.status}</p>
                             </div>
                             {
-                                change.status==="modified" || change.status === "added" ?
+                                change.content!=="" ?
                                     <textarea readOnly  rows="5">
                                     {change.content}
                                 </textarea>
