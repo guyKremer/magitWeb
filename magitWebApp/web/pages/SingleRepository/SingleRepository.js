@@ -45,6 +45,7 @@ export default class SingleRepository extends React.Component{
         this.commitButtonOnClickHandler=this.commitButtonOnClickHandler.bind(this);
         this.commitSha1OnClickHandler=this.commitSha1OnClickHandler.bind(this);
         this.showPrsOnClickHandler=this.showPrsOnClickHandler.bind(this);
+        this.pullRequestBackButtonOnClick=this.pullRequestBackButtonOnClick.bind(this);
     }
 
     async componentDidMount() {
@@ -87,16 +88,21 @@ export default class SingleRepository extends React.Component{
         }
         else{
             return(
-                <PullRequests repository={this.state.name}/>
+                <PullRequests pullRequestBackButtonOnClick={this.pullRequestBackButtonOnClick} repository={this.state.name}/>
             );
         }
 
     }
 
     showPrsOnClickHandler(){
-
         this.setState(()=>({
             showPr:true
+        }));
+    }
+
+    pullRequestBackButtonOnClick(){
+        this.setState(()=>({
+            showPr:false
         }));
     }
 

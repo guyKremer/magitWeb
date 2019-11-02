@@ -15,6 +15,7 @@ export default class PullRequests extends React.Component{
         this.prListRender=this.prListRender.bind(this);
         this.singlePrRender=this.singlePrRender.bind(this);
         this.acceptOrDeclineOnClickHandler=this.acceptOrDeclineOnClickHandler.bind(this);
+        this.singlePrBackOnClickHandler=this.singlePrBackOnClickHandler.bind(this);
     }
 
     async componentDidMount() {
@@ -37,44 +38,62 @@ export default class PullRequests extends React.Component{
     prListRender(){
         let pullRequestView = this.state.pullRequests.map((pr,index)=>{
             return(
-                <tr>
-                    <td>{index}</td>
-                    <td>{pr.msg}</td>
-                    <td>{pr.userCreator}</td>
-                    <td>{pr.targetBranch}</td>
-                    <td>{pr.baseBranch}</td>
-                    <td>{pr.date}</td>
-                    <td>{pr.status}</td>
-                    <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
-                    <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
-                    <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
-                </tr>
+                <React.Fragment>
+                    <Button variant={"success"} onClick={this.props.pullRequestBackButtonOnClick}>Back</Button>
+                    <tr>
+                        <td>{index}</td>
+                        <td>{pr.msg}</td>
+                        <td>{pr.userCreator}</td>
+                        <td>{pr.targetBranch}</td>
+                        <td>{pr.baseBranch}</td>
+                        <td>{pr.date}</td>
+                        <td>{pr.status}</td>
+                        <Button onClick={()=>{this.viewOnClickHandler(pr.date)}} size={"sm"} variant={"info"}>View</Button>
+                        <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"accept")}} size={"sm"} variant={"success"}>Accept</Button>
+                        <Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
+                    </tr>
+                </React.Fragment>
+
             );
         });
         return (
-            <Table >
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Message</th>
-                    <th>Creator</th>
-                    <th>Target branch</th>
-                    <th>Base branch</th>
-                    <th>Date of creation</th>
-                    <th>Status</th>
-                </tr>
-                </thead>
-                <tbody>
-                {pullRequestView}
-                </tbody>
-            </Table>
+            <React.Fragment>
+                <Button variant={"success"} onClick={this.singlePrBackOnClickHandler}>Back</Button>
+                <Table >
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Message</th>
+                        <th>Creator</th>
+                        <th>Target branch</th>
+                        <th>Base branch</th>
+                        <th>Date of creation</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {pullRequestView}
+                    </tbody>
+                </Table>
+            </React.Fragment>
         );
     }
 
-    acceptOrDeclineOnClickHandler(date,status){
-        fetch('PRData?repository='+this.props.repository+'&date='+date+'&status='+status, {method:'POST',body:'', credentials: 'include'});
+   async acceptOrDeclineOnClickHandler(date,status){
+        await fetch('PRData?repository='+this.props.repository+'&date='+date+'&status='+status, {method:'POST',body:'', credentials: 'include'});
+        let pullRequests = await fetch('PR?repository='+this.props.repository, {method:'GET', credentials: 'include'});
+        pullRequests = await pullRequests.json();
+        this.setState(()=>({
+            pullRequests : pullRequests
+        }));
     }
 
+    singlePrBackOnClickHandler(){
+        this.setState(()=>({
+            viewPressed: false,
+            changedFiles:[]
+        }))
+    }
 
 
     singlePrRender(){
