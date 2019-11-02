@@ -17,7 +17,7 @@ public class User {
     }
 
     List<Message> messages = new ArrayList<Message>();
-    List<Repository> repositories;
+    List<Repository> repositories = new ArrayList<>();
     Folder rootFolder;
     private boolean online;
 
