@@ -39,6 +39,10 @@ public class PRRequest {
         return baseBranch;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
     public void setBaseBranch(String baseBranch) {
         this.baseBranch = baseBranch;
     }
