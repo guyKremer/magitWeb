@@ -131,6 +131,13 @@ export default class SingleRepository extends React.Component{
         }
         else{
             let commitResponse=await fetch('WC?commitMsg='+msg+'&repository='+this.state.name, {method:'PUT',body:'', credentials: 'include'});
+            if(!commitResponse.ok){
+                commitResponse=await commitResponse.json();
+                alert(commitResponse.msg);
+            }
+            else{
+                alert("Commit succeeded");
+            }
         }
     }
 
@@ -256,7 +263,7 @@ export default class SingleRepository extends React.Component{
             alert(response.msg);
         }
         else{
-            alert("Push Succeded");
+            alert("Push succeeded");
         }
     }
    async pullOnClickHandler(){
@@ -269,7 +276,7 @@ export default class SingleRepository extends React.Component{
                 fileHierarchy:[this.state.name],
                 fileTree: folder}));
             this.getCommitsSha1();
-            alert("Pull Succeded")
+            alert("Pull succeeded")
         }
         else{
             colResponse=await colResponse.json();
