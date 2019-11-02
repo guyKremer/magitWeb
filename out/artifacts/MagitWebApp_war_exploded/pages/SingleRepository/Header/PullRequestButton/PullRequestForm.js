@@ -45,17 +45,7 @@ export default class PullRequestForm extends React.Component{
             </Button>
         </Form>
     );
-        /*
-        return(
-            <div class="form-style-2">
-                <div class="form-style-2-heading">Branch Details</div>
-                <label for="field1"><span>Target branch</span><input type="text" class="input-field" id={"targetBranchInput"} name="field1"/></label>
-                <label htmlFor="field1"><span>Base branch</span><input type="text" className="input-field" id={"baseBranchInput"} name="field1"/></label>
-                <label htmlFor="field1"><span>Message</span><input type="text" className="input-field" id={"prMessageInput"} name="field1"/></label>
-                <Button variant={"success"} onClick={this.onClickSubmit} size={"sm"}>Submit</Button>
-            </div>
-        );
-         */
+
     }
 
 

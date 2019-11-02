@@ -55,7 +55,7 @@ export default class PullRequests extends React.Component{
                                         this.acceptOrDeclineOnClickHandler(pr.date, "accept")
                                     }} size={"sm"} variant={"success"}>Accept</Button>
                                     < Button  onClick={()=>{this.acceptOrDeclineOnClickHandler(pr.date,"decline")}} size={"sm"} variant={"danger"}>Decline</Button>
-                                </React.Fragment>:""
+                                </React.Fragment>:null
                         }
                     </tr>
                 </React.Fragment>
@@ -119,7 +119,7 @@ export default class PullRequests extends React.Component{
                                     {change.content}
                                 </textarea>
                                     :
-                                    ""
+                                    null
                             }
                         </div>
                 );
