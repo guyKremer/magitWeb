@@ -52,11 +52,15 @@ export default class RepoColumn extends React.Component{
                     <div id="userDash-left-first">
                         <div>Repositories</div>
                         <input type="file" id="input" onChange={
-                            ()=>{
+                            async ()=>{
                                 let input = document.getElementById('input');
                                 let formData = new FormData();
                                 formData.append("input",input.files[0]);
-                                fetch("repositories?userName="+this.props.userName, {method:'POST', body:formData,credentials: 'include'});
+                                let newResponse = await fetch("repositories?userName="+this.props.userName, {method:'POST', body:formData,credentials: 'include'});
+                                if(!newResponse.ok){
+                                   // newResponse=await newResponse.json();
+                                    alert("newResponse");
+                                }
                                 this.setState(()=>({newRepoPressed:false}));
                             }}/>
                     </div>

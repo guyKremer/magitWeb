@@ -63,7 +63,7 @@ public class ServletUtils {
         PrintWriter out=response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.setStatus(209);
+        response.setStatus(422);
         out.print(jsonObj);
         out.flush();
         return response;
