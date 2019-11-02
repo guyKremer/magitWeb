@@ -28,7 +28,9 @@ function Header(props){
                     <PullRequestButton RRuser={props.RRuser} RRname={props.RRname} repoName={props.repoName}/>
                     <Button variant={"success"} id={"commit"} onClick={()=>{
                         let msg = window.prompt("Enter commit message");
-                        props.commitOnClick(msg);
+                        if(msg!==null){
+                            props.commitOnClick(msg);
+                        }
                     }} size={"sm"}>
                         Commit</Button>
                     <NewBranchButton repoName={props.repoName}/>
